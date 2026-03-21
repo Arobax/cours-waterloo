@@ -308,11 +308,15 @@
     .dispo-card h3 { color: var(--espresso); margin-bottom: 1rem; }
     .dispo-row {
       display: flex; justify-content: space-between; align-items: center;
+      gap: 12px;
       padding: 11px 0; border-bottom: 1px solid var(--border); font-size: .92rem;
     }
     .dispo-row:last-child { border-bottom: none; }
+    .dispo-row span:first-child { flex: 1; min-width: 0; }
     .dispo-status {
-      font-weight: 600; font-size: .8rem; padding: 4px 13px; border-radius: 99px;
+      font-weight: 600; font-size: .8rem;
+      padding: 4px 13px; border-radius: 99px;
+      white-space: nowrap; flex-shrink: 0;
     }
     .available   { background: #dcfce7; color: #16a34a; }
     .unavailable { background: #fee2e2; color: #dc2626; }
@@ -693,7 +697,7 @@
           <div>
             <div class="contact-label">Email</div>
             <!-- Modifiez l'email ici ou dans data/config.json → "damien.email" -->
-            <a href="mailto:damien.alaerts@arwaterloo.be" class="contact-value contact-link-hover" target="_blank" rel="noopener noreferrer" id="email-damien-display">damien.alaerts&#64;arwaterloo.be</a>
+            <a href="/cdn-cgi/l/email-protection#c6a2a7abafa3a8e8a7aaa7a3b4b2b586a7b4b1a7b2a3b4aaa9a9e8a4a3" class="contact-value contact-link-hover" target="_blank" rel="noopener noreferrer" id="email-damien-display">damien.alaerts&#64;arwaterloo.be</a>
           </div>
         </div>
       </div>
@@ -712,7 +716,7 @@
           <div>
             <div class="contact-label">Email</div>
             <!-- Modifiez l'email ici ou dans data/config.json → "mathieu.email" -->
-            <a href="mailto:mathieu.simar@arwaterloo.be" class="contact-value contact-link-hover" target="_blank" rel="noopener noreferrer" id="email-mathieu-display">mathieu.simar&#64;arwaterloo.be</a>
+            <a href="/cdn-cgi/l/email-protection#6805091c00010d1d461b0105091a28091a1f091c0d1a040707460a0d" class="contact-value contact-link-hover" target="_blank" rel="noopener noreferrer" id="email-mathieu-display">mathieu.simar&#64;arwaterloo.be</a>
           </div>
         </div>
       </div>
@@ -731,7 +735,7 @@
 </footer>
 
 <!-- ===== SCRIPTS ===== -->
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   /* — Hamburger — */
   var hamburger = document.getElementById('hamburger');
   var navLinks   = document.getElementById('nav-links');
@@ -796,12 +800,4 @@
 
   document.querySelectorAll(
     '.profile-card,.service-card,.subject-block,.dispo-card,.contact-card,.tarif-box'
-  ).forEach(function(el) {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(18px)';
-    el.style.transition = 'opacity .5s ease, transform .5s ease';
-    obs.observe(el);
-  });
-</script>
-</body>
-</html>
+  ).forEac
