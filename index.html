@@ -3,22 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cours particuliers – Waterloo – Par des élèves pour des élèves</title>
+  <title>Cours particuliers &ndash; Waterloo &ndash; Par des &eacute;l&egrave;ves pour des &eacute;l&egrave;ves</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     /* =====================================================
-       PALETTE — vibe terracotta / crème / espresso
-       =====================================================
-       --espresso  : #211009  fond sombre (hero, contact, footer)
-       --bark      : #5c2d14  brun intermédiaire, accents foncés
-       --terra     : #b85c38  terracotta principal (CTAs, badges)
-       --amber     : #d4804a  ambre (hover, gradients)
-       --cream     : #fdf0e0  fond de page principal
-       --sand      : #f5e0c8  fond sections alternées
-       --parchment : #fffaf4  fond des cartes
-       --border    : #dfc4a0  bordures douces
-       --text      : #2e1503  texte principal
-       --muted     : #9c7258  texte secondaire
+       PALETTE
+       --espresso  #211009  hero / contact / footer
+       --bark      #5c2d14  accents foncés
+       --terra     #b85c38  CTAs, badges
+       --amber     #d4804a  dégradés
+       --cream     #fdf0e0  fond de page
+       --sand      #f5e0c8  sections alternées
+       --parchment #fffaf4  fond cartes
+       --border    #dfc4a0  bordures
+       --text      #2e1503  texte principal
+       --muted     #9c7258  texte secondaire
     ===================================================== */
     :root {
       --espresso:  #211009;
@@ -35,31 +34,23 @@
       --radius:    16px;
     }
 
-    /* ======= RESET ======= */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--cream);
-      color: var(--text);
-      line-height: 1.7;
-    }
-    img { max-width: 100%; display: block; }
-    a   { color: inherit; text-decoration: none; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); line-height: 1.7; }
+    img  { max-width: 100%; display: block; }
+    a    { color: inherit; text-decoration: none; }
 
-    /* ======= TYPOGRAPHY ======= */
     h1, h2, h3 { font-family: 'Playfair Display', serif; line-height: 1.22; }
     h1 { font-size: clamp(2rem, 5vw, 3.3rem); }
     h2 { font-size: clamp(1.6rem, 3.5vw, 2.25rem); margin-bottom: .9rem; }
     h3 { font-size: 1.2rem; margin-bottom: .45rem; }
     p  { font-size: 1.02rem; }
 
-    /* ======= LAYOUT ======= */
-    .container      { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
-    .section        { padding: 96px 0; }
-    .section-parch  { background: var(--parchment); }
-    .section-sand   { background: var(--sand); }
-    .section-dark   { background: var(--espresso); color: #fff; }
+    .container     { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
+    .section       { padding: 96px 0; }
+    .section-parch { background: var(--parchment); }
+    .section-sand  { background: var(--sand); }
+    .section-dark  { background: var(--espresso); color: #fff; }
 
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
     .grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
@@ -69,36 +60,25 @@
       .section { padding: 64px 0; }
     }
 
-    /* ======= BADGE ======= */
     .badge {
-      display: inline-block;
-      background: var(--terra);
-      color: #fff;
-      font-size: .75rem; font-weight: 600;
-      letter-spacing: .09em; text-transform: uppercase;
-      padding: 5px 16px; border-radius: 99px;
-      margin-bottom: 1.1rem;
+      display: inline-block; background: var(--terra); color: #fff;
+      font-size: .75rem; font-weight: 600; letter-spacing: .09em; text-transform: uppercase;
+      padding: 5px 16px; border-radius: 99px; margin-bottom: 1.1rem;
     }
 
-    /* ======= PILL TAG ======= */
     .tag {
-      display: inline-block;
-      background: var(--sand);
-      color: var(--bark);
-      font-size: .84rem; font-weight: 500;
-      padding: 4px 13px; border-radius: 99px;
-      border: 1px solid var(--border);
-      margin: 3px 2px;
+      display: inline-block; background: var(--sand); color: var(--bark);
+      font-size: .84rem; font-weight: 500; padding: 4px 13px;
+      border-radius: 99px; border: 1px solid var(--border); margin: 3px 2px;
     }
 
-    /* ======= DECORATIVE RULE ======= */
     .title-rule {
       display: block; width: 48px; height: 3px;
       background: linear-gradient(90deg, var(--terra), var(--amber));
       border-radius: 99px; margin: 14px auto 0;
     }
 
-    /* ======= NAV ======= */
+    /* NAV */
     nav {
       position: sticky; top: 0; z-index: 100;
       background: rgba(253,240,224,.95);
@@ -108,40 +88,27 @@
     .nav-inner {
       max-width: 1140px; margin: 0 auto;
       display: flex; align-items: center; justify-content: space-between;
-      height: 66px; padding: 0 24px;
-      position: relative;
+      height: 66px; padding: 0 24px; position: relative;
     }
-    .nav-brand {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.15rem; font-weight: 700;
-      color: var(--espresso);
-    }
+    .nav-brand { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 700; color: var(--espresso); }
     .nav-brand span { color: var(--terra); }
-
     .nav-links { display: flex; gap: 26px; align-items: center; }
-    .nav-links a {
-      font-size: .9rem; font-weight: 500;
-      color: var(--muted); transition: color .18s;
-    }
+    .nav-links a { font-size: .9rem; font-weight: 500; color: var(--muted); transition: color .18s; }
     .nav-links a:hover { color: var(--espresso); }
     .nav-cta {
-      background: var(--terra) !important;
-      color: #fff !important;
-      padding: 8px 22px; border-radius: 99px;
-      font-weight: 600 !important;
+      background: var(--terra) !important; color: #fff !important;
+      padding: 8px 22px; border-radius: 99px; font-weight: 600 !important;
       transition: background .18s !important;
     }
     .nav-cta:hover { background: var(--bark) !important; }
 
-    /* Hamburger */
     .hamburger {
       display: none; background: none; border: none; cursor: pointer;
       flex-direction: column; gap: 5px; padding: 6px;
     }
     .hamburger span {
       display: block; width: 24px; height: 2px;
-      background: var(--espresso); border-radius: 2px;
-      transition: transform .28s, opacity .28s;
+      background: var(--espresso); border-radius: 2px; transition: transform .28s, opacity .28s;
     }
 
     @media (max-width: 860px) {
@@ -149,8 +116,7 @@
       .nav-links {
         display: none; flex-direction: column; align-items: flex-start; gap: 0;
         position: absolute; top: 66px; left: 0; right: 0;
-        background: #fdf0e0;
-        border-bottom: 2px solid var(--border);
+        background: #fdf0e0; border-bottom: 2px solid var(--border);
         box-shadow: 0 10px 28px rgba(46,21,3,.12);
         padding: 8px 0 16px; z-index: 150;
       }
@@ -162,38 +128,30 @@
       }
       .nav-links a:last-child { border-bottom: none; }
       .nav-cta {
-        margin: 10px 28px 0 !important;
-        width: calc(100% - 56px) !important;
+        margin: 10px 28px 0 !important; width: calc(100% - 56px) !important;
         text-align: center; display: block;
-        border-radius: 99px !important;
-        padding: 12px 20px !important;
+        border-radius: 99px !important; padding: 12px 20px !important;
       }
     }
 
-    /* ======= BUTTONS ======= */
+    /* BUTTONS */
     .btn {
       display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-      padding: 13px 30px; border-radius: 99px;
-      font-weight: 600; font-size: .95rem; border: none; cursor: pointer;
-      transition: transform .15s, box-shadow .15s;
-      text-decoration: none;
+      padding: 13px 30px; border-radius: 99px; font-weight: 600; font-size: .95rem;
+      border: none; cursor: pointer; transition: transform .15s, box-shadow .15s; text-decoration: none;
     }
     .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(46,21,3,.2); }
     .btn-terra   { background: var(--terra); color: #fff; }
     .btn-outline { background: transparent; border: 2px solid rgba(255,255,255,.45); color: #fff; }
     .btn-terra:hover { background: var(--bark); }
 
-    /* ======= SECTION TITLE ======= */
+    /* SECTION TITLE */
     .section-title { text-align: center; margin-bottom: 56px; }
     .section-title h2 { color: var(--espresso); }
     .section-title p  { max-width: 540px; margin: 1.2rem auto 0; color: var(--muted); }
 
-    /* ======= HERO ======= */
-    .hero {
-      background: var(--espresso);
-      color: #fff; padding: 110px 0 96px;
-      position: relative; overflow: hidden;
-    }
+    /* HERO */
+    .hero { background: var(--espresso); color: #fff; padding: 110px 0 96px; position: relative; overflow: hidden; }
     .hero::before {
       content: ''; position: absolute; inset: 0;
       background:
@@ -204,176 +162,122 @@
     .hero-inner { position: relative; z-index: 1; }
     .hero h1    { color: #fff; margin-bottom: 1.3rem; max-width: 720px; }
     .hero-sub   { font-size: 1.12rem; color: rgba(255,255,255,.72); max-width: 540px; margin-bottom: 2rem; }
-
     .hero-cards { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 3.5rem; }
     .hero-card {
-      background: rgba(255,255,255,.07);
-      border: 1px solid rgba(255,255,255,.13);
-      border-radius: var(--radius);
-      padding: 20px 26px; min-width: 200px;
-      backdrop-filter: blur(6px);
-      transition: background .2s;
+      background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.13);
+      border-radius: var(--radius); padding: 20px 26px; min-width: 200px;
+      backdrop-filter: blur(6px); transition: background .2s;
     }
     .hero-card:hover { background: rgba(255,255,255,.11); }
     .hero-card .icon  { font-size: 1.6rem; margin-bottom: .5rem; }
     .hero-card strong { display: block; font-size: 1rem; color: #fff; margin-bottom: 3px; }
     .hero-card p      { font-size: .88rem; color: rgba(255,255,255,.7); margin: 0; }
 
-    /* ======= PROFILE CARDS ======= */
+    /* PROFILE CARDS */
     .profile-card {
-      background: var(--parchment);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 40px 36px;
-      position: relative; overflow: hidden;
-      border: 1px solid var(--border);
-      transition: transform .2s, box-shadow .2s;
+      background: var(--parchment); border-radius: var(--radius); box-shadow: var(--shadow);
+      padding: 40px 36px; position: relative; overflow: hidden;
+      border: 1px solid var(--border); transition: transform .2s, box-shadow .2s;
     }
     .profile-card::before {
       content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px;
       background: linear-gradient(90deg, var(--terra), var(--amber));
     }
     .profile-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(46,21,3,.14); }
-
     .avatar-placeholder {
       width: 96px; height: 96px; border-radius: 50%;
       background: linear-gradient(135deg, var(--bark), var(--terra));
       display: flex; align-items: center; justify-content: center;
-      font-size: 2.1rem; color: #fff;
-      margin-bottom: 1.25rem;
-      border: 3px solid var(--border);
+      font-size: 2.1rem; color: #fff; margin-bottom: 1.25rem; border: 3px solid var(--border);
     }
-
     .profile-meta { margin: 1rem 0; list-style: none; }
-    .profile-meta li {
-      display: flex; align-items: flex-start; gap: 9px;
-      font-size: .92rem; color: var(--muted); margin-bottom: 7px;
-    }
+    .profile-meta li { display: flex; align-items: flex-start; gap: 9px; font-size: .92rem; color: var(--muted); margin-bottom: 7px; }
     .dot { color: var(--terra); font-weight: 700; margin-top: 1px; }
 
-    /* ======= SERVICE CARDS ======= */
+    /* SERVICE CARDS */
     .service-card {
-      background: var(--parchment);
-      border-radius: var(--radius); padding: 30px;
-      border: 1px solid var(--border);
-      transition: border-color .2s, box-shadow .2s, transform .2s;
+      background: var(--parchment); border-radius: var(--radius); padding: 30px;
+      border: 1px solid var(--border); transition: border-color .2s, box-shadow .2s, transform .2s;
     }
-    .service-card:hover {
-      border-color: var(--terra);
-      box-shadow: var(--shadow); transform: translateY(-3px);
-    }
+    .service-card:hover { border-color: var(--terra); box-shadow: var(--shadow); transform: translateY(-3px); }
     .service-icon { font-size: 2rem; margin-bottom: .8rem; }
     .service-card h3 { color: var(--espresso); }
     .service-card p  { font-size: .92rem; color: var(--muted); margin-top: .4rem; }
 
-    /* ======= SUBJECT BLOCKS ======= */
-    .subject-block {
-      background: var(--parchment); border-radius: var(--radius);
-      padding: 30px 32px; border: 1px solid var(--border);
-    }
+    /* SUBJECT BLOCKS */
+    .subject-block { background: var(--parchment); border-radius: var(--radius); padding: 30px 32px; border: 1px solid var(--border); }
     .subject-block h3 { color: var(--espresso); margin-bottom: 1rem; }
     .subject-list { display: flex; flex-wrap: wrap; gap: 8px; }
 
-    /* ======= TARIF ======= */
+    /* TARIF */
     .tarif-box {
-      text-align: center; background: var(--parchment);
-      border-radius: var(--radius); box-shadow: var(--shadow);
-      padding: 64px 48px; max-width: 520px; margin: 0 auto;
-      border: 1px solid var(--border);
-      position: relative; overflow: hidden;
+      text-align: center; background: var(--parchment); border-radius: var(--radius);
+      box-shadow: var(--shadow); padding: 64px 48px; max-width: 520px; margin: 0 auto;
+      border: 1px solid var(--border); position: relative; overflow: hidden;
     }
     .tarif-box::before {
       content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px;
       background: linear-gradient(90deg, var(--terra), var(--amber));
     }
-    .tarif-price {
-      font-family: 'Playfair Display', serif;
-      font-size: 5.5rem; font-weight: 700;
-      color: var(--espresso); line-height: 1;
-    }
+    .tarif-price { font-family: 'Playfair Display', serif; font-size: 5.5rem; font-weight: 700; color: var(--espresso); line-height: 1; }
     .tarif-price span { font-size: 2.2rem; color: var(--terra); }
     .tarif-note { color: var(--muted); margin-top: 1rem; font-size: .94rem; }
     .tarif-extras { margin-top: 2rem; display: flex; flex-direction: column; gap: 11px; text-align: left; }
-    .tarif-extras li {
-      list-style: none; display: flex; align-items: center; gap: 10px;
-      font-size: .95rem; color: var(--text);
-    }
+    .tarif-extras li { list-style: none; display: flex; align-items: center; gap: 10px; font-size: .95rem; color: var(--text); }
     .check { color: #22c55e; font-weight: 700; font-size: 1rem; }
 
-    /* ======= DISPONIBILITÉS ======= */
-    .dispo-card {
-      background: var(--parchment); border-radius: var(--radius);
-      padding: 32px; border: 1px solid var(--border); box-shadow: var(--shadow);
-    }
+    /* DISPONIBILITES */
+    .dispo-card { background: var(--parchment); border-radius: var(--radius); padding: 32px; border: 1px solid var(--border); box-shadow: var(--shadow); }
     .dispo-card h3 { color: var(--espresso); margin-bottom: 1rem; }
     .dispo-row {
       display: flex; justify-content: space-between; align-items: center;
-      gap: 12px;
-      padding: 11px 0; border-bottom: 1px solid var(--border); font-size: .92rem;
+      gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--border); font-size: .92rem;
     }
     .dispo-row:last-child { border-bottom: none; }
     .dispo-row span:first-child { flex: 1; min-width: 0; }
     .dispo-status {
-      font-weight: 600; font-size: .8rem;
-      padding: 4px 13px; border-radius: 99px;
+      font-weight: 600; font-size: .8rem; padding: 4px 13px; border-radius: 99px;
       white-space: nowrap; flex-shrink: 0;
     }
     .available   { background: #dcfce7; color: #16a34a; }
     .unavailable { background: #fee2e2; color: #dc2626; }
     .partial     { background: #fef9c3; color: #a16207; }
 
-    /* ======= CONTACT ======= */
+    /* CONTACT */
     .contact-card {
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.13);
+      background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.13);
       border-radius: var(--radius); padding: 38px;
-      backdrop-filter: blur(8px);
-      transition: background .2s;
+      backdrop-filter: blur(8px); transition: background .2s;
     }
     .contact-card:hover { background: rgba(255,255,255,.09); }
     .contact-card h3 { color: #fff; margin-bottom: 1.2rem; }
-    .contact-row {
-      display: flex; align-items: center; gap: 13px;
-      margin-bottom: 14px; font-size: .96rem;
-      color: rgba(255,255,255,.82);
-    }
+    .contact-row { display: flex; align-items: center; gap: 13px; margin-bottom: 14px; font-size: .96rem; color: rgba(255,255,255,.82); }
     .icon-circle {
       width: 40px; height: 40px; flex-shrink: 0;
-      background: rgba(184,92,56,.30);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1rem;
+      background: rgba(184,92,56,.30); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; font-size: 1rem;
       border: 1px solid rgba(184,92,56,.40);
     }
     .contact-label { font-size: .8rem; color: rgba(255,255,255,.45); margin-bottom: 2px; }
     .contact-value { font-weight: 600; color: #f5c4a0; }
-    .contact-link-hover {
-      text-decoration: none;
-      cursor: pointer;
-      transition: color .18s, text-decoration .18s;
-      user-select: text; /* reste copiable */
-    }
-    .contact-link-hover:hover {
-      color: #fff;
-      text-decoration: underline;
-      text-underline-offset: 3px;
-    }
 
-    /* ======= FOOTER ======= */
-    footer {
-      background: var(--espresso);
-      border-top: 3px solid var(--terra);
-      text-align: center; padding: 44px 24px;
+    /* Les liens de contact (tel et email) — construits en JS pour éviter l'obfuscation Cloudflare */
+    .contact-link {
+      font-weight: 600; color: #f5c4a0;
+      text-decoration: none; cursor: pointer;
+      user-select: text;
+      transition: color .18s;
     }
+    .contact-link:hover { color: #fff; text-decoration: underline; text-underline-offset: 3px; }
+
+    /* FOOTER */
+    footer { background: var(--espresso); border-top: 3px solid var(--terra); text-align: center; padding: 44px 24px; }
     .footer-main { color: rgba(255,255,255,.82); font-size: .96rem; }
     .footer-main span { color: #f5c4a0; font-weight: 600; }
     .footer-sub  { color: rgba(255,255,255,.4); font-size: .85rem; margin-top: 7px; }
 
-    /* ======= ANIMATIONS ======= */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(22px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
+    /* ANIMATIONS */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
     .animate  { animation: fadeUp .62s ease both; }
     .delay-1  { animation-delay: .10s; }
     .delay-2  { animation-delay: .22s; }
@@ -382,116 +286,114 @@
 </head>
 <body>
 
-<!-- ===== NAV ===== -->
+<!-- NAV -->
 <nav>
   <div class="nav-inner">
-    <div class="nav-brand">Cours<span>•</span>Waterloo</div>
+    <div class="nav-brand">Cours<span>&bull;</span>Waterloo</div>
     <button class="hamburger" id="hamburger" aria-label="Ouvrir le menu" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
     <div class="nav-links" id="nav-links">
-      <a href="#qui">Qui sommes-nous ?</a>
+      <a href="#qui">Qui sommes-nous&nbsp;?</a>
       <a href="#services">Services</a>
-      <a href="#matieres">Matières</a>
+      <a href="#matieres">Mati&egrave;res</a>
       <a href="#tarif">Tarif</a>
-      <a href="#dispos">Disponibilités</a>
+      <a href="#dispos">Disponibilit&eacute;s</a>
       <a href="#contact" class="nav-cta">Contact</a>
     </div>
   </div>
 </nav>
 
-<!-- ===== HERO ===== -->
+<!-- HERO -->
 <section class="hero" id="top">
   <div class="container hero-inner">
-    <div class="badge animate">🎓 Waterloo · Belgique</div>
+    <div class="badge animate">&#127979; Waterloo &middot; Belgique</div>
     <h1 class="animate delay-1">Cours particuliers<br>primaire &amp; secondaire</h1>
-    <p class="hero-sub animate delay-2">Des élèves motivés qui aident d'autres élèves à comprendre, progresser et réussir.</p>
+    <p class="hero-sub animate delay-2">Des &eacute;l&egrave;ves motiv&eacute;s qui aident d&rsquo;autres &eacute;l&egrave;ves &agrave; comprendre, progresser et r&eacute;ussir.</p>
     <div style="display:flex;gap:14px;flex-wrap:wrap;" class="animate delay-3">
-      <a href="#contact" class="btn btn-terra">📩 Nous contacter</a>
-      <a href="#qui"     class="btn btn-outline">Découvrir le concept</a>
+      <a href="#contact" class="btn btn-terra">&#128233; Nous contacter</a>
+      <a href="#qui"     class="btn btn-outline">D&eacute;couvrir le concept</a>
     </div>
     <div class="hero-cards animate delay-3">
       <div class="hero-card">
-        <div class="icon">🤝</div>
-        <strong>Par des élèves</strong>
+        <div class="icon">&#129309;</div>
+        <strong>Par des &eacute;l&egrave;ves</strong>
         <p>Explications dans votre langage</p>
       </div>
       <div class="hero-card">
-        <div class="icon">📐</div>
+        <div class="icon">&#128208;</div>
         <strong>Maths &amp; Sciences</strong>
         <p>Programme belge actuel</p>
       </div>
       <div class="hero-card">
-        <div class="icon">💶</div>
-        <strong>20 € / heure</strong>
+        <div class="icon">&#128182;</div>
+        <strong>20 &euro; / heure</strong>
         <p>Tarif unique, sans surprise</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ===== QUI SOMMES-NOUS ===== -->
+<!-- QUI SOMMES-NOUS -->
 <section class="section section-parch" id="qui">
   <div class="container">
     <div class="section-title">
-      <div class="badge">👋 Qui sommes-nous ?</div>
-      <h2>Deux élèves de 5<sup>e</sup> secondaire à votre service</h2>
+      <div class="badge">&#128075; Qui sommes-nous&nbsp;?</div>
+      <h2>Deux &eacute;l&egrave;ves de 5<sup>e</sup> secondaire &agrave; votre service</h2>
       <span class="title-rule"></span>
-      <p>Notre force : nous avons nous-mêmes suivi ce programme récemment. On sait exactement ce qui pose problème, et comment l'expliquer clairement.</p>
+      <p>Notre force&nbsp;: nous avons nous-m&ecirc;mes suivi ce programme r&eacute;cemment. On sait exactement ce qui pose probl&egrave;me, et comment l&rsquo;expliquer clairement.</p>
     </div>
     <div class="grid-2">
 
-      <!-- DAMIEN -->
       <div class="profile-card">
         <!--
-          📸 PHOTO DAMIEN :
+          PHOTO DAMIEN :
           1. Placez la photo dans /images/profils/damien.jpg
-          2. Supprimez la div.avatar-placeholder ci-dessous
-          3. Décommentez la balise <img>
+          2. Supprimez la div.avatar-placeholder
+          3. Décommentez la balise img
         -->
-        <div class="avatar-placeholder">👨‍🎓</div>
+        <div class="avatar-placeholder">&#127979;</div>
         <!-- <img src="images/profils/damien.jpg" alt="Damien Alaerts"
              style="width:96px;height:96px;border-radius:50%;object-fit:cover;
                     margin-bottom:1.25rem;border:3px solid var(--border);"> -->
         <h3>Alaerts Damien</h3>
-        <p style="color:var(--muted);font-size:.88rem;margin-bottom:.9rem;">Élève de 5<sup>e</sup> secondaire</p>
+        <p style="color:var(--muted);font-size:.88rem;margin-bottom:.9rem;">&Eacute;l&egrave;ve de 5<sup>e</sup> secondaire</p>
         <ul class="profile-meta">
-          <li><span class="dot">▸</span>Spécialité : mathématiques (8h) &amp; sciences</li>
-          <li><span class="dot">▸</span>Style : pédagogue, patient, adaptatif</li>
-          <li><span class="dot">▸</span>Cours chez lui <em>ou</em> chez vous (Waterloo)</li>
+          <li><span class="dot">&#9658;</span>Sp&eacute;cialit&eacute;&nbsp;: math&eacute;matiques (8h) &amp; sciences</li>
+          <li><span class="dot">&#9658;</span>Style&nbsp;: p&eacute;dagogue, patient, adaptatif</li>
+          <li><span class="dot">&#9658;</span>Cours chez lui <em>ou</em> chez vous (Waterloo)</li>
         </ul>
         <div style="margin-top:1rem;">
-          <span class="tag">📍 Waterloo</span>
-          <span class="tag">🏠 Chez lui</span>
-          <span class="tag">🚶 Chez le client</span>
+          <span class="tag">&#128205; Waterloo</span>
+          <span class="tag">&#127968; Chez lui</span>
+          <span class="tag">&#128694; Chez le client</span>
         </div>
       </div>
 
-      <!-- MATHIEU -->
       <div class="profile-card">
         <!--
-          📸 PHOTO MATHIEU :
+          PHOTO MATHIEU :
           1. Placez la photo dans /images/profils/mathieu.jpg
-          2. Supprimez la div.avatar-placeholder ci-dessous
-          3. Décommentez la balise <img>
+          2. Supprimez la div.avatar-placeholder
+          3. Décommentez la balise img
         -->
-        <div class="avatar-placeholder">👨‍🎓</div>
+        <div class="avatar-placeholder">&#127979;</div>
         <!-- <img src="images/profils/mathieu.jpg" alt="Mathieu Simar"
              style="width:96px;height:96px;border-radius:50%;object-fit:cover;
                     margin-bottom:1.25rem;border:3px solid var(--border);"> -->
         <h3>Simar Mathieu</h3>
-        <p style="color:var(--muted);font-size:.88rem;margin-bottom:.9rem;">Élève de 5<sup>e</sup> secondaire</p>
+        <p style="color:var(--muted);font-size:.88rem;margin-bottom:.9rem;">&Eacute;l&egrave;ve de 5<sup>e</sup> secondaire</p>
         <ul class="profile-meta">
-          <li><span class="dot">▸</span>Spécialité : mathématiques (8h) &amp; sciences</li>
-          <li><span class="dot">▸</span>Style : clair, structuré, méthodique</li>
-          <li><span class="dot">▸</span>Cours uniquement chez lui</li>
+          <li><span class="dot">&#9658;</span>Sp&eacute;cialit&eacute;&nbsp;: math&eacute;matiques (8h) &amp; sciences</li>
+          <li><span class="dot">&#9658;</span>Style&nbsp;: clair, structur&eacute;, m&eacute;thodique</li>
+          <li><span class="dot">&#9658;</span>Cours uniquement chez lui</li>
         </ul>
         <div style="margin-top:1rem;">
-          <span class="tag">📍 Waterloo / Linkebeek</span>
-          <span class="tag">🏠 Chez lui uniquement</span>
+          <span class="tag">&#128205; Waterloo / Linkebeek</span>
+          <span class="tag">&#127968; Chez lui uniquement</span>
         </div>
         <p style="margin-top:1rem;font-size:.84rem;color:var(--muted);">
-          ⓘ Localisation variable selon les semaines (Waterloo ou Linkebeek).
+          &#9432; Localisation variable selon les semaines (Waterloo ou Linkebeek).
         </p>
       </div>
 
@@ -499,43 +401,43 @@
   </div>
 </section>
 
-<!-- ===== NOS SERVICES ===== -->
+<!-- NOS SERVICES -->
 <section class="section section-sand" id="services">
   <div class="container">
     <div class="section-title">
-      <div class="badge">⚡ Nos services</div>
-      <h2>Comment pouvons-nous vous aider ?</h2>
+      <div class="badge">&#9889; Nos services</div>
+      <h2>Comment pouvons-nous vous aider&nbsp;?</h2>
       <span class="title-rule"></span>
-      <p>Du soutien ponctuel aux préparations aux examens, nous nous adaptons à vos besoins.</p>
+      <p>Du soutien ponctuel aux pr&eacute;parations aux examens, nous nous adaptons &agrave; vos besoins.</p>
     </div>
     <div class="grid-3">
       <div class="service-card">
-        <div class="service-icon">📚</div>
+        <div class="service-icon">&#128218;</div>
         <h3>Aide aux devoirs</h3>
-        <p>Compréhension des exercices du jour, correction, méthode de résolution.</p>
+        <p>Compr&eacute;hension des exercices du jour, correction, m&eacute;thode de r&eacute;solution.</p>
       </div>
       <div class="service-card">
-        <div class="service-icon">🔁</div>
-        <h3>Remédiation</h3>
+        <div class="service-icon">&#128257;</div>
+        <h3>R&eacute;m&eacute;diation</h3>
         <p>Retour sur des notions mal comprises, consolidation des bases.</p>
       </div>
       <div class="service-card">
-        <div class="service-icon">🎯</div>
-        <h3>Préparation aux examens</h3>
-        <p>Révision ciblée, entraînement sur exercices types, gestion du stress.</p>
+        <div class="service-icon">&#127919;</div>
+        <h3>Pr&eacute;paration aux examens</h3>
+        <p>R&eacute;vision cibl&eacute;e, entra&icirc;nement sur exercices types, gestion du stress.</p>
       </div>
       <div class="service-card">
-        <div class="service-icon">💡</div>
-        <h3>Explications ciblées</h3>
-        <p>Lorsqu'une notion bloque, on l'attaque sous un angle différent.</p>
+        <div class="service-icon">&#128161;</div>
+        <h3>Explications cibl&eacute;es</h3>
+        <p>Lorsqu&rsquo;une notion bloque, on l&rsquo;attaque sous un angle diff&eacute;rent.</p>
       </div>
       <div class="service-card">
-        <div class="service-icon">🗂️</div>
-        <h3>Méthodologie</h3>
-        <p>Organisation du travail, logique de résolution, méthodes d'apprentissage.</p>
+        <div class="service-icon">&#128193;</div>
+        <h3>M&eacute;thodologie</h3>
+        <p>Organisation du travail, logique de r&eacute;solution, m&eacute;thodes d&rsquo;apprentissage.</p>
       </div>
       <div class="service-card">
-        <div class="service-icon">🔢</div>
+        <div class="service-icon">&#128290;</div>
         <h3>Cours de maths &amp; sciences</h3>
         <p>Du primaire au secondaire, selon le programme belge en vigueur.</p>
       </div>
@@ -543,50 +445,50 @@
   </div>
 </section>
 
-<!-- ===== MATIÈRES ===== -->
+<!-- MATIERES -->
 <section class="section section-parch" id="matieres">
   <div class="container">
     <div class="section-title">
-      <div class="badge">📖 Matières</div>
+      <div class="badge">&#128214; Mati&egrave;res</div>
       <h2>Ce que nous enseignons</h2>
       <span class="title-rule"></span>
-      <p>Principalement axés sur les sciences et les mathématiques, du primaire au secondaire.</p>
+      <p>Principalement ax&eacute;s sur les sciences et les math&eacute;matiques, du primaire au secondaire.</p>
     </div>
     <div class="grid-2" style="max-width:800px;margin:0 auto;">
       <div class="subject-block">
-        <h3>🔢 Mathématiques</h3>
+        <h3>&#128290; Math&eacute;matiques</h3>
         <div class="subject-list">
-          <span class="tag">Algèbre</span>
-          <span class="tag">Géométrie</span>
+          <span class="tag">Alg&egrave;bre</span>
+          <span class="tag">G&eacute;om&eacute;trie</span>
           <span class="tag">Fonctions</span>
-          <span class="tag">Trigonométrie</span>
+          <span class="tag">Trigonom&eacute;trie</span>
           <span class="tag">Statistiques</span>
           <span class="tag">Tous niveaux secondaire</span>
           <span class="tag">Primaire</span>
         </div>
       </div>
       <div class="subject-block">
-        <h3>🔬 Sciences</h3>
+        <h3>&#128300; Sciences</h3>
         <div class="subject-list">
           <span class="tag">Physique</span>
           <span class="tag">Chimie</span>
           <span class="tag">Biologie</span>
-          <span class="tag">Sciences générales</span>
+          <span class="tag">Sciences g&eacute;n&eacute;rales</span>
         </div>
       </div>
       <div class="subject-block">
-        <h3>🧭 Méthodologie</h3>
+        <h3>&#129517; M&eacute;thodologie</h3>
         <div class="subject-list">
           <span class="tag">Organisation du travail</span>
           <span class="tag">Prise de notes</span>
-          <span class="tag">Logique de résolution</span>
+          <span class="tag">Logique de r&eacute;solution</span>
         </div>
       </div>
       <div class="subject-block">
-        <h3>✏️ Exercices complexes</h3>
+        <h3>&#9999; Exercices complexes</h3>
         <div class="subject-list">
           <span class="tag">Exercices difficiles</span>
-          <span class="tag">Compréhension globale</span>
+          <span class="tag">Compr&eacute;hension globale</span>
           <span class="tag">Approche adaptative</span>
         </div>
       </div>
@@ -594,47 +496,48 @@
   </div>
 </section>
 
-<!-- ===== TARIF ===== -->
+<!-- TARIF -->
 <section class="section section-sand" id="tarif">
   <div class="container">
     <div class="section-title">
-      <div class="badge">💶 Tarif</div>
+      <div class="badge">&#128182; Tarif</div>
       <h2>Simple et transparent</h2>
       <span class="title-rule"></span>
       <p>Un seul tarif, pour tout le monde.</p>
     </div>
     <div class="tarif-box">
-      <div class="tarif-price">20<span>€/h</span></div>
+      <div class="tarif-price">20<span>&euro;/h</span></div>
       <p class="tarif-note">Tarif unique par heure de cours</p>
       <ul class="tarif-extras">
-        <li><span class="check">✓</span>Aucun supplément pour déplacement à Waterloo</li>
-        <li><span class="check">✓</span>Primaire ou secondaire, même prix</li>
-        <li><span class="check">✓</span>Paiement après le cours</li>
-        <li><span class="check">✓</span>Pas de frais d'inscription</li>
+        <li><span class="check">&#10003;</span>Aucun suppl&eacute;ment pour d&eacute;placement &agrave; Waterloo</li>
+        <li><span class="check">&#10003;</span>Primaire ou secondaire, m&ecirc;me prix</li>
+        <li><span class="check">&#10003;</span>Paiement apr&egrave;s le cours</li>
+        <li><span class="check">&#10003;</span>Pas de frais d&rsquo;inscription</li>
       </ul>
       <a href="#contact" class="btn btn-terra" style="margin-top:2rem;width:100%;">
-        📩 Réserver un premier cours
+        &#128233; R&eacute;server un premier cours
       </a>
     </div>
   </div>
 </section>
 
-<!-- ===== DISPONIBILITÉS ===== -->
+<!-- DISPONIBILITES -->
 <section class="section section-parch" id="dispos">
   <div class="container">
     <div class="section-title">
-      <div class="badge">📅 Disponibilités</div>
-      <h2>Quand sommes-nous disponibles ?</h2>
+      <div class="badge">&#128197; Disponibilit&eacute;s</div>
+      <h2>Quand sommes-nous disponibles&nbsp;?</h2>
       <span class="title-rule"></span>
-      <p>Les disponibilités exactes se confirment toujours par message. Voici les informations à jour.</p>
+      <p>Les disponibilit&eacute;s exactes se confirment toujours par message. Voici les informations &agrave; jour.</p>
     </div>
     <div class="grid-2" style="max-width:860px;margin:0 auto;">
 
       <div class="dispo-card">
         <h3>Alaerts Damien</h3>
         <div id="dispo-damien">
+          <!-- Valeurs par défaut — remplacées automatiquement par disponibilites.json -->
           <div class="dispo-row">
-            <span>Semaine (lundi–vendredi)</span>
+            <span>Semaine (lundi&ndash;vendredi)</span>
             <span class="dispo-status available">Disponible</span>
           </div>
           <div class="dispo-row">
@@ -642,7 +545,7 @@
             <span class="dispo-status available">Disponible</span>
           </div>
           <div class="dispo-row">
-            <span>Vacances de Pâques</span>
+            <span>Vacances de P&acirc;ques</span>
             <span class="dispo-status available">Disponible</span>
           </div>
         </div>
@@ -651,12 +554,13 @@
       <div class="dispo-card">
         <h3>Simar Mathieu</h3>
         <div id="dispo-mathieu">
+          <!-- Valeurs par défaut — remplacées automatiquement par disponibilites.json -->
           <div class="dispo-row">
-            <span>Semaine (lundi–vendredi)</span>
+            <span>Semaine (lundi&ndash;vendredi)</span>
             <span class="dispo-status available">Disponible</span>
           </div>
           <div class="dispo-row">
-            <span>12 – 28 avril</span>
+            <span>12 &ndash; 28 avril</span>
             <span class="dispo-status unavailable">Indisponible (voyage)</span>
           </div>
           <div class="dispo-row">
@@ -670,15 +574,15 @@
   </div>
 </section>
 
-<!-- ===== CONTACT ===== -->
+<!-- CONTACT -->
 <section class="section section-dark" id="contact">
   <div class="container">
     <div class="section-title">
-      <div class="badge">📩 Contact</div>
-      <h2 style="color:#fff;">Prenons contact !</h2>
+      <div class="badge">&#128233; Contact</div>
+      <h2 style="color:#fff;">Prenons contact&nbsp;!</h2>
       <span class="title-rule"></span>
       <p style="color:rgba(255,255,255,.6);">
-        N'hésitez pas à nous écrire — les disponibilités exactes se confirment par message.
+        N&rsquo;h&eacute;sitez pas &agrave; nous &eacute;crire &mdash; les disponibilit&eacute;s exactes se confirment par message.
       </p>
     </div>
     <div class="grid-2" style="max-width:840px;margin:0 auto;">
@@ -686,18 +590,19 @@
       <div class="contact-card">
         <h3>Alaerts Damien</h3>
         <div class="contact-row">
-          <div class="icon-circle">📱</div>
+          <div class="icon-circle">&#128241;</div>
           <div>
-            <div class="contact-label">Téléphone / WhatsApp</div>
-            <a href="https://wa.me/32486409020" class="contact-value contact-link-hover" target="_blank" rel="noopener noreferrer">+32 486 40 90 20</a>
+            <div class="contact-label">T&eacute;l&eacute;phone / WhatsApp</div>
+            <!-- Lien WhatsApp construit en JS — ne pas modifier le href ici -->
+            <a id="wa-damien" class="contact-link" target="_blank" rel="noopener noreferrer">+32 486 40 90 20</a>
           </div>
         </div>
         <div class="contact-row">
-          <div class="icon-circle">✉️</div>
+          <div class="icon-circle">&#9993;</div>
           <div>
             <div class="contact-label">Email</div>
-            <!-- Modifiez l'email ici ou dans data/config.json → "damien.email" -->
-            <a href="/cdn-cgi/l/email-protection#c6a2a7abafa3a8e8a7aaa7a3b4b2b586a7b4b1a7b2a3b4aaa9a9e8a4a3" class="contact-value contact-link-hover" target="_blank" rel="noopener noreferrer" id="email-damien-display">damien.alaerts&#64;arwaterloo.be</a>
+            <!-- Lien mailto construit en JS — ne pas modifier le href ici -->
+            <a id="mail-damien" class="contact-link" target="_blank" rel="noopener noreferrer">damien.alaerts [arwaterloo.be]</a>
           </div>
         </div>
       </div>
@@ -705,99 +610,161 @@
       <div class="contact-card">
         <h3>Simar Mathieu</h3>
         <div class="contact-row">
-          <div class="icon-circle">📱</div>
+          <div class="icon-circle">&#128241;</div>
           <div>
-            <div class="contact-label">Téléphone / WhatsApp</div>
-            <a href="https://wa.me/32493423656" class="contact-value contact-link-hover" target="_blank" rel="noopener noreferrer">+32 493 42 36 56</a>
+            <div class="contact-label">T&eacute;l&eacute;phone / WhatsApp</div>
+            <!-- Lien WhatsApp construit en JS — ne pas modifier le href ici -->
+            <a id="wa-mathieu" class="contact-link" target="_blank" rel="noopener noreferrer">+32 493 42 36 56</a>
           </div>
         </div>
         <div class="contact-row">
-          <div class="icon-circle">✉️</div>
+          <div class="icon-circle">&#9993;</div>
           <div>
             <div class="contact-label">Email</div>
-            <!-- Modifiez l'email ici ou dans data/config.json → "mathieu.email" -->
-            <a href="/cdn-cgi/l/email-protection#6805091c00010d1d461b0105091a28091a1f091c0d1a040707460a0d" class="contact-value contact-link-hover" target="_blank" rel="noopener noreferrer" id="email-mathieu-display">mathieu.simar&#64;arwaterloo.be</a>
+            <!-- Lien mailto construit en JS — ne pas modifier le href ici -->
+            <a id="mail-mathieu" class="contact-link" target="_blank" rel="noopener noreferrer">mathieu.simar [arwaterloo.be]</a>
           </div>
         </div>
       </div>
 
     </div>
     <p style="text-align:center;margin-top:2.5rem;color:rgba(255,255,255,.4);font-size:.88rem;">
-      ⓘ Les disponibilités exactes sont confirmées par message après prise de contact.
+      &#9432; Les disponibilit&eacute;s exactes sont confirm&eacute;es par message apr&egrave;s prise de contact.
     </p>
   </div>
 </section>
 
-<!-- ===== FOOTER ===== -->
+<!-- FOOTER -->
 <footer>
-  <p class="footer-main">© 2025 Cours particuliers Waterloo — <span>Damien &amp; Mathieu</span> · 5<sup>e</sup> secondaire</p>
-  <p class="footer-sub">Par des élèves, pour des élèves 🎓</p>
+  <p class="footer-main">&copy; 2025 Cours particuliers Waterloo &mdash; <span>Damien &amp; Mathieu</span> &middot; 5<sup>e</sup> secondaire</p>
+  <p class="footer-sub">Par des &eacute;l&egrave;ves, pour des &eacute;l&egrave;ves &#127979;</p>
 </footer>
 
-<!-- ===== SCRIPTS ===== -->
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-  /* — Hamburger — */
-  var hamburger = document.getElementById('hamburger');
-  var navLinks   = document.getElementById('nav-links');
+<script>
+/* ============================================================
+   LIENS DE CONTACT
+   Construits entièrement en JS pour éviter que Cloudflare
+   n'obfusque les adresses email et liens WhatsApp.
+   Pour modifier : changez les variables ci-dessous.
+   ============================================================ */
+(function() {
+  /* -- Données de contact -- */
+  var DAMIEN_PHONE  = '32486409020';
+  var DAMIEN_EMAIL  = 'damien.alaerts' + '\u0040' + 'arwaterloo.be';
+  var MATHIEU_PHONE = '32493423656';
+  var MATHIEU_EMAIL = 'mathieu.simar' + '\u0040' + 'arwaterloo.be';
 
-  hamburger.addEventListener('click', function() {
-    var open = navLinks.classList.toggle('open');
-    hamburger.setAttribute('aria-expanded', String(open));
+  /* -- WhatsApp -- */
+  var waDamien  = document.getElementById('wa-damien');
+  var waMathieu = document.getElementById('wa-mathieu');
+  waDamien.href  = 'https://wa.me/' + DAMIEN_PHONE;
+  waMathieu.href = 'https://wa.me/' + MATHIEU_PHONE;
+
+  /* -- Email -- */
+  var mailDamien  = document.getElementById('mail-damien');
+  var mailMathieu = document.getElementById('mail-mathieu');
+  mailDamien.href        = 'mailto:' + DAMIEN_EMAIL;
+  mailDamien.textContent = DAMIEN_EMAIL;
+  mailMathieu.href        = 'mailto:' + MATHIEU_EMAIL;
+  mailMathieu.textContent = MATHIEU_EMAIL;
+})();
+
+/* ============================================================
+   HAMBURGER
+   ============================================================ */
+var hamburger = document.getElementById('hamburger');
+var navLinks  = document.getElementById('nav-links');
+
+hamburger.addEventListener('click', function() {
+  var open = navLinks.classList.toggle('open');
+  hamburger.setAttribute('aria-expanded', String(open));
+});
+navLinks.querySelectorAll('a').forEach(function(a) {
+  a.addEventListener('click', function() {
+    navLinks.classList.remove('open');
+    hamburger.setAttribute('aria-expanded', 'false');
   });
-  navLinks.querySelectorAll('a').forEach(function(a) {
-    a.addEventListener('click', function() {
-      navLinks.classList.remove('open');
-      hamburger.setAttribute('aria-expanded', 'false');
-    });
+});
+document.addEventListener('click', function(e) {
+  if (!navLinks.contains(e.target) && !hamburger.contains(e.target)) {
+    navLinks.classList.remove('open');
+    hamburger.setAttribute('aria-expanded', 'false');
+  }
+});
+
+/* ============================================================
+   DISPONIBILITES
+   Chargées depuis data/disponibilites.json
+   Le paramètre ?v=timestamp force le rechargement sans cache.
+   ============================================================ */
+function renderDispos(id, items) {
+  var el = document.getElementById('dispo-' + id);
+  if (!el || !items || !items.length) return;
+  el.innerHTML = items.map(function(d) {
+    return '<div class="dispo-row">'
+         + '<span>' + d.label + '</span>'
+         + '<span class="dispo-status ' + d.status + '">' + d.text + '</span>'
+         + '</div>';
+  }).join('');
+}
+
+fetch('data/disponibilites.json?v=' + Date.now())
+  .then(function(r) {
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    return r.json();
+  })
+  .then(function(data) {
+    renderDispos('damien',  data.damien);
+    renderDispos('mathieu', data.mathieu);
+  })
+  .catch(function(err) {
+    console.warn('disponibilites.json non chargé :', err);
+    /* Les valeurs HTML par défaut restent affichées */
   });
-  document.addEventListener('click', function(e) {
-    if (!navLinks.contains(e.target) && !hamburger.contains(e.target)) {
-      navLinks.classList.remove('open');
-      hamburger.setAttribute('aria-expanded', 'false');
+
+/* ============================================================
+   EMAILS depuis data/config.json (optionnel — écrase les
+   valeurs JS ci-dessus si le fichier est présent)
+   ============================================================ */
+fetch('data/config.json?v=' + Date.now())
+  .then(function(r) {
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    return r.json();
+  })
+  .then(function(c) {
+    if (c.damien && c.damien.email) {
+      var d = document.getElementById('mail-damien');
+      d.href        = 'mailto:' + c.damien.email;
+      d.textContent = c.damien.email;
+    }
+    if (c.mathieu && c.mathieu.email) {
+      var m = document.getElementById('mail-mathieu');
+      m.href        = 'mailto:' + c.mathieu.email;
+      m.textContent = c.mathieu.email;
+    }
+  })
+  .catch(function() {});
+
+/* ============================================================
+   ANIMATIONS AU SCROLL
+   ============================================================ */
+var obs = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) {
+    if (e.isIntersecting) {
+      e.target.style.opacity  = '1';
+      e.target.style.transform = 'translateY(0)';
     }
   });
+}, { threshold: 0.08 });
 
-  /* — Disponibilités depuis data/disponibilites.json — */
-  function renderDispos(id, items) {
-    var el = document.getElementById('dispo-' + id);
-    if (!el || !items) return;
-    el.innerHTML = items.map(function(d) {
-      return '<div class="dispo-row"><span>' + d.label + '</span>'
-           + '<span class="dispo-status ' + d.status + '">' + d.text + '</span></div>';
-    }).join('');
-  }
-  fetch('data/disponibilites.json')
-    .then(function(r) { if (!r.ok) throw 0; return r.json(); })
-    .then(function(d) { renderDispos('damien', d.damien); renderDispos('mathieu', d.mathieu); })
-    .catch(function() {});
-
-  /* — Emails depuis data/config.json — */
-  fetch('data/config.json')
-    .then(function(r) { if (!r.ok) throw 0; return r.json(); })
-    .then(function(c) {
-      if (c.damien && c.damien.email) {
-        var d = document.getElementById('email-damien-display');
-        d.textContent = c.damien.email;
-        d.href = 'mailto:' + c.damien.email;
-      }
-      if (c.mathieu && c.mathieu.email) {
-        var m = document.getElementById('email-mathieu-display');
-        m.textContent = c.mathieu.email;
-        m.href = 'mailto:' + c.mathieu.email;
-      }
-    })
-    .catch(function() {});
-
-  /* — Scroll animations — */
-  var obs = new IntersectionObserver(function(entries) {
-    entries.forEach(function(e) {
-      if (e.isIntersecting) {
-        e.target.style.opacity = '1';
-        e.target.style.transform = 'translateY(0)';
-      }
-    });
-  }, { threshold: 0.08 });
-
-  document.querySelectorAll(
-    '.profile-card,.service-card,.subject-block,.dispo-card,.contact-card,.tarif-box'
-  ).forEac
+document.querySelectorAll(
+  '.profile-card,.service-card,.subject-block,.dispo-card,.contact-card,.tarif-box'
+).forEach(function(el) {
+  el.style.opacity   = '0';
+  el.style.transform = 'translateY(18px)';
+  el.style.transition = 'opacity .5s ease, transform .5s ease';
+  obs.observe(el);
+});
+</script>
+</body>
+</html>
