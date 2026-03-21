@@ -1,6 +1,6 @@
 {
   "damien": [
-    { "label": "Semaine (lundi–vendredi)", "status": "unavailable", "text": "Disponible" },
+    { "label": "Semaine (lundi–vendredi)", "status": "available", "text": "test" },
     { "label": "Week-end",                 "status": "available", "text": "Disponible" },
     { "label": "Vacances de Pâques",        "status": "available", "text": "Disponible" }
   ],
