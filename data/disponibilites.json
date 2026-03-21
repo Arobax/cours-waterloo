@@ -1,0 +1,12 @@
+{
+  "damien": [
+    { "label": "Semaine (lundi–vendredi)", "status": "unavailable", "text": "Disponible" },
+    { "label": "Week-end",                 "status": "available", "text": "Disponible" },
+    { "label": "Vacances de Pâques",        "status": "available", "text": "Disponible" }
+  ],
+  "mathieu": [
+    { "label": "Semaine (lundi–vendredi)", "status": "available",   "text": "Disponible" },
+    { "label": "12 – 28 avril",           "status": "unavailable", "text": "Indisponible (voyage)" },
+    { "label": "Week-end (hors absence)", "status": "available",   "text": "Disponible" }
+  ]
+}
