@@ -1,13 +1,12 @@
 {
   "damien": [
-    { "label": "TEST2Semaine (lundi–vendredi)", "status": "available", "text": "Disponible" },
+    { "label": "Semaine (lundi–vendredi)", "status": "available", "text": "Disponible" },
     { "label": "Week-end",                 "status": "available", "text": "Disponible" },
-    { "label": "Mercredi 25 mars",        "status": "unavailable", "text": "Indisponible" },
-    { "label": "Du 30 mars au 3 avril", "status": "unavailable",   "text": "Indisponible (Voyage scolaire)" }
+    { "label": "Vacances de printemps (27/04 - 10/05)",        "status": "available", "text": "Disponible" }
   ],
   "mathieu": [
     { "label": "Semaine (lundi–vendredi)", "status": "available",   "text": "Disponible" },
     { "label": "Week-ends",           "status": "available", "text": "Disponible" },
-    { "label": "Du 30 mars au 3 avril", "status": "unavailable",   "text": "Indisponible (Voyage scolaire)" }
+    { "label": "Vacances de printemps (27/04 - 10/05)",        "status": "partial", "text": "À confirmer" }
   ]
 }
