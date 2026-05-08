@@ -2,11 +2,11 @@
   "damien": [
     { "label": "Semaine (lundi–vendredi)", "status": "available", "text": "Disponible" },
     { "label": "Week-end",                 "status": "available", "text": "Disponible" },
-    { "label": "Vacances de printemps (27/04 - 10/05)",        "status": "available", "text": "Disponible" }
+    { "label": "Mai/Juin",        "status": "available", "text": "Disponible" }
   ],
   "mathieu": [
     { "label": "Semaine (lundi–vendredi)", "status": "available",   "text": "Disponible" },
-    { "label": "Week-ends",           "status": "available", "text": "Disponible" },
-    { "label": "Vacances de printemps (27/04 - 10/05)",        "status": "partial", "text": "À confirmer" }
+    { "label": "Week-end",           "status": "available", "text": "Disponible" },
+    { "label": "Mai/Juin",        "status": "available", "text": "Disponible" }
   ]
 }
