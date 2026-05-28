@@ -2,11 +2,13 @@
   "damien": [
     { "label": "Semaine (lundi–vendredi)", "status": "available", "text": "Disponible" },
     { "label": "Week-end",                 "status": "available", "text": "Disponible" },
-    { "label": "Mai/Juin",        "status": "available", "text": "Disponible" }
+    { "label": "Mai/Juin",        "status": "available", "text": "Disponible" },
+    { "label": "Juillet",        "status": "unavailable", "text": "Indisponible" }
   ],
   "mathieu": [
     { "label": "Semaine (lundi–vendredi)", "status": "available",   "text": "Disponible" },
     { "label": "Week-end",           "status": "available", "text": "Disponible" },
-    { "label": "Mai/Juin",        "status": "available", "text": "Disponible" }
+    { "label": "Jusqu'au 15 juin",        "status": "available", "text": "Disponible" },
+    { "label": "Après le 15 juin",        "status": "partial", "text": "À vérifier" }
   ]
 }
