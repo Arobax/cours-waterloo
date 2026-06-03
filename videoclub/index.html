@@ -212,10 +212,25 @@
     font-family: 'Bebas Neue', sans-serif;
     font-size: clamp(28px, 3.8vw, 58px);
     color: var(--cyan);
-    margin-bottom: 1vh;
+    margin-bottom: 0.8vh;
   }
 
   .bio-col .person-name.magenta { color: var(--magenta); }
+
+  .bio-col .portrait {
+    width: clamp(70px, 9vw, 140px);
+    height: clamp(70px, 9vw, 140px);
+    object-fit: cover;
+    border-radius: 6px;
+    margin-bottom: 1vh;
+    box-shadow: 0 0 24px rgba(0,229,255,0.18);
+    filter: saturate(0.75) contrast(1.08);
+    display: block;
+  }
+
+  .bio-col .portrait.magenta-shadow {
+    box-shadow: 0 0 24px rgba(255,45,120,0.22);
+  }
 
   .bio-col p {
     font-size: clamp(14px, 1.6vw, 24px);
@@ -349,7 +364,7 @@
   }
 
   .stats-row {
-    display: flex; gap: 3vw; width: 100%;
+    display: flex; gap: 3vw; width: 100%; align-items: center;
   }
 
   .stat-box {
@@ -374,22 +389,28 @@
     margin-top: 0.5vh;
   }
 
+  .stat-box.diamant-box {
+    display: flex; flex-direction: column; align-items: center; gap: 0.8vh;
+    border-color: rgba(255,45,120,0.25);
+  }
+
+  .stat-box.diamant-box img {
+    width: clamp(110px, 14vw, 220px);
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 0 16px rgba(255,45,120,0.45));
+  }
+
   /* ═══════════════════════════════════════
      SLIDE 3bis — Chanson
   ════════════════════════════════════════ */
   #s3b {
     background: radial-gradient(ellipse at center, rgba(0,229,255,0.06) 0%, transparent 70%), var(--deep);
     flex-direction: column;
-    gap: 3vh;
+    gap: 1.5vh;
     text-align: center;
-  }
-
-  #s3b .cover-img {
-    width: clamp(180px, 24vw, 340px);
-    height: clamp(180px, 24vw, 340px);
-    object-fit: cover;
-    border-radius: 8px;
-    box-shadow: 0 0 80px rgba(0,229,255,0.2), 0 0 40px rgba(255,45,120,0.1);
+    justify-content: center;
+    padding: 4vh 7vw;
   }
 
   #s3b .song-title {
@@ -397,6 +418,7 @@
     font-size: clamp(36px, 5.5vw, 80px);
     color: var(--cream);
     letter-spacing: 0.05em;
+    flex-shrink: 0;
   }
 
   #s3b .song-artist {
@@ -404,13 +426,51 @@
     font-size: clamp(14px, 1.8vw, 28px);
     color: var(--cyan);
     letter-spacing: 0.2em;
+    flex-shrink: 0;
   }
 
-  #s3b audio {
-    width: clamp(300px, 50vw, 700px);
-    margin-top: 1vh;
-    filter: invert(1) hue-rotate(180deg);
-    opacity: 0.9;
+  /* ── Clip video player (slide 3bis) ── */
+  #s3b .clip-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    width: clamp(300px, 70vw, 1000px);
+    flex-shrink: 1;
+  }
+
+  #s3b video {
+    width: 100%;
+    display: block;
+    max-height: 52vh;
+    object-fit: contain;
+    background: #000;
+    border-radius: 8px 8px 0 0;
+    box-shadow: 0 0 60px rgba(0,229,255,0.18), 0 0 30px rgba(255,45,120,0.10);
+  }
+
+  #s3b .srt-display {
+    width: 100%;
+    background: rgba(0,0,0,0.82);
+    border: 1px solid rgba(0,229,255,0.18);
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    padding: 1.2vh 2vw;
+    min-height: 6.5vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  #s3b .srt-display p {
+    font-family: 'DM Sans', sans-serif;
+    font-size: clamp(15px, 1.8vw, 28px);
+    font-weight: 700;
+    color: var(--cream);
+    line-height: 1.45;
+    margin: 0;
+    word-break: break-word;
   }
 
   /* ═══════════════════════════════════════
@@ -1221,16 +1281,9 @@
   }
 
   /* ═══════════════════════════════════════
-     SLIDE 13 — Conclusion
+     SLIDE 15 — Conclusion
   ════════════════════════════════════════ */
-  #s13 {
-    background: radial-gradient(ellipse at center, rgba(0,229,255,0.06), transparent 60%),
-                var(--deep);
-    text-align: center;
-    gap: 3vh;
-  }
-
-  #s13 .big-q {
+  #s15 .big-q {
     font-family: 'Bebas Neue', sans-serif;
     font-size: clamp(44px, 7.5vw, 110px);
     color: var(--cream);
@@ -1238,7 +1291,7 @@
     max-width: 85vw;
   }
 
-  #s13 .answer {
+  #s15 .answer {
     font-family: 'Bebas Neue', sans-serif;
     font-size: clamp(36px, 5.5vw, 80px);
     color: var(--cyan);
@@ -1259,7 +1312,7 @@
   .kw-final:nth-child(2) { color: var(--magenta); }
   .kw-final:nth-child(3) { color: #ffd97a; }
 
-  #s13 .merci {
+  #s15 .merci {
     font-family: 'Bebas Neue', sans-serif;
     font-size: clamp(32px, 4.5vw, 66px);
     color: var(--cream);
@@ -1267,11 +1320,263 @@
     margin-top: 1vh;
   }
 
-  #s13 .team {
+  #s15 .team {
     font-family: 'Space Mono', monospace;
     font-size: clamp(14px, 1.6vw, 24px);
     color: var(--dim);
     letter-spacing: 0.2em;
+  }
+
+  /* ═══════════════════════════════════════
+     SLIDE 13 — Ligne du temps post-Videoclub
+  ════════════════════════════════════════ */
+  #s13 {
+    background: var(--navy);
+    justify-content: flex-start;
+    padding: 3vh 3vw 2vh;
+    gap: 0;
+  }
+
+  .tl2-svg-wrap {
+    width: 88%;
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1vh;
+  }
+
+  .tl2-svg-wrap svg {
+    width: 100%;
+    height: 100%;
+    max-height: 70vh;
+    overflow: visible;
+  }
+
+  .tl2-imgs {
+    display: flex;
+    gap: 0.5vw;
+    margin-top: 0.4vh;
+  }
+
+  .tl2-imgs img {
+    width: clamp(52px, 6vw, 96px);
+    height: clamp(36px, 4.2vw, 68px);
+    object-fit: cover;
+    border-radius: 4px;
+    border: 1px solid rgba(255,255,255,0.1);
+    filter: saturate(0.7) contrast(1.05);
+  }
+
+  /* Foreignobject content inside SVG timeline */
+  .tl2-fo-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    font-family: 'Space Mono', monospace;
+    font-size: clamp(10px, 1.1vw, 16px);
+    color: #f0e8d8;
+    text-align: center;
+    line-height: 1.35;
+    white-space: nowrap;
+  }
+
+  .tl2-fo-imgs {
+    display: flex;
+    gap: 4px;
+    margin-top: 4px;
+  }
+
+  .tl2-fo-imgs img {
+    width: clamp(48px, 5.5vw, 88px);
+    height: clamp(32px, 3.8vw, 60px);
+    object-fit: cover;
+    border-radius: 4px;
+    border: 1px solid rgba(255,255,255,0.1);
+    filter: saturate(0.7) contrast(1.05);
+  }
+
+  .tl2-fo-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(18px, 2.4vw, 38px);
+    line-height: 1;
+    margin-bottom: 2px;
+  }
+
+  /* ═══════════════════════════════════════
+     SLIDE 14 — Duel concerts
+  ════════════════════════════════════════ */
+  #s14 {
+    background: var(--deep);
+    flex-direction: column;
+    padding: 2.5vh 3vw 2vh;
+    gap: 1.5vh;
+  }
+
+  .duel-wrap {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 0;
+    width: 100%;
+    flex: 1;
+    min-height: 0;
+  }
+
+  .duel-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    min-width: 0;
+  }
+
+  .duel-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(22px, 3vw, 46px);
+    letter-spacing: 0.05em;
+    margin-bottom: 0.8vh;
+    flex-shrink: 0;
+  }
+
+  /* Format portrait TikTok ~9:16 */
+  .duel-col video {
+    width: 100%;
+    max-width: min(38vw, calc(70vh * 9/16));
+    aspect-ratio: 9/16;
+    object-fit: cover;
+    border-radius: 8px 8px 0 0;
+    background: #000;
+    display: block;
+  }
+
+  .duel-srt-box {
+    width: 100%;
+    max-width: min(38vw, calc(70vh * 9/16));
+    background: rgba(0,0,0,0.8);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    padding: 0.8vh 1vw;
+    min-height: 5.5vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .duel-srt-box p {
+    font-family: 'DM Sans', sans-serif;
+    font-size: clamp(13px, 1.5vw, 22px);
+    font-weight: 700;
+    color: var(--cream);
+    line-height: 1.4;
+    margin: 0;
+    word-break: break-word;
+  }
+
+  .duel-divider {
+    width: 1px;
+    align-self: stretch;
+    background: linear-gradient(180deg, transparent, rgba(255,255,255,0.12) 30%, rgba(255,255,255,0.12) 70%, transparent);
+    margin: 0 1.5vw;
+    flex-shrink: 0;
+  }
+
+  #duel-play-btn {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(22px, 3vw, 48px);
+    line-height: 1;
+    color: var(--navy);
+    background: linear-gradient(90deg, var(--cyan), var(--magenta));
+    border: none;
+    border-radius: 50%;
+    width: clamp(44px, 5.5vw, 80px);
+    height: clamp(44px, 5.5vw, 80px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: opacity 0.2s, transform 0.15s;
+    padding: 0;
+  }
+  #duel-play-btn:hover { opacity: 0.85; transform: scale(1.07); }
+
+  .duel-srt-center {
+    width: 80%;
+    max-width: 700px;
+    background: rgba(0,0,0,0.72);
+    border: 1px solid rgba(0,229,255,0.18);
+    border-radius: 8px;
+    padding: 0.8vh 2vw;
+    min-height: 5vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .duel-srt-center p {
+    font-family: 'DM Sans', sans-serif;
+    font-size: clamp(14px, 1.8vw, 26px);
+    font-weight: 700;
+    color: var(--cream);
+    line-height: 1.4;
+    margin: 0;
+    word-break: break-word;
+  }
+
+  /* ═══════════════════════════════════════
+     SLIDE 15 — Conclusion
+  ════════════════════════════════════════ */
+  #s15 {
+    background: radial-gradient(ellipse at center, rgba(0,229,255,0.06), transparent 60%),
+                var(--deep);
+    text-align: center;
+    gap: 3vh;
+  }
+
+  /* ═══════════════════════════════════════
+     SLIDE 16 — Anecdote
+  ════════════════════════════════════════ */
+  #s16 {
+    background: var(--deep);
+    flex-direction: column;
+    padding: 3vh;
+    gap: 2vh;
+  }
+
+  .anec-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2vh;
+    width: 100%;
+    height: 100%;
+  }
+
+  .anec-img {
+    max-width: 59vw;
+    max-height: 54vh;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 0 80px rgba(0,229,255,0.12), 0 0 40px rgba(255,45,120,0.08);
+    filter: saturate(0.85) contrast(1.05);
+  }
+
+  .anec-legend {
+    font-family: 'Space Mono', monospace;
+    font-size: clamp(14px, 1.8vw, 28px);
+    color: var(--dim);
+    letter-spacing: 0.18em;
+    text-align: center;
   }
 
   /* ═══ Shared: slide-label ═══ */
@@ -1369,10 +1674,12 @@
     <div class="bio-grid">
       <div class="bio-col">
         <div class="person-name">Adèle Castillon</div>
+        <img class="portrait" src="adele.jpg" alt="Adèle Castillon">
         <p>Née en 2001. YouTube dès 13 ans. Actrice dans "Sous le même toit" (2017). Voix du duo.</p>
       </div>
       <div class="bio-col">
         <div class="person-name magenta">Matthieu Reynaud</div>
+        <img class="portrait magenta-shadow" src="matthieu.jpg" alt="Matthieu Reynaud">
         <p>Né en 2001. Fils de guitariste. Inspiré des années 70-80. Compositeur et producteur.</p>
       </div>
     </div>
@@ -1418,8 +1725,9 @@
         <div class="stat-number">22M</div>
         <div class="stat-label">vues dès 2019</div>
       </div>
-      <div class="stat-box">
-        <div class="stat-number">Single Diamant</div>
+      <div class="stat-box diamant-box">
+        <img src="single_diamant.jpg" alt="Certification Single Diamant">
+        <div class="stat-number" style="font-size: clamp(22px, 2.8vw, 44px); color: var(--magenta);">Single Diamant</div>
         <div class="stat-label">certification 2025</div>
       </div>
       <div class="stat-box">
@@ -1431,10 +1739,14 @@
 
   <!-- ── SLIDE 3bis : Écoute ── -->
   <div class="slide" id="s3b">
-    <img class="cover-img" src="amour_plastique_vraie_cover.jpg" alt="Amour Plastique cover">
     <div class="song-title">Amour Plastique</div>
     <div class="song-artist">Vidéoclub</div>
-    <audio id="song-audio" src="amour_plastique_fullsong.mp3" controls></audio>
+    <div class="clip-wrapper">
+      <video id="song-video" src="xamour_plastique_fullclip.mp4" controls></video>
+      <div class="srt-display">
+        <p id="srt-line">&nbsp;</p>
+      </div>
+    </div>
   </div>
 
   <!-- ── SLIDE 4 : Themes ── -->
@@ -1749,8 +2061,143 @@
     </div>
   </div>
 
-  <!-- ── SLIDE 13 : Conclusion ── -->
+  <!-- ── SLIDE 13 : Conclusion (ancienne) devient slide 15 ── -->
+  <!-- renommée s15 ci-dessous, l'ancienne s13 est supprimée -->
+
+  <!-- ── SLIDE 13 : Aujourd'hui - Ligne du temps ── -->
   <div class="slide" id="s13">
+    <div class="slide-label">Aujourd'hui</div>
+    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(28px,4.5vw,66px);color:var(--cream);line-height:1;margin-bottom:0.5vh;text-align:center;">Après Vidéoclub</h2>
+
+    <div class="tl2-svg-wrap">
+      <!--
+        ViewBox : 860 x 420
+        Zones horizontales :
+          0-10   : marge gauche
+          10-180 : bloc 2018 (images + labels)
+          180-200: ligne commune debut
+          200-310: ligne commune (visible, pleine couleur)
+          310-330: point 2021
+          330-350: ligne commune fin / debut fourche
+          350-420: courbe de bifurcation
+          420-860: branches Adele (y=100) et Matthieu (y=320) + blocs fin
+      -->
+      <svg viewBox="0 0 860 420" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <!-- Ligne commune : cyan plein des deux cotes -->
+          <linearGradient id="lc-grad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#00e5ff" stop-opacity="0.9"/>
+            <stop offset="100%" stop-color="#00e5ff" stop-opacity="0.9"/>
+          </linearGradient>
+          <!-- Branche Adele : cyan -->
+          <linearGradient id="ba-grad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#00e5ff" stop-opacity="0.7"/>
+            <stop offset="100%" stop-color="#00e5ff"/>
+          </linearGradient>
+          <!-- Branche Matthieu : magenta -->
+          <linearGradient id="bm-grad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#ff2d78" stop-opacity="0.7"/>
+            <stop offset="100%" stop-color="#ff2d78"/>
+          </linearGradient>
+          <filter id="gc" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="4" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <filter id="gm" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="4" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+
+        <!-- Ligne commune 2018 -> 2021 (bien visible, pleine couleur) -->
+        <line x1="175" y1="210" x2="340" y2="210" stroke="#00e5ff" stroke-width="3" stroke-linecap="round" opacity="0.9"/>
+
+        <!-- Courbe bifurcation vers Adele (haut, cyan) -->
+        <path d="M 340 210 C 390 210 400 100 450 100 L 680 100"
+              stroke="url(#ba-grad)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+        <!-- Courbe bifurcation vers Matthieu (bas, magenta) -->
+        <path d="M 340 210 C 390 210 400 320 450 320 L 680 320"
+              stroke="url(#bm-grad)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+        <!-- Dot 2018 -->
+        <circle cx="175" cy="210" r="7" fill="#00e5ff" filter="url(#gc)"/>
+        <!-- Dot 2021 / fourche -->
+        <circle cx="340" cy="210" r="7" fill="#8899aa"/>
+        <!-- Dot Adele fin -->
+        <circle cx="680" cy="100" r="7" fill="#00e5ff" filter="url(#gc)"/>
+        <!-- Dot Matthieu fin -->
+        <circle cx="680" cy="320" r="7" fill="#ff2d78" filter="url(#gm)"/>
+
+        <!-- ── Bloc 2018 : label + 2 images cote a cote ── -->
+        <foreignObject x="0" y="50" width="185" height="320" overflow="visible">
+          <div xmlns="http://www.w3.org/1999/xhtml" style="display:flex;flex-direction:column;align-items:center;gap:3px;font-family:'Space Mono',monospace;text-align:center;">
+            <span style="font-size:0.85vw;color:#8899aa;white-space:nowrap;">2018</span>
+            <span style="font-size:0.8vw;color:#f0e8d8;white-space:nowrap;">Amour Plastique</span>
+            <div style="display:flex;flex-direction:row;gap:5px;margin-top:5px;">
+              <img src="serre_1.jpg"   alt="serre 2018"   style="width:6vw;height:4.3vw;object-fit:cover;border-radius:4px;border:1px solid rgba(255,255,255,0.12);filter:saturate(0.75) contrast(1.05);">
+              <img src="magasin_1.jpg" alt="magasin 2018" style="width:6vw;height:4.3vw;object-fit:cover;border-radius:4px;border:1px solid rgba(255,255,255,0.12);filter:saturate(0.75) contrast(1.05);">
+            </div>
+          </div>
+        </foreignObject>
+
+        <!-- ── Label 2021 ── -->
+        <foreignObject x="295" y="222" width="100" height="52" overflow="visible">
+          <div xmlns="http://www.w3.org/1999/xhtml" style="display:flex;flex-direction:column;align-items:center;font-family:'Space Mono',monospace;text-align:center;gap:2px;">
+            <span style="font-size:0.85vw;color:#8899aa;white-space:nowrap;">2021</span>
+            <span style="font-size:0.8vw;color:#f0e8d8;white-space:nowrap;">SMS</span>
+          </div>
+        </foreignObject>
+
+        <!-- ── Bloc Adele : label + 2 images cote a cote ── -->
+        <foreignObject x="685" y="10" width="175" height="185" overflow="visible">
+          <div xmlns="http://www.w3.org/1999/xhtml" style="display:flex;flex-direction:column;align-items:center;gap:3px;font-family:'Space Mono',monospace;text-align:center;">
+            <span style="font-family:'Bebas Neue',sans-serif;font-size:1.7vw;color:#00e5ff;line-height:1.1;">Adèle Castillon</span>
+            <span style="font-size:0.8vw;color:#8899aa;white-space:nowrap;">2023 - C'est Drôle</span>
+            <div style="display:flex;flex-direction:row;gap:5px;margin-top:5px;">
+              <img src="serre_2.jpg"   alt="serre 2023"   style="width:6vw;height:4.3vw;object-fit:cover;border-radius:4px;border:1px solid rgba(0,229,255,0.2);filter:saturate(0.75) contrast(1.05);">
+              <img src="magasin_2.jpg" alt="magasin 2023" style="width:6vw;height:4.3vw;object-fit:cover;border-radius:4px;border:1px solid rgba(0,229,255,0.2);filter:saturate(0.75) contrast(1.05);">
+            </div>
+          </div>
+        </foreignObject>
+
+        <!-- ── Bloc Matthieu : label + 2 images cote a cote ── -->
+        <foreignObject x="685" y="200" width="175" height="185" overflow="visible">
+          <div xmlns="http://www.w3.org/1999/xhtml" style="display:flex;flex-direction:column;align-items:center;gap:3px;font-family:'Space Mono',monospace;text-align:center;">
+            <span style="font-family:'Bebas Neue',sans-serif;font-size:1.7vw;color:#ff2d78;line-height:1.1;">Matthieu Reynaud</span>
+            <span style="font-size:0.8vw;color:#8899aa;white-space:nowrap;">2024 - Émotions Saturées</span>
+            <div style="display:flex;flex-direction:row;gap:5px;margin-top:5px;">
+              <img src="serre_3.jpg"   alt="serre 2024"   style="width:6vw;height:4.3vw;object-fit:cover;border-radius:4px;border:1px solid rgba(255,45,120,0.2);filter:saturate(0.75) contrast(1.05);">
+              <img src="magasin_3.jpg" alt="magasin 2024" style="width:6vw;height:4.3vw;object-fit:cover;border-radius:4px;border:1px solid rgba(255,45,120,0.2);filter:saturate(0.75) contrast(1.05);">
+            </div>
+          </div>
+        </foreignObject>
+      </svg>
+    </div>
+  </div>
+
+  <!-- ── SLIDE 14 : Deux clips côte à côte ── -->
+  <div class="slide" id="s14">
+    <div class="slide-label">Aujourd'hui</div>
+    <div class="duel-wrap">
+      <div class="duel-col">
+        <div class="duel-name" style="color:var(--cyan);">Adèle Castillon</div>
+        <video id="concert-adele" src="concert_adele.mp4" playsinline></video>
+      </div>
+      <div class="duel-divider"></div>
+      <div class="duel-col">
+        <div class="duel-name" style="color:var(--magenta);">Matthieu Reynaud</div>
+        <video id="concert-mattyeux" src="concert_mattyeux.mp4" playsinline></video>
+      </div>
+    </div>
+    <div class="duel-srt-center">
+      <p id="srt-adele">&nbsp;</p>
+    </div>
+    <button id="duel-play-btn" aria-label="Lancer les deux">&#9654;</button>
+  </div>
+
+  <!-- ── SLIDE 15 : Conclusion ── -->
+  <div class="slide" id="s15">
     <div class="big-q">Alors, une chanson<br>peut-elle être un poème ?</div>
     <div class="rule"></div>
     <div class="answer">Oui.</div>
@@ -1763,6 +2210,14 @@
     <div class="team">Niobé &nbsp;&middot;&nbsp; Mathéo &nbsp;&middot;&nbsp; Damien</div>
     <audio id="instru-audio" src="instru_finale.mp3" loop></audio>
     <button id="instru-vol-btn" title="Augmenter le volume" aria-label="Augmenter le volume"></button>
+  </div>
+
+  <!-- ── SLIDE 16 : Anecdote ── -->
+  <div class="slide" id="s16">
+    <div class="anec-wrap">
+      <img class="anec-img" src="epic.jpg" alt="La Maroquinerie - 24 mai 2025">
+      <div class="anec-legend">La Maroquinerie &nbsp;&middot;&nbsp; 24 mai 2025</div>
+    </div>
   </div>
 
 </div>
@@ -1780,26 +2235,26 @@
 
   const progressEl = document.getElementById('progress');
   const trendAudio = document.getElementById('trend-audio');
-  const songAudio = document.getElementById('song-audio');
+  const songVideo = document.getElementById('song-video');
   const instruAudio = document.getElementById('instru-audio');
   const instruBtn = document.getElementById('instru-vol-btn');
+  const concertAdele = document.getElementById('concert-adele');
+  const concertMattyeux = document.getElementById('concert-mattyeux');
+  const duelPlayBtn = document.getElementById('duel-play-btn');
 
-  // Slide index of the conclusion (s13) - count from 0, black screen is 0
-  // s-1=0, s0=1, s1=2, ... s3b=4, ... s13=14
-  const CONCLUSION_IDX = total - 1;
+  // Slide indices (0-based): s0=0, s1=1, ..., s13=14, s14=15, s15=16, s16=17
+  // s14 (duel concerts) = index 15, s16 (anecdote, avant-derniere) = index 17
+  const DUEL_IDX = 15;
+  const CONCLUSION_IDX = 17;
 
-  // Volumes
   const VOL_LOW  = 0.22;
   const VOL_FULL = 1.0;
 
-  if (instruAudio) {
-    instruAudio.volume = VOL_LOW;
-  }
+  if (instruAudio) { instruAudio.volume = VOL_LOW; }
 
   let instruRampTimer = null;
   let instruFull = false;
 
-  // Volume ramp helper - cancels any ongoing ramp first
   function rampVolume(audio, from, to, durationMs) {
     if (instruRampTimer) { clearInterval(instruRampTimer); instruRampTimer = null; }
     const steps = 40;
@@ -1831,7 +2286,6 @@
     slides[current].classList.add('active');
     progressEl.textContent = (current + 1) + ' / ' + total;
 
-    // Trend audio: plays on slide index 1 (s0 = napoleon)
     if (trendAudio) {
       if (current === 1) {
         trendAudio.play().catch(() => {});
@@ -1841,14 +2295,19 @@
       }
     }
 
-    // Song audio: stop when leaving slide 4 (s3b)
-    if (songAudio) {
+    if (songVideo) {
       if (current !== 4) {
-        songAudio.pause();
+        songVideo.pause();
       }
     }
 
-    // Instru audio: start low on conclusion, show button
+    // Stop concert videos when leaving slide 14
+    if (current !== DUEL_IDX) {
+      if (concertAdele)   { concertAdele.pause();   concertAdele.currentTime = 0; }
+      if (concertMattyeux){ concertMattyeux.pause(); concertMattyeux.currentTime = 0; }
+      if (duelPlayBtn) duelPlayBtn.innerHTML = '\u25B6';
+    }
+
     if (instruAudio) {
       if (current === CONCLUSION_IDX) {
         instruAudio.volume = VOL_LOW;
@@ -1863,13 +2322,8 @@
     }
   }
 
-  function next() {
-    if (current < total - 1) showSlide(current + 1);
-  }
-
-  function prev() {
-    if (current > 0) showSlide(current - 1);
-  }
+  function next() { if (current < total - 1) showSlide(current + 1); }
+  function prev() { if (current > 0) showSlide(current - 1); }
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); next(); }
@@ -1877,11 +2331,122 @@
   });
 
   document.getElementById('deck').addEventListener('click', (e) => {
-    if (e.target.closest('.quiz-opt') || e.target.closest('audio') || e.target.closest('.quiz-btn') || e.target.closest('#instru-vol-btn')) return;
+    if (e.target.closest('.quiz-opt') || e.target.closest('video') || e.target.closest('audio') || e.target.closest('.quiz-btn') || e.target.closest('#instru-vol-btn')) return;
     const x = e.clientX;
     if (x > window.innerWidth * 0.6) next();
     else if (x < window.innerWidth * 0.4) prev();
   });
+
+  // ── SRT subtitle engine ──
+  function parseSRT(srtText) {
+    const cues = [];
+    const blocks = srtText.trim().replace(/\r\n/g, '\n').replace(/\r/g, '\n').split(/\n\n+/);
+    const timeRe = /(\d{2}):(\d{2}):(\d{2})[,.](\d{3})\s*-->\s*(\d{2}):(\d{2}):(\d{2})[,.](\d{3})/;
+    blocks.forEach(block => {
+      const lines = block.split('\n');
+      if (lines.length < 2) return;
+      let tsIdx = -1;
+      for (let i = 0; i < lines.length; i++) {
+        if (timeRe.test(lines[i])) { tsIdx = i; break; }
+      }
+      if (tsIdx === -1) return;
+      const m = lines[tsIdx].match(timeRe);
+      const toSec = (h, min, s, ms) => parseInt(h)*3600 + parseInt(min)*60 + parseInt(s) + parseInt(ms)/1000;
+      const start = toSec(m[1], m[2], m[3], m[4]);
+      const end   = toSec(m[5], m[6], m[7], m[8]);
+      const textLines = lines.slice(tsIdx + 1).join('\n').replace(/<[^>]+>/g, '').trim();
+      if (textLines) cues.push({ start, end, text: textLines });
+    });
+    return cues;
+  }
+
+  let srtCues = [];
+  const srtLineEl = document.getElementById('srt-line');
+
+  fetch('subtitles.srt')
+    .then(r => r.text())
+    .then(text => { srtCues = parseSRT(text); })
+    .catch(() => { srtCues = []; });
+
+  function escapeHtml(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function updateSRTDisplay(t) {
+    if (!srtLineEl) return;
+    let found = '';
+    for (let i = 0; i < srtCues.length; i++) {
+      const c = srtCues[i];
+      if (t >= c.start && t <= c.end) { found = c.text; break; }
+    }
+    if (found) {
+      const parts = found.split('\n');
+      srtLineEl.innerHTML = parts.slice(0, 2).map(p => escapeHtml(p)).join('<br>');
+    } else {
+      srtLineEl.innerHTML = '&nbsp;';
+    }
+  }
+
+  if (songVideo) {
+    songVideo.addEventListener('timeupdate', () => updateSRTDisplay(songVideo.currentTime));
+    songVideo.addEventListener('seeked',     () => updateSRTDisplay(songVideo.currentTime));
+    songVideo.addEventListener('ended',      () => { if (srtLineEl) srtLineEl.innerHTML = '&nbsp;'; });
+  }
+
+  // ── Duel play button ──
+  let duelPlaying = false;
+  if (duelPlayBtn) {
+    duelPlayBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      if (!duelPlaying) {
+        if (concertAdele)    concertAdele.play().catch(() => {});
+        if (concertMattyeux) concertMattyeux.play().catch(() => {});
+        duelPlayBtn.innerHTML = '\u23F8';
+        duelPlaying = true;
+      } else {
+        if (concertAdele)    concertAdele.pause();
+        if (concertMattyeux) concertMattyeux.pause();
+        duelPlayBtn.innerHTML = '\u25B6';
+        duelPlaying = false;
+      }
+    });
+  }
+
+  // ── SRT engine for duel concerts (new_subtitles.srt) ──
+  let newSrtCues = [];
+  const srtAdeleEl   = document.getElementById('srt-adele');
+  const srtMattyeuxEl = null; // merged into single centered subtitle
+
+  fetch('new_subtitles.srt')
+    .then(r => r.text())
+    .then(text => { newSrtCues = parseSRT(text); })
+    .catch(() => { newSrtCues = []; });
+
+  function updateDuelSRT(el, t) {
+    if (!el) return;
+    let found = '';
+    for (let i = 0; i < newSrtCues.length; i++) {
+      const c = newSrtCues[i];
+      if (t >= c.start && t <= c.end) { found = c.text; break; }
+    }
+    if (found) {
+      const parts = found.split('\n');
+      el.innerHTML = parts.slice(0, 2).map(p => escapeHtml(p)).join('<br>');
+    } else {
+      el.innerHTML = '&nbsp;';
+    }
+  }
+
+  if (concertAdele) {
+    concertAdele.addEventListener('timeupdate', () => updateDuelSRT(srtAdeleEl,    concertAdele.currentTime));
+    concertAdele.addEventListener('seeked',     () => updateDuelSRT(srtAdeleEl,    concertAdele.currentTime));
+    concertAdele.addEventListener('ended',      () => { if (srtAdeleEl) srtAdeleEl.innerHTML = '&nbsp;'; duelPlaying = false; if (duelPlayBtn) duelPlayBtn.innerHTML = '\u25B6'; });
+  }
+  if (concertMattyeux) {
+    concertMattyeux.addEventListener('timeupdate', () => updateDuelSRT(srtAdeleEl, concertMattyeux.currentTime));
+    concertMattyeux.addEventListener('seeked',     () => updateDuelSRT(srtAdeleEl, concertMattyeux.currentTime));
+    concertMattyeux.addEventListener('ended',      () => { if (srtAdeleEl) srtAdeleEl.innerHTML = '&nbsp;'; });
+  }
 
   // ── Quiz logic ──
   function setupQuiz() {
