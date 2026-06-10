@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L'Arctique, nouvel Eldorado</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #07111f;
+    --deep:      #0a1a2e;
+    --panel:     #0f2340;
+    --cyan:      #4fc3e8;
+    --teal:      #2dd4a4;
+    --amber:     #f0a030;
+    --red:       #e05050;
+    --white:     #e8f4f8;
+    --muted:     #7fa8c0;
+    --border:    rgba(79,195,232,0.25);
+  }
+
+  html, body {
+    width: 100%; height: 100%;
+    background: var(--bg);
+    color: var(--white);
+    font-family: 'Inter', sans-serif;
+    overflow: hidden;
+  }
+
+  /* ===== SLIDESHOW ===== */
+  #deck {
+    position: relative;
+    width: 100vw; height: 100vh;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4vh 6vw;
+    opacity: 0;
+    pointer-events: none;
+    background: var(--bg);
+    /* no default transition — handled by enter/exit keyframes */
+  }
+  .slide.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  /* ===== SLIDE TRANSITIONS ===== */
+  @keyframes enterFromRight {
+    0%   { opacity:0; transform: translateX(80px) rotateY(8deg) scale(0.97); filter: blur(4px); }
+    100% { opacity:1; transform: translateX(0)    rotateY(0deg) scale(1);    filter: blur(0); }
+  }
+  @keyframes enterFromLeft {
+    0%   { opacity:0; transform: translateX(-80px) rotateY(-8deg) scale(0.97); filter: blur(4px); }
+    100% { opacity:1; transform: translateX(0)     rotateY(0deg)  scale(1);    filter: blur(0); }
+  }
+  @keyframes exitToLeft {
+    0%   { opacity:1; transform: translateX(0)   scale(1);    filter: blur(0); }
+    100% { opacity:0; transform: translateX(-60px) scale(0.95); filter: blur(3px); }
+  }
+  @keyframes exitToRight {
+    0%   { opacity:1; transform: translateX(0)    scale(1);    filter: blur(0); }
+    100% { opacity:0; transform: translateX(60px) scale(0.95); filter: blur(3px); }
+  }
+
+  .slide.enter-right { animation: enterFromRight 0.55s cubic-bezier(0.22,1,0.36,1) both; }
+  .slide.enter-left  { animation: enterFromLeft  0.55s cubic-bezier(0.22,1,0.36,1) both; }
+  .slide.exit-left   { animation: exitToLeft     0.55s cubic-bezier(0.55,0,1,0.45) both; }
+  .slide.exit-right  { animation: exitToRight    0.55s cubic-bezier(0.55,0,1,0.45) both; }
+
+  /* ===== PROGRESS ===== */
+  #progress {
+    position: fixed;
+    bottom: 2.5vh;
+    right: 3vw;
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(11px, 1.1vw, 16px);
+    font-weight: 600;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    z-index: 100;
+  }
+
+  /* progress bar */
+  #progbar {
+    position: fixed;
+    bottom: 0; left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--cyan), var(--teal));
+    transition: width 0.4s ease;
+    z-index: 100;
+  }
+
+  /* ===== ICE PARTICLE BG ===== */
+  #ice-canvas {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.18;
+  }
+
+  /* ===== TYPOGRAPHY ===== */
+  .display {
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    font-size: clamp(3rem, 7.5vw, 9rem);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    color: var(--white);
+  }
+  .display.cyan  { color: var(--cyan); }
+  .display.teal  { color: var(--teal); }
+  .display.amber { color: var(--amber); }
+
+  .title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 4.5vw, 5.5rem);
+    line-height: 1.1;
+    color: var(--white);
+  }
+
+  .subtitle {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.1rem, 2.2vw, 2.8rem);
+    color: var(--cyan);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .body {
+    font-size: clamp(1.1rem, 2vw, 2.5rem);
+    font-weight: 600;
+    line-height: 1.5;
+    color: var(--white);
+    max-width: 80vw;
+  }
+  .body.muted { color: var(--muted); font-weight: 400; font-size: clamp(0.9rem, 1.6vw, 2rem); }
+
+  .big-stat {
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    font-size: clamp(4rem, 11vw, 14rem);
+    line-height: 1;
+    color: var(--cyan);
+  }
+  .big-stat.amber { color: var(--amber); }
+  .big-stat.red   { color: var(--red); }
+  .big-stat.teal  { color: var(--teal); }
+
+  .label-under {
+    font-size: clamp(0.85rem, 1.5vw, 1.8rem);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-top: 0.3em;
+  }
+
+  /* ===== LAYOUT HELPERS ===== */
+  .col    { display: flex; flex-direction: column; align-items: center; gap: 2.5vh; text-align: center; }
+  .col.left { align-items: flex-start; text-align: left; }
+  .row    { display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 5vw; width: 100%; }
+
+  .divider {
+    width: 8vw; height: 3px;
+    background: linear-gradient(90deg, var(--cyan), var(--teal));
+    border-radius: 2px;
+    margin: 1.5vh 0;
+  }
+
+  .tag {
+    display: inline-block;
+    padding: 0.3em 1em;
+    border-radius: 50px;
+    font-size: clamp(0.75rem, 1.2vw, 1.4rem);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .tag.cyan   { background: rgba(79,195,232,0.18); color: var(--cyan); border: 1.5px solid rgba(79,195,232,0.4); }
+  .tag.teal   { background: rgba(45,212,164,0.15); color: var(--teal); border: 1.5px solid rgba(45,212,164,0.35); }
+  .tag.amber  { background: rgba(240,160,48,0.15); color: var(--amber); border: 1.5px solid rgba(240,160,48,0.35); }
+  .tag.red    { background: rgba(224,80,80,0.15);  color: var(--red);   border: 1.5px solid rgba(224,80,80,0.35); }
+
+  /* ===== IMAGE BLOCKS ===== */
+  .img-block {
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1.5px solid var(--border);
+    flex-shrink: 0;
+  }
+  .img-block img {
+    display: block;
+    width: 100%; height: 100%;
+    object-fit: cover;
+  }
+  .img-placeholder {
+    background: var(--panel);
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 1vh;
+    color: var(--muted);
+    font-size: clamp(0.75rem, 1.1vw, 1.3rem);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-align: center;
+    padding: 1.5em;
+    border-radius: 12px;
+    border: 1.5px dashed rgba(79,195,232,0.3);
+  }
+  .img-placeholder .ph-icon { font-size: clamp(2rem, 4vw, 5rem); opacity: 0.5; }
+
+  /* ===== PANEL / CARD ===== */
+  .card {
+    background: rgba(15,35,64,0.85);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 3vh 3vw;
+    backdrop-filter: blur(6px);
+  }
+  .card.amber-border { border-color: rgba(240,160,48,0.4); }
+  .card.teal-border  { border-color: rgba(45,212,164,0.35); }
+
+  /* ===== PLAN LIST ===== */
+  .plan-list {
+    list-style: none;
+    display: flex; flex-direction: column; gap: 1.8vh;
+    width: 100%;
+    max-width: 75vw;
+  }
+  .plan-list li {
+    display: flex; align-items: center; gap: 2vw;
+    padding: 1.5vh 2.5vw;
+    border-left: 4px solid transparent;
+    transition: border-color 0.2s;
+  }
+  .plan-list li:hover { border-left-color: var(--cyan); }
+  .plan-list .num {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.5rem, 3vw, 3.8rem);
+    font-weight: 900;
+    color: var(--cyan);
+    min-width: 3vw;
+  }
+  .plan-list .txt {
+    font-size: clamp(1rem, 1.8vw, 2.2rem);
+    font-weight: 600;
+    color: var(--white);
+  }
+  .plan-list .dur {
+    margin-left: auto;
+    font-size: clamp(0.75rem, 1.1vw, 1.3rem);
+    color: var(--muted);
+    font-weight: 400;
+  }
+
+  /* ===== FACT BOX ===== */
+  .fact-row {
+    display: flex; gap: 3vw; align-items: stretch; width: 100%;
+  }
+  .fact-card {
+    flex: 1;
+    background: var(--panel);
+    border-radius: 14px;
+    border: 1.5px solid var(--border);
+    padding: 2.5vh 2.5vw;
+    display: flex; flex-direction: column; gap: 1.5vh;
+  }
+  .fact-card .doc-num {
+    font-size: clamp(0.7rem, 1vw, 1.2rem);
+    font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--cyan); opacity: 0.7;
+  }
+  .fact-card .headline {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: clamp(1rem, 2vw, 2.5rem);
+    line-height: 1.2;
+    color: var(--white);
+  }
+  .fact-card .detail {
+    font-size: clamp(0.85rem, 1.4vw, 1.7rem);
+    font-weight: 400;
+    color: var(--muted);
+    line-height: 1.45;
+  }
+
+  /* ===== TABLE ===== */
+  .bi-table {
+    width: 100%;
+    max-width: 88vw;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+  .bi-table th {
+    font-size: clamp(0.85rem, 1.4vw, 1.8rem);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 1.5vh 2.5vw;
+    text-align: left;
+  }
+  .bi-table th.pot { color: var(--teal); border-bottom: 2px solid rgba(45,212,164,0.4); }
+  .bi-table th.vul { color: var(--red); border-bottom: 2px solid rgba(224,80,80,0.4); }
+  .bi-table td {
+    font-size: clamp(0.82rem, 1.35vw, 1.65rem);
+    font-weight: 500;
+    padding: 1.2vh 2.5vw;
+    line-height: 1.35;
+    vertical-align: top;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .bi-table td.pot { color: #b3ead8; }
+  .bi-table td.vul { color: #f0b0b0; }
+  .bi-table td.pot::before { content: "+ "; color: var(--teal); font-weight: 700; }
+  .bi-table td.vul::before { content: "- "; color: var(--red); font-weight: 700; }
+
+  /* ===== TRAFFIC COMPARE ===== */
+  .traffic-bars {
+    display: flex; flex-direction: column; gap: 2vh; width: 100%; max-width: 75vw;
+  }
+  .tbar-row {
+    display: flex; align-items: center; gap: 2vw;
+  }
+  .tbar-label {
+    font-size: clamp(0.85rem, 1.4vw, 1.7rem);
+    font-weight: 600;
+    min-width: 22vw;
+    color: var(--white);
+  }
+  .tbar-fill-wrap {
+    flex: 1;
+    height: clamp(22px, 3vh, 40px);
+    background: rgba(255,255,255,0.05);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .tbar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 1.2s cubic-bezier(.4,0,.2,1);
+    width: 0;
+  }
+  .slide.anim .tbar-fill { width: var(--w); }
+  .tbar-val {
+    font-size: clamp(0.85rem, 1.4vw, 1.7rem);
+    font-weight: 700;
+    color: var(--white);
+    min-width: 10vw;
+    text-align: right;
+  }
+
+  /* ===== QRCODE SLOT ===== */
+  .qr-slot {
+    width: clamp(300px, 20vw, 370px);
+    height: auto;
+    aspect-ratio: auto;
+    background: var(--panel);
+    border: 1.5px dashed rgba(79,195,232,0.3);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .qr-slot img { width: 100%; height: 100%; object-fit: contain; }
+  .qr-slot .ph-qr { font-size: 2rem; opacity: 0.35; }
+
+  /* ===== MAP VISUAL ===== */
+  .map-visual {
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid var(--border);
+    position: relative;
+  }
+  .map-visual img { display: block; width: 100%; height: 100%; object-fit: contain; }
+
+  /* ===== SLIDE-SPECIFIC ===== */
+
+  /* TITLE SLIDE */
+  #s1 { background: radial-gradient(ellipse at 30% 60%, #0d2a4a 0%, #07111f 70%); }
+  #s1 .eyebrow {
+    font-size: clamp(0.75rem, 1.2vw, 1.4rem);
+    font-weight: 700; text-transform: uppercase; letter-spacing: 0.22em;
+    color: var(--cyan); opacity: 0.8;
+  }
+  #s1 .main-title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    font-size: clamp(3.5rem, 9vw, 11rem);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    color: var(--white);
+    position: relative;
+  }
+  #s1 .main-title span { color: var(--cyan); }
+  #s1 .subtitle-block {
+    font-size: clamp(1rem, 2vw, 2.5rem);
+    font-weight: 400; color: var(--muted);
+  }
+  #s1 .geo-line {
+    width: 100%; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+    margin: 2vh 0;
+  }
+
+  /* SECTION HEADER */
+  .section-badge {
+    font-size: clamp(0.75rem, 1.1vw, 1.3rem);
+    font-weight: 800; text-transform: uppercase; letter-spacing: 0.2em;
+    color: var(--cyan);
+    padding: 0.4em 1.2em;
+    border: 1.5px solid rgba(79,195,232,0.35);
+    border-radius: 50px;
+  }
+
+  /* TEMP HIGHLIGHT */
+  .temp-box {
+    display: flex; gap: 5vw; align-items: flex-end;
+    margin: 1.5vh 0;
+  }
+  .temp-item { text-align: center; }
+  .temp-val {
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    font-size: clamp(3.5rem, 8vw, 10rem);
+    line-height: 1;
+  }
+  .temp-desc {
+    font-size: clamp(0.8rem, 1.3vw, 1.6rem);
+    font-weight: 600; color: var(--muted);
+    margin-top: 0.5vh;
+  }
+
+  /* CONCLUSION */
+  #s16 { background: radial-gradient(ellipse at 70% 40%, #0d2a4a 0%, #07111f 70%); }
+  #s16 .big-q {
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    font-size: clamp(1.3rem, 2.8vw, 3.5rem);
+    color: var(--white);
+    line-height: 1.3;
+    max-width: 75vw;
+    border-left: 5px solid var(--cyan);
+    padding-left: 3vw;
+    text-align: left;
+  }
+
+  /* ===== MASTER EDITOR ANIMATIONS ===== */
+
+  /* -- Keyframes -- */
+  @keyframes smashDown {
+    0%   { opacity:0; transform: translateY(-55px) scale(1.04); }
+    55%  { opacity:1; transform: translateY(7px)   scale(0.99); }
+    75%  { transform: translateY(-3px) scale(1.005); }
+    100% { opacity:1; transform: translateY(0)    scale(1); }
+  }
+  @keyframes stampIn {
+    0%   { opacity:0; transform: scale(1.35) rotate(-2.5deg); filter: blur(2px); }
+    50%  { opacity:1; transform: scale(0.95) rotate(0.5deg);  filter: blur(0); }
+    75%  { transform: scale(1.03) rotate(0); }
+    100% { opacity:1; transform: scale(1)    rotate(0); }
+  }
+  @keyframes wipeUp {
+    0%   { opacity:1; clip-path: inset(100% 0 0 0); }
+    100% { opacity:1; clip-path: inset(0%   0 0 0); }
+  }
+  @keyframes slideInLeft {
+    0%   { opacity:0; transform: translateX(-55px) skewX(4deg); }
+    60%  { opacity:1; transform: translateX(6px)   skewX(-1deg); }
+    100% { opacity:1; transform: translateX(0)     skewX(0); }
+  }
+  @keyframes slideInRight {
+    0%   { opacity:0; transform: translateX(55px) skewX(-4deg); }
+    60%  { opacity:1; transform: translateX(-6px) skewX(1deg); }
+    100% { opacity:1; transform: translateX(0)    skewX(0); }
+  }
+  @keyframes popBounce {
+    0%   { opacity:0; transform: scale(0.5) rotate(-5deg); }
+    55%  { opacity:1; transform: scale(1.1) rotate(1.5deg); }
+    78%  { transform: scale(0.97) rotate(-0.3deg); }
+    100% { opacity:1; transform: scale(1)   rotate(0); }
+  }
+  @keyframes rulerGrow {
+    0%   { transform: scaleX(0); transform-origin: left; opacity:0.6; }
+    100% { transform: scaleX(1); transform-origin: left; opacity:1; }
+  }
+  @keyframes glitchIn {
+    0%   { opacity:0; transform: translateX(-6px); filter: saturate(3) blur(2px); }
+    20%  { opacity:1; transform: translateX(4px);  filter: saturate(0); }
+    40%  { transform: translateX(-2px); filter: saturate(2); }
+    60%  { transform: translateX(1px);  filter: saturate(1); }
+    100% { opacity:1; transform: translateX(0);   filter: saturate(1) blur(0); }
+  }
+  @keyframes smashUp {
+    0%   { opacity:0; transform: translateY(55px) scale(0.97); }
+    55%  { opacity:1; transform: translateY(-6px)  scale(1.01); }
+    75%  { transform: translateY(2px) scale(0.999); }
+    100% { opacity:1; transform: translateY(0)    scale(1); }
+  }
+
+  /* -- anim-1 : section badge → stampIn -- */
+  .slide.anim .anim-1 {
+    animation: stampIn 0.55s cubic-bezier(0.22,1,0.36,1) 0.08s both;
+  }
+  /* -- anim-2 : titles → smashDown -- */
+  .slide.anim .anim-2 {
+    animation: smashDown 0.6s cubic-bezier(0.22,1,0.36,1) 0.18s both;
+  }
+  /* -- anim-3 : dividers → rulerGrow ; body text → slideInLeft -- */
+  .slide.anim .divider.anim-3,
+  .slide.anim .geo-line.anim-3 {
+    animation: rulerGrow 0.5s cubic-bezier(0.22,1,0.36,1) 0.32s both;
+  }
+  .slide.anim .anim-3:not(.divider):not(.geo-line) {
+    animation: slideInLeft 0.55s cubic-bezier(0.22,1,0.36,1) 0.32s both;
+  }
+  /* -- anim-4 : cards / images / secondary content → smashUp or slideInRight -- */
+  .slide.anim .anim-4 {
+    animation: smashUp 0.6s cubic-bezier(0.22,1,0.36,1) 0.44s both;
+  }
+  /* -- anim-5 : muted text / footnotes → glitchIn -- */
+  .slide.anim .anim-5 {
+    animation: glitchIn 0.5s cubic-bezier(0.22,1,0.36,1) 0.58s both;
+  }
+  /* -- anim-6 : cta / last element → popBounce -- */
+  .slide.anim .anim-6 {
+    animation: popBounce 0.6s cubic-bezier(0.34,1.56,0.64,1) 0.72s both;
+  }
+
+  /* plan-list items stagger with wipeUp */
+  .slide.anim .plan-list li:nth-child(1) { animation: wipeUp 0.4s cubic-bezier(0.22,1,0.36,1) 0.28s both; }
+  .slide.anim .plan-list li:nth-child(2) { animation: wipeUp 0.4s cubic-bezier(0.22,1,0.36,1) 0.40s both; }
+  .slide.anim .plan-list li:nth-child(3) { animation: wipeUp 0.4s cubic-bezier(0.22,1,0.36,1) 0.52s both; }
+  .slide.anim .plan-list li:nth-child(4) { animation: wipeUp 0.4s cubic-bezier(0.22,1,0.36,1) 0.64s both; }
+
+  /* table rows stagger */
+  .slide.anim .bi-table tbody tr:nth-child(1) { animation: slideInLeft 0.38s cubic-bezier(0.22,1,0.36,1) 0.50s both; }
+  .slide.anim .bi-table tbody tr:nth-child(2) { animation: slideInLeft 0.38s cubic-bezier(0.22,1,0.36,1) 0.60s both; }
+  .slide.anim .bi-table tbody tr:nth-child(3) { animation: slideInLeft 0.38s cubic-bezier(0.22,1,0.36,1) 0.70s both; }
+  .slide.anim .bi-table tbody tr:nth-child(4) { animation: slideInLeft 0.38s cubic-bezier(0.22,1,0.36,1) 0.80s both; }
+  .slide.anim .bi-table tbody tr:nth-child(5) { animation: slideInLeft 0.38s cubic-bezier(0.22,1,0.36,1) 0.90s both; }
+  .slide.anim .bi-table tbody tr:nth-child(6) { animation: slideInLeft 0.38s cubic-bezier(0.22,1,0.36,1) 1.00s both; }
+  .slide.anim .bi-table thead { animation: stampIn 0.45s cubic-bezier(0.22,1,0.36,1) 0.38s both; }
+
+  @keyframes pulseGlow {
+    0%, 100% { text-shadow: 0 0 20px rgba(79,195,232,0.3); }
+    50%       { text-shadow: 0 0 50px rgba(79,195,232,0.7), 0 0 80px rgba(79,195,232,0.3); }
+  }
+  #s1 .main-title { animation: pulseGlow 4s ease infinite; }
+
+  /* route line animation */
+  @keyframes drawLine {
+    from { stroke-dashoffset: 1000; }
+    to   { stroke-dashoffset: 0; }
+  }
+  .route-svg path {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    transition: stroke-dashoffset 0s;
+  }
+  .slide.anim .route-svg path {
+    animation: drawLine 1.8s ease 0.6s forwards;
+  }
+
+  /* zoom image on active */
+  .slide.anim .img-zoom {
+    animation: imgZoom 8s ease forwards;
+  }
+  @keyframes imgZoom {
+    from { transform: scale(1); }
+    to   { transform: scale(1.04); }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="ice-canvas"></canvas>
+
+<div id="deck">
+
+  <!-- SLIDE 1 : TITRE -->
+  <div class="slide active" id="s1">
+    <div class="col" style="z-index:1; position:relative;">
+      <p class="eyebrow anim-1">Thomas - Timéo</p>
+      <div class="main-title anim-2">
+        L'<span>Arc</span>tique
+      </div>
+      <div class="geo-line anim-3"></div>
+      <div class="display anim-3" style="font-size: clamp(1.8rem, 5vw, 6.5rem); color: var(--amber);">
+        Nouvel Eldorado ?
+      </div>
+      <p class="subtitle-block anim-4">Alaska &nbsp;|&nbsp; Canada &nbsp;|&nbsp; Russie &nbsp;|&nbsp; Groenland &nbsp;|&nbsp; Norvège</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 2 : PLAN -->
+  <div class="slide" id="s2">
+    <div class="col" style="width:100%;">
+      <div class="section-badge anim-1">Plan de l'exposé</div>
+      <ul class="plan-list anim-2">
+        <li>
+          <span class="num">I</span>
+          <span class="txt">Qu'est-ce que l'Arctique ? Les effets visibles</span>
+        </li>
+        <li>
+          <span class="num">II</span>
+          <span class="txt">L'Arctique face au réchauffement climatique</span>
+        </li>
+        <li>
+          <span class="num">III</span>
+          <span class="txt">Les routes maritimes arctiques</span>
+        </li>
+        <li>
+          <span class="num">IV</span>
+          <span class="txt">Ressources et enjeux géopolitiques</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SLIDE 3 : INTRODUCTION / DEF ARCTIQUE — carte agrandie -->
+  <div class="slide" id="s3">
+    <div class="row" style="align-items: center;">
+      <div class="col left" style="flex:0.85;">
+        <div class="section-badge anim-1">Introduction</div>
+        <div class="title anim-2">L'Arctique, c'est quoi ?</div>
+        <div class="divider anim-3"></div>
+        <p class="body anim-3">
+          La région où la température moyenne<br>
+          du mois le plus chaud reste
+          <span style="color: var(--cyan); font-weight:800;">en dessous de 10 degrés celsius</span>
+        </p>
+        <p class="body muted anim-4" style="margin-top:1vh;">
+          Pôle Nord - Océan Arctique - Alaska, Canada,<br>
+          Groenland, Norvège, Russie
+        </p>
+      </div>
+      <div class="col anim-4" style="flex:1.15;">
+        <div class="map-visual" style="width: 52vw; height: 72vh;">
+          <img src="carte_localisation.jpg" alt="Carte de localisation de la région arctique" class="img-zoom">
+        </div>
+        <p style="font-size:clamp(0.7rem,1vw,1.2rem); color:var(--muted); margin-top:1vh;">Doc 4 - Région arctique</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4 : DOC 1 - OURS POLAIRES -->
+  <div class="slide" id="s4">
+    <div class="row" style="align-items: stretch;">
+      <div class="col left" style="flex:1.1;">
+        <div class="tag cyan anim-1">Document 1</div>
+        <div class="title anim-2" style="font-size: clamp(1.6rem, 3.5vw, 4.5rem); line-height:1.15;">
+          56 ours polaires<br>aux portes d'un village
+        </div>
+        <div class="divider anim-3"></div>
+        <p class="body anim-3">
+          Tchoukotka, Russie - extrême nord-est
+        </p>
+        <p class="body muted anim-4">
+          Les ours se rapprochent des habitations
+          car la banquise se forme de plus en plus tard.
+          Elle est leur terrain de chasse pour les phoques.
+        </p>
+        <div class="tag amber anim-5" style="margin-top: 2vh;">
+          Cause : banquise tardive
+        </div>
+      </div>
+      <div class="col anim-4" style="flex:0.9; justify-content: center;">
+        <div class="img-block" style="width: 34vw; height: 42vh;">
+          <img src="ours_polaires.jpg" alt="56 ours polaires près du village de Tchoukotka" class="img-zoom">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5 : DOC 2 - CANIDE PERMAFROST -->
+  <div class="slide" id="s5">
+    <div class="row" style="align-items: stretch;">
+      <div class="col anim-4" style="flex:0.9; justify-content: center;">
+        <div class="img-block" style="width: 34vw; height: 42vh;">
+          <img src="canide_permafrost.jpg" alt="Canidé retrouvé dans le permafrost sibérie" class="img-zoom">
+        </div>
+      </div>
+      <div class="col left" style="flex:1.1;">
+        <div class="tag cyan anim-1">Document 2</div>
+        <div class="title anim-2" style="font-size: clamp(1.6rem, 3.5vw, 4.5rem); line-height:1.15;">
+          Un canidé mort<br>il y a 18 000 ans
+        </div>
+        <div class="divider anim-3"></div>
+        <p class="body anim-3">
+          Retrouvé intact en Sibérie (2018)
+        </p>
+        <p class="body muted anim-4">
+          Fourrure, dents, cils - parfaitement conservés.
+          Rendu possible par la fonte du
+          <span style="color:var(--cyan);">permafrost.</span>
+        </p>
+        <div class="tag amber anim-5" style="margin-top: 2vh;">
+          Cause : fonte du pergélisol
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 6 : CAUSE COMMUNE -->
+  <div class="slide" id="s6">
+    <div class="col" style="gap: 3vh;">
+      <div class="anim-1" style="font-size: clamp(0.8rem,1.3vw,1.6rem); font-weight:700; text-transform:uppercase; letter-spacing:0.15em; color:var(--muted);">
+        Ces deux faits ont une cause commune
+      </div>
+      <div class="display anim-2" style="font-size: clamp(2.5rem, 6vw, 7.5rem); color: var(--amber);">
+        Le dérèglement<br>climatique
+      </div>
+      <div class="divider anim-3" style="width:12vw;"></div>
+      <div class="row anim-4" style="gap:4vw; margin-top:1vh;">
+        <div class="card" style="flex:1; text-align:center;">
+          <div style="font-size:clamp(2rem,4vw,5rem);">🐻‍❄️</div>
+          <p style="font-size:clamp(0.95rem,1.6vw,2rem); font-weight:700; color:var(--white); margin-top:1vh;">Banquise tardive</p>
+          <p style="font-size:clamp(0.8rem,1.2vw,1.5rem); color:var(--muted); margin-top:0.5vh;">Les ours ne peuvent plus chasser les phoques</p>
+        </div>
+        <div class="card" style="flex:1; text-align:center;">
+          <div style="font-size:clamp(2rem,4vw,5rem);">🧊</div>
+          <p style="font-size:clamp(0.95rem,1.6vw,2rem); font-weight:700; color:var(--white); margin-top:1vh;">Permafrost qui fond</p>
+          <p style="font-size:clamp(0.8rem,1.2vw,1.5rem); color:var(--muted); margin-top:0.5vh;">1/4 des terres émergées de l'hémisphère nord</p>
+        </div>
+        <div class="card" style="flex:1; text-align:center;">
+          <div style="font-size:clamp(2rem,4vw,5rem);">🌡️</div>
+          <p style="font-size:clamp(0.95rem,1.6vw,2rem); font-weight:700; color:var(--white); margin-top:1vh;">Libère du méthane</p>
+          <p style="font-size:clamp(0.8rem,1.2vw,1.5rem); color:var(--muted); margin-top:0.5vh;">La fonte aggrave encore le réchauffement</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 7 : RECHAUFFEMENT CHIFFRES CLES -->
+  <div class="slide" id="s7">
+    <div class="col" style="gap:2vh; width:100%;">
+      <div class="section-badge anim-1">II. Réchauffement climatique</div>
+      <div class="title anim-2">L'Arctique : épicentre du réchauffement</div>
+      <div class="divider anim-3"></div>
+      <div class="temp-box anim-4">
+        <div class="temp-item">
+          <div class="temp-val" style="color: var(--red);">+2,3 °C</div>
+          <div class="temp-desc">Grand Nord canadien<br>depuis 1948</div>
+        </div>
+        <div style="width:2px; height:12vh; background: rgba(255,255,255,0.1); align-self:center;"></div>
+        <div class="temp-item">
+          <div class="temp-val" style="color:var(--muted); font-size: clamp(2rem,4.5vw,5.5rem);">+0,8 °C</div>
+          <div class="temp-desc">Moyenne mondiale<br>sur la même période</div>
+        </div>
+        <div style="width:2px; height:12vh; background: rgba(255,255,255,0.1); align-self:center;"></div>
+        <div class="temp-item">
+          <div class="temp-val" style="color: var(--amber);">2x</div>
+          <div class="temp-desc">plus rapide<br>qu'ailleurs</div>
+        </div>
+      </div>
+      <div class="row anim-5" style="gap:3vw; margin-top:1.5vh;">
+        <div class="card" style="flex:1; border-color: rgba(224,80,80,0.35);">
+          <p style="font-size:clamp(0.9rem,1.5vw,1.9rem); color:var(--white); font-weight:600;">
+            Côtes de Beaufort
+          </p>
+          <p style="font-size:clamp(1.2rem,2.2vw,2.8rem); color:var(--red); font-weight:800; margin-top:0.5vh;">
+            - 30 à 40 m / an
+          </p>
+          <p style="font-size:clamp(0.75rem,1.1vw,1.3rem); color:var(--muted);">érosion côtière</p>
+        </div>
+        <div class="card" style="flex:1; border-color: rgba(224,80,80,0.35);">
+          <p style="font-size:clamp(0.9rem,1.5vw,1.9rem); color:var(--white); font-weight:600;">
+            Île de Pelly Island
+          </p>
+          <p style="font-size:clamp(1.2rem,2.2vw,2.8rem); color:var(--red); font-weight:800; margin-top:0.5vh;">
+            20 à 30x
+          </p>
+          <p style="font-size:clamp(0.75rem,1.1vw,1.3rem); color:var(--muted);">plus rapide qu'ailleurs au Canada</p>
+        </div>
+        <div class="card" style="flex:1.3;">
+          <p style="font-size:clamp(0.85rem,1.3vw,1.6rem); color:var(--muted); line-height:1.4;">
+            Effondrement des infrastructures, libération de méthane, submersion des côtes...
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 8 : BANQUISE (doc 3 + doc 9) — carte agrandie -->
+  <div class="slide" id="s8">
+    <div class="row" style="align-items:flex-start; gap:4vw;">
+      <div class="col left" style="flex:0.9;">
+        <div class="section-badge anim-1">Document 3 - Vidéo</div>
+        <div class="title anim-2" style="font-size:clamp(1.8rem,3.8vw,4.8rem);">
+          La fonte de la banquise
+        </div>
+        <div class="divider anim-3"></div>
+        <p class="body anim-3">
+          La banquise atteint son
+          <span style="color:var(--cyan);">maximum en mars</span>,
+          son <span style="color:var(--amber);">minimum en septembre</span>.
+        </p>
+        <p class="body muted anim-4" style="margin-top:1.5vh;">
+          La vidéo Terra Darwin (2019) illustre l'accélération
+          de la fonte depuis 35 ans.
+        </p>
+        <div class="row anim-5" style="gap:1.5vw; margin-top:2vh; justify-content:flex-start;">
+          <div class="qr-slot">
+            <img src="qr_banquise.png" alt="QR code vidéo banquise Terra Darwin" onerror="this.parentNode.innerHTML='<span class=ph-qr>&#x25B6;</span>'">
+          </div>
+          <div>
+            <p style="font-size:clamp(0.8rem,1.3vw,1.6rem); font-weight:700; color:var(--white);">
+              "L'accélération de la fonte<br>de la banquise arctique depuis 35 ans"
+            </p>
+            <p style="font-size:clamp(0.7rem,1.1vw,1.3rem); color:var(--muted); margin-top:0.4vh;">Terra Darwin, 17/09/2019 - 3:02 min</p>
+          </div>
+        </div>
+      </div>
+      <div class="col anim-4" style="flex:1.1;">
+        <div class="map-visual" style="width:52vw; height:68vh;">
+          <img src="carte_banquise.jpg" alt="Carte extension banquise arctique mars et septembre doc 9" class="img-zoom">
+        </div>
+        <p style="font-size:clamp(0.7rem,1vw,1.2rem); color:var(--muted); margin-top:1vh;">Doc 9 - Extension de la banquise : mars (max) / septembre (min)</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 9 : ROUTES MARITIMES — carte agrandie -->
+  <div class="slide" id="s9">
+    <div class="row" style="align-items:flex-start; gap:4vw;">
+      <div class="col left" style="flex:0.9;">
+        <div class="section-badge anim-1">III. Routes maritimes</div>
+        <div class="title anim-2" style="font-size:clamp(1.8rem,3.8vw,4.8rem);">
+          Deux passages stratégiques
+        </div>
+        <div class="divider anim-3"></div>
+        <div class="col left anim-3" style="gap:2vh;">
+          <div class="card teal-border" style="width:100%;">
+            <div class="tag teal" style="margin-bottom:1vh;">Passage du Nord-Est</div>
+            <p style="font-size:clamp(0.95rem,1.5vw,1.9rem); font-weight:600; color:var(--white);">
+              Route Maritime du Nord, côte russe
+            </p>
+            <p style="font-size:clamp(0.8rem,1.2vw,1.5rem); color:var(--muted); margin-top:0.5vh;">
+              Navigable surtout en été. Courant nord-atlantique chaud.
+            </p>
+          </div>
+          <div class="card amber-border" style="width:100%;">
+            <div class="tag amber" style="margin-bottom:1vh;">Passage du Nord-Ouest</div>
+            <p style="font-size:clamp(0.95rem,1.5vw,1.9rem); font-weight:600; color:var(--white);">
+              Au nord du Canada
+            </p>
+            <p style="font-size:clamp(0.8rem,1.2vw,1.5rem); color:var(--muted); margin-top:0.5vh;">
+              Plus difficile. Courants froids, détroits étroits.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col anim-4" style="flex:1.1;">
+        <div class="map-visual" style="width:52vw; height:68vh;">
+          <img src="carte_routes_maritimes.jpg" alt="Carte des routes maritimes arctiques passage NE et NO doc 12" class="img-zoom">
+        </div>
+        <p style="font-size:clamp(0.7rem,1vw,1.2rem); color:var(--muted); margin-top:1vh;">Doc 12 - Routes maritimes du pôle Nord</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 10 : TRAFIC COMPARE -->
+  <div class="slide" id="s10">
+    <div class="col" style="width:100%; gap:2.5vh;">
+      <div class="section-badge anim-1">Document 13</div>
+      <div class="title anim-2">Trafic comparé : routes mondiales vs arctiques</div>
+      <div class="divider anim-3"></div>
+      <div class="traffic-bars anim-4">
+        <div class="tbar-row">
+          <span class="tbar-label">Détroit de Malacca</span>
+          <div class="tbar-fill-wrap">
+            <div class="tbar-fill" style="--w: 100%; background: linear-gradient(90deg, var(--cyan), var(--teal));"></div>
+          </div>
+          <span class="tbar-val">84 456 navires</span>
+        </div>
+        <div class="tbar-row">
+          <span class="tbar-label">Canal de Suez</span>
+          <div class="tbar-fill-wrap">
+            <div class="tbar-fill" style="--w: 20.8%; background: var(--cyan);"></div>
+          </div>
+          <span class="tbar-val">17 550 navires</span>
+        </div>
+        <div class="tbar-row">
+          <span class="tbar-label">Canal de Panama</span>
+          <div class="tbar-fill-wrap">
+            <div class="tbar-fill" style="--w: 16.3%; background: rgba(79,195,232,0.65);"></div>
+          </div>
+          <span class="tbar-val">13 795 navires</span>
+        </div>
+        <div class="tbar-row">
+          <span class="tbar-label" style="color:var(--teal);">Passage du Nord-Est</span>
+          <div class="tbar-fill-wrap">
+            <div class="tbar-fill" style="--w: 0.032%; background: var(--amber); min-width: 4px;"></div>
+          </div>
+          <span class="tbar-val" style="color:var(--amber);">27 navires</span>
+        </div>
+        <div class="tbar-row">
+          <span class="tbar-label" style="color:var(--amber);">Passage du Nord-Ouest</span>
+          <div class="tbar-fill-wrap">
+            <div class="tbar-fill" style="--w: 0.006%; background: var(--red); min-width: 4px;"></div>
+          </div>
+          <span class="tbar-val" style="color:var(--red);">5 navires</span>
+        </div>
+      </div>
+      <p class="body muted anim-5" style="font-size:clamp(0.8rem,1.3vw,1.6rem);">
+        Le trafic arctique reste très marginal - il augmente depuis 2008, mais ce sont surtout des navires de destination (ravitaillement local).
+      </p>
+    </div>
+  </div>
+
+  <!-- SLIDE 11 : POURQUOI DIFFERENCE NE / NO — carte agrandie -->
+  <div class="slide" id="s11">
+    <div class="row" style="align-items:center; gap:5vw;">
+      <div class="col anim-4" style="flex:1.1;">
+        <div class="map-visual" style="width:50vw; height:65vh;">
+          <img src="carte_courants_marins.jpg" alt="Carte des courants marins Gulf Stream dérive nord-atlantique" class="img-zoom">
+        </div>
+        <p style="font-size:clamp(0.7rem,1vw,1.2rem); color:var(--muted); margin-top:1vh;">Courants marins et leur influence</p>
+      </div>
+      <div class="col left" style="flex:0.9;">
+        <div class="title anim-2" style="font-size:clamp(1.6rem,3.2vw,4rem);">
+          Pourquoi une différence NE / NO ?
+        </div>
+        <div class="divider anim-3"></div>
+        <div class="card teal-border anim-3" style="width:100%;">
+          <div class="tag teal" style="margin-bottom:0.8vh;">Côte russe (NE)</div>
+          <p style="font-size:clamp(0.95rem,1.5vw,1.9rem); font-weight:600; color:var(--white); line-height:1.4;">
+            Courant chaud de la dérive nord-atlantique
+          </p>
+          <p style="font-size:clamp(0.8rem,1.2vw,1.5rem); color:var(--muted); margin-top:0.5vh;">
+            Retarde la formation de la glace. Moins encombrée.
+          </p>
+        </div>
+        <div class="card amber-border anim-4" style="width:100%; margin-top:1.5vh;">
+          <div class="tag amber" style="margin-bottom:0.8vh;">Côte canadienne (NO)</div>
+          <p style="font-size:clamp(0.95rem,1.5vw,1.9rem); font-weight:600; color:var(--white); line-height:1.4;">
+            Courants froids, détroits étroits
+          </p>
+          <p style="font-size:clamp(0.8rem,1.2vw,1.5rem); color:var(--muted); margin-top:0.5vh;">
+            La glace se forme plus tôt et reste piégée dans les détroits.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 12 : RESSOURCES -->
+  <div class="slide" id="s12">
+    <div class="row" style="align-items:flex-start; gap:4vw;">
+      <div class="col left" style="flex:1.1;">
+        <div class="section-badge anim-1">IV. Ressources</div>
+        <div class="title anim-2" style="font-size:clamp(1.8rem,3.8vw,4.8rem);">
+          Un véritable Eldorado
+        </div>
+        <div class="divider anim-3"></div>
+        <p class="body anim-3">Charbon, pétrole, fer, zinc, plomb, uranium...</p>
+        <div class="row anim-4" style="gap:2.5vw; margin-top:2vh; justify-content:flex-start;">
+          <div style="text-align:center;">
+            <div class="big-stat teal" style="font-size:clamp(3rem,6vw,7.5rem);">29%</div>
+            <div class="label-under">réserves mondiales de gaz</div>
+          </div>
+          <div style="text-align:center;">
+            <div class="big-stat amber" style="font-size:clamp(3rem,6vw,7.5rem);">10%</div>
+            <div class="label-under">réserves mondiales de pétrole</div>
+          </div>
+        </div>
+        <p class="body muted anim-5" style="font-size:clamp(0.8rem,1.3vw,1.6rem); margin-top:1.5vh;">
+          Estimation US Geological Survey (USGS, 2008). Les gisements de gaz arctiques
+          surpassent ceux de la Russie et de l'Iran.
+        </p>
+      </div>
+      <div class="col anim-4" style="flex:0.9;">
+        <div class="img-block" style="width:34vw; height:42vh;">
+          <img src="plateforme_petrole.jpg" alt="Plateforme pétrolière océan arctique doc 10" class="img-zoom">
+        </div>
+        <p style="font-size:clamp(0.7rem,1vw,1.2rem); color:var(--muted); margin-top:1vh;">Doc 10 - Plateforme pétrolière en Arctique</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 13 : RESSOURCES HALIEUTIQUES -->
+  <div class="slide" id="s13">
+    <div class="col" style="gap:2.5vh; width:100%;">
+      <div class="section-badge anim-1">Document 11 - Pêche</div>
+      <div class="title anim-2">Les ressources halieutiques</div>
+      <div class="divider anim-3"></div>
+      <div class="row anim-4" style="gap:3.5vw; align-items:stretch;">
+        <div class="card" style="flex:1; text-align:center;">
+          <div style="font-size:clamp(2.5rem,5vw,6rem);">🐟</div>
+          <div class="big-stat teal" style="font-size:clamp(2.5rem,5.5vw,7rem);">800</div>
+          <div class="label-under">espèces de poissons migrantes</div>
+          <p style="font-size:clamp(0.8rem,1.2vw,1.5rem); color:var(--muted); margin-top:1vh;">
+            vers les pôles, à 26 km/an
+          </p>
+        </div>
+        <div class="card" style="flex:1; text-align:center;">
+          <div style="font-size:clamp(2.5rem,5vw,6rem);">📜</div>
+          <div class="big-stat amber" style="font-size:clamp(2.5rem,5.5vw,7rem);">16</div>
+          <div class="label-under">ans de moratoire</div>
+          <p style="font-size:clamp(0.8rem,1.2vw,1.5rem); color:var(--muted); margin-top:1vh;">
+            Accord international sur la pêche industrielle arctique
+          </p>
+        </div>
+        <div class="card" style="flex:1.2;">
+          <p style="font-size:clamp(0.9rem,1.5vw,1.9rem); font-weight:700; color:var(--white); line-height:1.4; margin-bottom:1.5vh;">
+            Zone interdite
+          </p>
+          <p style="font-size:clamp(0.82rem,1.3vw,1.6rem); color:var(--muted); line-height:1.4;">
+            200 km autour du pôle géographique. Une superficie comparable à la Méditerranée.
+            Pourrait être accessible en été d'ici peu.
+          </p>
+          <div class="tag cyan" style="margin-top:1.5vh;">
+            Écosystèmes à évaluer
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 14 : GEOPOLITIQUE — carte agrandie -->
+  <div class="slide" id="s14">
+    <div class="row" style="align-items:center; gap:3vw; width:100%; max-height:90vh; overflow:hidden;">
+      <div class="col left" style="flex:0 0 auto; width:36vw; min-width:0;">
+        <div class="section-badge anim-1">Enjeux géopolitiques</div>
+        <div class="title anim-2" style="font-size:clamp(1.4rem,2.8vw,3.6rem);">
+          5 puissances, 1 océan contesté
+        </div>
+        <div class="divider anim-3"></div>
+        <div class="col left anim-4" style="gap:1vh;">
+          <div class="row" style="gap:0.8vw; justify-content:flex-start; flex-wrap:wrap;">
+            <div class="tag cyan">États-Unis</div>
+            <div class="tag cyan">Canada</div>
+            <div class="tag red">Russie</div>
+            <div class="tag teal">Norvège</div>
+            <div class="tag amber">Danemark</div>
+          </div>
+          <p class="body" style="font-size:clamp(0.85rem,1.3vw,1.6rem); margin-top:0.8vh; color:var(--white);">
+            Rivalités sur :
+          </p>
+          <p class="body muted" style="font-size:clamp(0.8rem,1.2vw,1.5rem); line-height:1.5;">
+            - Zones économiques exclusives (200 miles marins)<br>
+            - Plateau continental et ressources souterraines<br>
+            - Contrôle des routes maritimes<br>
+            - Bases militaires stratégiques
+          </p>
+        </div>
+      </div>
+      <div class="col anim-4" style="flex:1 1 0; min-width:0;">
+        <div class="map-visual" style="width:100%; height:clamp(300px, 58vh, 620px);">
+          <img src="carte_geopolitique.jpg" alt="Carte géopolitique arctique bases militaires ZEE ressources doc 9" class="img-zoom">
+        </div>
+        <p style="font-size:clamp(0.7rem,1vw,1.2rem); color:var(--muted); margin-top:1vh;">Doc 9 - Arctique dans la mondialisation</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 15 : TABLEAU POTENTIALITES / VULNERABILITES -->
+  <div class="slide" id="s15">
+    <div class="col" style="width:100%; gap:2vh;">
+      <div class="section-badge anim-1">Bilan</div>
+      <div class="title anim-2" style="font-size:clamp(1.6rem,3.3vw,4.2rem);">Potentialités et vulnérabilités</div>
+      <div class="divider anim-3"></div>
+      <table class="bi-table anim-4">
+        <thead>
+          <tr>
+            <th class="pot">Potentialités (+)</th>
+            <th class="vul">Vulnérabilités (-)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="pot">29% du gaz mondial, 10% du pétrole non-découverts</td>
+            <td class="vul">Réchauffement 2x plus rapide qu'ailleurs</td>
+          </tr>
+          <tr>
+            <td class="pot">Nouvelles routes maritimes (gain de temps et de distance)</td>
+            <td class="vul">Fonte du permafrost : méthane + infrastructures</td>
+          </tr>
+          <tr>
+            <td class="pot">Ressources minières : fer, zinc, uranium...</td>
+            <td class="vul">Érosion côtière accélérée (Beaufort : -30 à 40m/an)</td>
+          </tr>
+          <tr>
+            <td class="pot">800 espèces de poissons migrantes, nouvelles zones de pêche</td>
+            <td class="vul">Menace sur la biodiversité (ours polaires, faune)</td>
+          </tr>
+          <tr>
+            <td class="pot">Tourisme polaire et recherche scientifique</td>
+            <td class="vul">Tensions géopolitiques entre grandes puissances</td>
+          </tr>
+          <tr>
+            <td class="pot">Développement économique des États riverains</td>
+            <td class="vul">Écosystèmes uniques et fragiles</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SLIDE 16 : CONCLUSION -->
+  <div class="slide" id="s16">
+    <div class="col" style="gap:3vh;">
+      <div class="section-badge anim-1">Conclusion</div>
+      <div class="display anim-2" style="font-size:clamp(2.5rem,6vw,7.5rem);">
+        L'Arctique : <span style="color:var(--amber);">Eldorado</span>
+        <br>ou <span style="color:var(--red);">piège ?</span>
+      </div>
+      <div class="divider anim-3" style="width:15vw;"></div>
+      <div class="big-q anim-4">
+        Comment exploiter ces potentialités
+        sans aggraver les vulnérabilités ?
+      </div>
+      <p class="body muted anim-5" style="font-size:clamp(0.9rem,1.5vw,1.9rem); margin-top:1vh;">
+        Un défi pour les États riverains, mais aussi pour la communauté internationale.
+      </p>
+      <div class="tag amber anim-6" style="margin-top:2vh; font-size:clamp(0.9rem,1.6vw,2rem); padding:0.5em 2em;">
+        Merci pour votre attention
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div id="progress"><span id="cur">1</span> / <span id="tot">16</span></div>
+<div id="progbar"></div>
+
+<script>
+(function() {
+  // === ICE PARTICLES ===
+  var canvas = document.getElementById('ice-canvas');
+  var ctx = canvas.getContext('2d');
+  var W, H, particles = [];
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  function Particle() {
+    this.reset();
+  }
+  Particle.prototype.reset = function() {
+    this.x = Math.random() * W;
+    this.y = Math.random() * H;
+    this.size = Math.random() * 3 + 1;
+    this.vx = (Math.random() - 0.5) * 0.3;
+    this.vy = Math.random() * 0.4 + 0.1;
+    this.alpha = Math.random() * 0.6 + 0.2;
+    this.color = Math.random() > 0.5 ? '#4fc3e8' : '#e8f4f8';
+  };
+
+  for (var i = 0; i < 55; i++) particles.push(new Particle());
+
+  function drawHex(x, y, r) {
+    ctx.beginPath();
+    for (var a = 0; a < 6; a++) {
+      var angle = (Math.PI / 3) * a - Math.PI / 6;
+      var px = x + r * Math.cos(angle);
+      var py = y + r * Math.sin(angle);
+      if (a === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+    }
+    ctx.closePath();
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, W, H);
+    for (var i = 0; i < particles.length; i++) {
+      var p = particles[i];
+      p.x += p.vx;
+      p.y += p.vy;
+      if (p.y > H + 10) p.reset(), p.y = -10;
+      if (p.x < -10 || p.x > W + 10) p.reset();
+      ctx.globalAlpha = p.alpha;
+      ctx.strokeStyle = p.color;
+      ctx.lineWidth = 0.8;
+      drawHex(p.x, p.y, p.size);
+      ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(animate);
+  }
+  animate();
+
+  // === SLIDESHOW ===
+  var slides = Array.from(document.querySelectorAll('.slide'));
+  var total = slides.length;
+  var current = 0;
+  var progBar = document.getElementById('progbar');
+  var curEl = document.getElementById('cur');
+  var totEl = document.getElementById('tot');
+  totEl.textContent = total;
+
+  var animating = false;
+
+  function goTo(idx) {
+    if (idx < 0 || idx >= total || animating) return;
+    animating = true;
+
+    var prev = current;
+    var dir = ((idx - prev + total) % total <= total / 2) ? 1 : -1;
+
+    // Trigger enter/exit classes
+    slides[prev].classList.add(dir === 1 ? 'exit-left' : 'exit-right');
+    slides[prev].classList.remove('anim');
+
+    current = idx;
+    slides[current].classList.add('active');
+    slides[current].classList.add(dir === 1 ? 'enter-right' : 'enter-left');
+
+    // Force reflow so animations fire cleanly
+    void slides[current].offsetWidth;
+    slides[current].classList.add('anim');
+
+    curEl.textContent = current + 1;
+    progBar.style.width = ((current + 1) / total * 100) + '%';
+
+    setTimeout(function() {
+      slides[prev].classList.remove('active', 'exit-left', 'exit-right', 'anim');
+      slides[current].classList.remove('enter-right', 'enter-left');
+      animating = false;
+    }, 700);
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+      e.preventDefault(); goTo(current + 1);
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      e.preventDefault(); goTo(current - 1);
+    }
+  });
+
+  document.addEventListener('click', function(e) {
+    // click right half = next, left half = prev
+    if (e.clientX > window.innerWidth / 2) goTo(current + 1);
+    else goTo(current - 1);
+  });
+
+  // touch swipe
+  var touchX = null;
+  document.addEventListener('touchstart', function(e) {
+    touchX = e.touches[0].clientX;
+  });
+  document.addEventListener('touchend', function(e) {
+    if (touchX === null) return;
+    var dx = e.changedTouches[0].clientX - touchX;
+    if (Math.abs(dx) > 40) { if (dx < 0) goTo(current + 1); else goTo(current - 1); }
+    touchX = null;
+  });
+
+  // init progress bar + trigger anim on first slide
+  progBar.style.width = (1 / total * 100) + '%';
+  slides[0].classList.add('anim');
+})();
+</script>
+</body>
+</html>
