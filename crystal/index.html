@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CRYSTALLING // Analyseur de cadence</title>
+<style>
+  :root{
+    --bg: #0a0d0a;
+    --bg-panel: #0f1410;
+    --grid: #1c2620;
+    --grid-major: #2a3a30;
+    --phosphor: #4dff8a;
+    --phosphor-dim: #2a9a5c;
+    --amber: #ffb454;
+    --red: #ff4d5e;
+    --red-dim: #6b1f28;
+    --crystal: #b586ff;
+    --cancel: #ff7ab8;
+    --text: #cfe8d9;
+    --text-dim: #6c8577;
+    --mono: "IBM Plex Mono", "SF Mono", "Consolas", monospace;
+    --disp: "Barlow Condensed", "Arial Narrow", sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--mono);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body {
+    background-image:
+      radial-gradient(ellipse at top, rgba(77,255,138,0.04), transparent 60%);
+  }
+
+  .scanline-overlay{
+    pointer-events:none;
+    position:fixed; inset:0;
+    background: repeating-linear-gradient(
+      to bottom,
+      rgba(0,0,0,0) 0px,
+      rgba(0,0,0,0) 2px,
+      rgba(0,0,0,0.06) 3px
+    );
+    z-index: 50;
+    mix-blend-mode: overlay;
+  }
+
+  .wrap{
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 28px 20px 60px;
+  }
+
+  header{
+    display:flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-bottom: 1px solid var(--grid-major);
+    padding-bottom: 16px;
+    margin-bottom: 22px;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .brand-eyebrow{
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    color: var(--phosphor-dim);
+    text-transform: uppercase;
+  }
+
+  h1{
+    font-family: var(--disp);
+    font-weight: 700;
+    font-size: 34px;
+    letter-spacing: 0.02em;
+    margin: 4px 0 0;
+    color: var(--phosphor);
+    text-shadow: 0 0 18px rgba(77,255,138,0.35);
+  }
+
+  h1 span{ color: var(--text); font-weight: 400; }
+
+  .status-block{
+    text-align: right;
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  .status-value{
+    color: var(--amber);
+    font-weight: 600;
+  }
+
+  /* Arena */
+  .arena{
+    position: relative;
+    height: 220px;
+    border: 1px solid var(--grid-major);
+    background:
+      linear-gradient(180deg, #0d1310 0%, #0a0f0c 100%);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    cursor: crosshair;
+    user-select: none;
+    overflow:hidden;
+  }
+
+  .arena::before{
+    content:"";
+    position:absolute; inset:0;
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 24px 24px;
+    opacity: 0.5;
+  }
+
+  .arena.idle{ cursor: pointer; }
+  .arena.armed{
+    box-shadow: inset 0 0 0 1px var(--phosphor-dim), inset 0 0 40px rgba(77,255,138,0.06);
+  }
+  .arena.flash-l{ animation: flashL 90ms ease-out; }
+  .arena.flash-r{ animation: flashR 90ms ease-out; }
+  .arena.flash-err{ animation: flashErr 160ms ease-out; }
+
+  @keyframes flashL { 0%{ background-color: rgba(77,255,138,0.14);} 100%{ background-color: transparent; } }
+  @keyframes flashR { 0%{ background-color: rgba(255,180,84,0.14);} 100%{ background-color: transparent; } }
+  @keyframes flashErr { 0%{ background-color: rgba(255,77,94,0.28);} 100%{ background-color: transparent; } }
+
+  .arena-msg{
+    position: relative;
+    z-index: 2;
+    max-width: 480px;
+    padding: 0 20px;
+  }
+
+  .arena-msg .big{
+    font-family: var(--disp);
+    font-size: 26px;
+    color: var(--phosphor);
+    letter-spacing: 0.03em;
+    margin-bottom: 8px;
+  }
+  .arena-msg .small{
+    font-size: 12.5px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+  .arena-msg .small b{ color: var(--text); font-weight: 600; }
+
+  .last-click-tag{
+    position:absolute;
+    top: 10px; left: 12px;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--text-dim);
+    z-index: 3;
+  }
+  .last-click-tag .tag-l{ color: var(--phosphor); }
+  .last-click-tag .tag-r{ color: var(--amber); }
+  .last-click-tag .tag-err{ color: var(--red); }
+
+  .click-count{
+    position:absolute;
+    top:10px; right:12px;
+    font-size:11px;
+    color: var(--text-dim);
+    z-index:3;
+  }
+
+  /* Controls */
+  .controls{
+    display:flex;
+    gap: 10px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+  }
+
+  button{
+    font-family: var(--mono);
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: transparent;
+    border: 1px solid var(--grid-major);
+    color: var(--text);
+    padding: 11px 18px;
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s, background 0.15s;
+  }
+  button:hover{ border-color: var(--phosphor-dim); color: var(--phosphor); }
+  button:active{ transform: translateY(1px); }
+  button.primary{
+    border-color: var(--phosphor-dim);
+    color: var(--phosphor);
+  }
+  button.primary:hover{ background: rgba(77,255,138,0.08); }
+  button:disabled{ opacity:0.35; cursor:not-allowed; }
+  button:disabled:hover{ border-color: var(--grid-major); color: var(--text); background:transparent; }
+
+  /* Stats */
+  .stats-grid{
+    display:grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    margin-top: 26px;
+    background: var(--grid-major);
+    border: 1px solid var(--grid-major);
+  }
+  @media (max-width: 640px){
+    .stats-grid{ grid-template-columns: 1fr; }
+  }
+
+  .stat-card{
+    background: var(--bg-panel);
+    padding: 18px 20px;
+  }
+
+  .stat-label{
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    display:flex;
+    justify-content: space-between;
+    align-items:center;
+  }
+  .stat-label .dot{
+    width:7px; height:7px;
+    border-radius:50%;
+    display:inline-block;
+    margin-right:6px;
+  }
+  .dot-pose{ background: var(--phosphor); box-shadow:0 0 6px var(--phosphor); }
+  .dot-break{ background: var(--amber); box-shadow:0 0 6px var(--amber); }
+
+  .stat-values{
+    display:flex;
+    align-items: baseline;
+    gap: 18px;
+    margin-top: 10px;
+  }
+
+  .stat-values .primary-val{
+    font-family: var(--disp);
+    font-size: 40px;
+    color: var(--text);
+    line-height: 1;
+  }
+  .stat-values .primary-val .unit{
+    font-size: 15px;
+    color: var(--text-dim);
+    font-family: var(--mono);
+    margin-left: 3px;
+  }
+  .stat-values .secondary-val{
+    font-size: 16px;
+    color: var(--text-dim);
+  }
+  .stat-values .secondary-val b{
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .stat-sub{
+    margin-top: 8px;
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  /* Score card */
+  .score-card{
+    margin-top: 22px;
+    border: 1px solid var(--grid-major);
+    background: var(--bg-panel);
+    padding: 20px 22px;
+    display:flex;
+    gap: 26px;
+    align-items:center;
+    flex-wrap: wrap;
+  }
+
+  .score-ring-wrap{
+    flex-shrink:0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:6px;
+  }
+
+  .score-num{
+    font-family: var(--disp);
+    font-size: 52px;
+    line-height:1;
+  }
+  .score-num .over10{
+    font-size: 20px;
+    color: var(--text-dim);
+    font-family: var(--mono);
+  }
+
+  .score-label{
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .score-body{
+    flex: 1;
+    min-width: 220px;
+  }
+
+  .score-cps{
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+  .score-cps b{ color: var(--text); font-weight:600; font-size:15px; }
+
+  .score-comment{
+    font-size: 12.5px;
+    line-height: 1.7;
+  }
+
+  .score-tags{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-top: 10px;
+  }
+  .score-tag{
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 4px 9px;
+    border: 1px solid;
+  }
+  .tag-warn-slow{ color: var(--amber); border-color: rgba(255,180,84,0.4); background: rgba(255,180,84,0.06); }
+  .tag-warn-rep{ color: var(--red); border-color: rgba(255,77,94,0.4); background: rgba(255,77,94,0.06); }
+  .tag-warn-cancel{ color: #ff8a5c; border-color: rgba(255,138,92,0.4); background: rgba(255,138,92,0.06); }
+  .tag-good{ color: var(--phosphor); border-color: rgba(77,255,138,0.4); background: rgba(77,255,138,0.06); }
+
+  /* Timeline */
+  .timeline-section{
+    margin-top: 30px;
+  }
+
+  .timeline-header{
+    display:flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .timeline-title{
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .legend{
+    display:flex;
+    gap: 16px;
+    font-size: 11px;
+    color: var(--text-dim);
+    flex-wrap: wrap;
+  }
+  .legend-item{ display:flex; align-items:center; gap:6px; }
+  .legend-swatch{ width:10px; height:10px; display:inline-block; }
+  .sw-l{ background: var(--phosphor); }
+  .sw-r{ background: var(--amber); }
+  .sw-err{ background: var(--red); }
+
+  .timeline-scroll{
+    overflow-x: auto;
+    border: 1px solid var(--grid-major);
+    background: var(--bg-panel);
+    padding: 4px 0;
+  }
+
+  svg#ticktrack{
+    display:block;
+  }
+
+  .empty-note{
+    padding: 40px 20px;
+    text-align:center;
+    color: var(--text-dim);
+    font-size: 12.5px;
+    line-height: 1.7;
+  }
+
+  footer{
+    margin-top: 40px;
+    padding-top: 16px;
+    border-top: 1px solid var(--grid);
+    font-size: 11px;
+    color: var(--text-dim);
+    line-height: 1.7;
+  }
+
+  kbd{
+    background: var(--grid);
+    border: 1px solid var(--grid-major);
+    padding: 1px 6px;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    color: var(--text);
+  }
+
+  ::selection{ background: var(--phosphor-dim); color: #001a0c; }
+</style>
+</head>
+<body>
+<div class="scanline-overlay"></div>
+
+<div class="wrap">
+
+  <header>
+    <div>
+      <div class="brand-eyebrow">MINECRAFT VANILLA PVP // OUTIL DE DIAGNOSTIC</div>
+      <h1>CRYSTALLING<span>.timer</span></h1>
+    </div>
+    <div class="status-block">
+      HORLOGE&nbsp;: <span class="status-value" id="clockStatus">ARRÊTÉE</span><br>
+      FENÊTRE&nbsp;: <span class="status-value">5.00 s / 100 ticks</span>
+    </div>
+  </header>
+
+  <div class="arena idle" id="arena" tabindex="0">
+    <div class="last-click-tag" id="lastClickTag"></div>
+    <div class="click-count" id="clickCount"></div>
+    <div class="arena-msg" id="arenaMsg">
+      <div class="big">PRÊT</div>
+      <div class="small">Appuyez sur <b>Démarrer</b> pour lancer l'horloge des ticks (20/s).<br>Enchaînez ensuite <b>clic gauche</b> (pose) → <b>clic droit</b> (casse) → gauche → droit…</div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="primary" id="btnStart">▶ Démarrer</button>
+    <button id="btnReset" disabled>↺ Réinitialiser</button>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-label"><span><span class="dot dot-pose"></span>POSE — Gauche → Droit</span></div>
+      <div class="stat-values">
+        <div class="primary-val" id="statPoseMs">—<span class="unit">ms</span></div>
+        <div class="secondary-val" id="statPoseTick">— <b>ticks</b></div>
+      </div>
+      <div class="stat-sub" id="statPoseSub">Aucune donnée</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label"><span><span class="dot dot-break"></span>CASSE — Droit → Gauche</span></div>
+      <div class="stat-values">
+        <div class="primary-val" id="statBreakMs">—<span class="unit">ms</span></div>
+        <div class="secondary-val" id="statBreakTick">— <b>ticks</b></div>
+      </div>
+      <div class="stat-sub" id="statBreakSub">Aucune donnée</div>
+    </div>
+  </div>
+
+  <div class="score-card">
+    <div class="score-ring-wrap">
+      <div class="score-num" id="scoreNum" style="color:var(--text-dim)">—<span class="over10">/10</span></div>
+      <div class="score-label">Note de cadence</div>
+    </div>
+    <div class="score-body">
+      <div class="score-cps">Cadence réelle&nbsp;: <b id="scoreCps">—</b> crystal/s effectif <span style="color:var(--text-dim)">(après annulations MC)</span></div>
+      <div class="score-comment" id="scoreComment">Aucune donnée — lancez une session pour obtenir votre note.</div>
+      <div class="score-tags" id="scoreTags"></div>
+    </div>
+  </div>
+
+  <div class="timeline-section">
+    <div class="timeline-header">
+      <div class="timeline-title">Chronologie des ticks (0 → 100, 50 ms / tick)</div>
+      <div class="legend">
+        <div class="legend-item"><span class="legend-swatch sw-l"></span>Clic gauche</div>
+        <div class="legend-item"><span class="legend-swatch sw-r"></span>Clic droit</div>
+        <div class="legend-item"><span class="legend-swatch" style="background:var(--crystal)"></span>Durée de vie crystal (D→G)</div>
+        <div class="legend-item"><span class="legend-swatch sw-err"></span>Erreur (répétition)</div>
+        <div class="legend-item"><span class="legend-swatch" style="background:var(--cancel)"></span>Annulé (⌀ même tick)</div>
+      </div>
+    </div>
+    <div class="timeline-scroll">
+      <div class="empty-note" id="emptyNote">Le graphe s'affichera ici après le premier clic, une fois l'horloge démarrée.</div>
+      <svg id="ticktrack" style="display:none"></svg>
+    </div>
+  </div>
+
+  <footer>
+    Méthode de mesure&nbsp;: l'horloge des ticks tourne à 20 Hz dès l'appui sur <b>Démarrer</b>, indépendamment des clics (comme le tick loop du serveur Minecraft). Chaque clic est horodaté en temps réel puis rattaché au numéro de tick dans lequel il tombe (<code>tick = floor(t / 50 ms)</code>). La distance en ticks entre deux clics est la différence entre ces numéros de tick — pas une simple conversion de la durée en ms.<br>
+    Raccourcis&nbsp;: <kbd>clic gauche</kbd> / <kbd>clic droit</kbd> dans la zone grise ci-dessus. <kbd>R</kbd> pour réinitialiser.
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  const TICK_MS = 50;
+  const TOTAL_TICKS = 100;
+  const TOTAL_MS = TICK_MS * TOTAL_TICKS;
+
+  const arena = document.getElementById('arena');
+  const arenaMsg = document.getElementById('arenaMsg');
+  const btnStart = document.getElementById('btnStart');
+  const btnReset = document.getElementById('btnReset');
+  const clockStatus = document.getElementById('clockStatus');
+  const lastClickTag = document.getElementById('lastClickTag');
+  const clickCountEl = document.getElementById('clickCount');
+  const emptyNote = document.getElementById('emptyNote');
+  const svg = document.getElementById('ticktrack');
+
+  const statPoseMs = document.getElementById('statPoseMs');
+  const statPoseTick = document.getElementById('statPoseTick');
+  const statPoseSub = document.getElementById('statPoseSub');
+  const statBreakMs = document.getElementById('statBreakMs');
+  const statBreakTick = document.getElementById('statBreakTick');
+  const statBreakSub = document.getElementById('statBreakSub');
+
+  const scoreNum = document.getElementById('scoreNum');
+  const scoreCps = document.getElementById('scoreCps');
+  const scoreComment = document.getElementById('scoreComment');
+  const scoreTags = document.getElementById('scoreTags');
+
+  let running = false;
+  let startTime = null;      // performance.now() at clock start (tick 0 origin)
+  let events = [];           // { type: 'L'|'R', t: ms since start, tick: int, isError: bool }
+  let endTimer = null;
+
+  function tickIndexFor(tMs){
+    // Numéro du tick dans lequel tombe l'instant tMs (0-based)
+    return Math.floor(tMs / TICK_MS);
+  }
+
+  function resetState(){
+    running = false;
+    startTime = null;
+    events = [];
+    if(endTimer){ clearTimeout(endTimer); endTimer = null; }
+
+    arena.classList.remove('flash-l','flash-r','flash-err','armed');
+    arena.classList.add('idle');
+    arenaMsg.innerHTML = '<div class="big">PRÊT</div><div class="small">Appuyez sur <b>Démarrer</b> pour lancer l\'horloge des ticks (20/s).<br>Enchaînez ensuite <b>clic gauche</b> (pose) → <b>clic droit</b> (casse) → gauche → droit…</div>';
+    lastClickTag.innerHTML = '';
+    clickCountEl.innerHTML = '';
+    clockStatus.textContent = 'ARRÊTÉE';
+    clockStatus.style.color = '';
+
+    statPoseMs.innerHTML = '—<span class="unit">ms</span>';
+    statPoseTick.innerHTML = '— <b>ticks</b>';
+    statPoseSub.textContent = 'Aucune donnée';
+    statBreakMs.innerHTML = '—<span class="unit">ms</span>';
+    statBreakTick.innerHTML = '— <b>ticks</b>';
+    statBreakSub.textContent = 'Aucune donnée';
+
+    scoreNum.innerHTML = '—<span class="over10">/10</span>';
+    scoreNum.style.color = 'var(--text-dim)';
+    scoreCps.innerHTML = '—';
+    scoreComment.textContent = 'Aucune donnée — lancez une session pour obtenir votre note.';
+    scoreTags.innerHTML = '';
+
+    svg.style.display = 'none';
+    svg.innerHTML = '';
+    emptyNote.style.display = 'block';
+    emptyNote.textContent = "Le graphe s'affichera ici après le premier clic, une fois l'horloge démarrée.";
+
+    btnStart.disabled = false;
+    btnStart.textContent = '▶ Démarrer';
+    btnReset.disabled = true;
+  }
+
+  function startClock(){
+    running = true;
+    startTime = performance.now();
+    events = [];
+
+    arena.classList.remove('idle');
+    arena.classList.add('armed');
+    arenaMsg.innerHTML = '<div class="big" style="color:var(--phosphor)">HORLOGE ACTIVE</div><div class="small">Cliquez dans cette zone. Premier clic attendu&nbsp;: <b>gauche</b>.</div>';
+    clockStatus.textContent = 'EN COURS';
+    clockStatus.style.color = 'var(--phosphor)';
+
+    btnStart.disabled = true;
+    btnReset.disabled = false;
+
+    emptyNote.style.display = 'none';
+    svg.style.display = 'block';
+    renderTimeline();
+
+    endTimer = setTimeout(finishSession, TOTAL_MS + 40);
+  }
+
+  function finishSession(){
+    running = false;
+    arena.classList.remove('armed');
+    clockStatus.textContent = 'TERMINÉE (5.00 s écoulées)';
+    clockStatus.style.color = 'var(--amber)';
+    arenaMsg.innerHTML = '<div class="big" style="color:var(--amber)">FENÊTRE TERMINÉE</div><div class="small">5 secondes écoulées (100 ticks). Consultez les statistiques ci-dessous, ou réinitialisez pour recommencer.</div>';
+    computeStats(); // recalcul final avec running=false => elapsedS = 5.00s exactement
+  }
+
+  function registerClick(type){
+    if(!running) return;
+    const now = performance.now();
+    let t = now - startTime;
+    if(t > TOTAL_MS) t = TOTAL_MS; // clamp visuel si clic juste après la fin
+    const tick = tickIndexFor(t);
+
+    const prev = events.length ? events[events.length-1] : null;
+    const isError = prev && prev.type === type;
+
+    events.push({ type, t, tick, isError });
+
+    // Feedback visuel immédiat
+    arena.classList.remove('flash-l','flash-r','flash-err');
+    void arena.offsetWidth; // reflow pour rejouer l'animation
+    if(isError){
+      arena.classList.add('flash-err');
+    } else {
+      arena.classList.add(type === 'L' ? 'flash-l' : 'flash-r');
+    }
+
+    const label = type === 'L' ? 'GAUCHE' : 'DROIT';
+    const cls = isError ? 'tag-err' : (type === 'L' ? 'tag-l' : 'tag-r');
+    lastClickTag.innerHTML = 'DERNIER&nbsp;: <span class="' + cls + '">' + label + (isError ? ' — ERREUR' : '') + '</span> · tick ' + tick;
+    clickCountEl.textContent = events.length + ' clic' + (events.length>1?'s':'');
+
+    updateArenaHint();
+    computeStats();
+    renderTimeline();
+  }
+
+  function updateArenaHint(){
+    if(!running) return;
+    const last = events[events.length-1];
+    const next = last.type === 'L' ? 'droit' : 'gauche';
+    arenaMsg.innerHTML = '<div class="big" style="color:var(--phosphor)">HORLOGE ACTIVE</div><div class="small">Prochain attendu&nbsp;: <b>clic ' + next + '</b></div>';
+  }
+
+  // Résout la séquence en simulant le traitement "1 action par tick" du serveur MC.
+  // - Une répétition (même type que le dernier événement RÉELLEMENT retenu) est une erreur.
+  // - Un événement qui tombe dans le même tick qu'un événement déjà retenu est totalement
+  //   annulé (ignoré, comme s'il n'avait jamais eu lieu) — ce qui peut provoquer une
+  //   répétition en cascade sur l'événement suivant, comparé au dernier événement retenu.
+  function resolveProcessedEvents(){
+    const resolved = []; // événements réellement traités par le "serveur", avec leur statut
+    let lastKept = null; // dernier événement effectivement retenu (type + tick)
+
+    for(let i=0;i<events.length;i++){
+      const ev = events[i];
+
+      if(lastKept && ev.tick === lastKept.tick){
+        // Même tick que le dernier événement retenu -> action perdue, ignorée
+        resolved.push({ ...ev, status: 'cancelled' });
+        continue;
+      }
+
+      if(lastKept && ev.type === lastKept.type){
+        // Répétition par rapport au dernier événement réellement retenu
+        resolved.push({ ...ev, status: 'error' });
+        lastKept = ev; // le dernier "connu" devient celui-ci pour la suite de la comparaison
+        continue;
+      }
+
+      // Événement valide et retenu
+      resolved.push({ ...ev, status: 'valid' });
+      lastKept = ev;
+    }
+
+    return resolved;
+  }
+
+  function computeStats(){
+    const resolved = resolveProcessedEvents();
+    const validSeq = resolved.filter(e => e.status === 'valid');
+
+    const poseDeltas = [];   // L -> R  (pose crystal), sur séquence valide uniquement
+    const breakDeltas = [];  // R -> L  (casse crystal), sur séquence valide uniquement
+
+    for(let i=1;i<validSeq.length;i++){
+      const a = validSeq[i-1], b = validSeq[i];
+      if(a.type === 'L' && b.type === 'R'){
+        poseDeltas.push({ ms: b.t - a.t, ticks: b.tick - a.tick });
+      } else if(a.type === 'R' && b.type === 'L'){
+        breakDeltas.push({ ms: b.t - a.t, ticks: b.tick - a.tick });
+      }
+    }
+
+    fillStat(poseDeltas, statPoseMs, statPoseTick, statPoseSub);
+    fillStat(breakDeltas, statBreakMs, statBreakTick, statBreakSub);
+    computeScore(resolved, validSeq);
+  }
+
+  // Un crystal complet = un G valide suivi d'un D valide (pose) OU un D valide suivi d'un G valide (casse),
+  // selon l'énoncé : on compte les clics gauche qui arrivent après un clic droit -> nombre de crystals cassés.
+  function computeScore(resolved, validSeq){
+    if(events.length === 0){
+      scoreNum.innerHTML = '—<span class="over10">/10</span>';
+      scoreNum.style.color = 'var(--text-dim)';
+      scoreCps.innerHTML = '—';
+      scoreComment.textContent = 'Aucune donnée — lancez une session pour obtenir votre note.';
+      scoreTags.innerHTML = '';
+      return;
+    }
+
+    // Nombre de crystals réellement cassés = nombre de G valides précédés d'un D valide dans la séquence retenue
+    let crystalsBroken = 0;
+    for(let i=1;i<validSeq.length;i++){
+      if(validSeq[i-1].type === 'R' && validSeq[i].type === 'L') crystalsBroken++;
+    }
+
+    // Durée de référence : fenêtre de 5s, ou temps écoulé si on calcule en cours de session
+    const elapsedS = running ? Math.min(TOTAL_MS, (performance.now() - startTime)) / 1000 : TOTAL_MS/1000;
+    const cps = crystalsBroken / elapsedS;
+
+    // Note /10 : 10/10 = 10 crystals/s (un cycle complet D+G = 2 ticks = 100ms)
+    const note = Math.max(0, Math.min(10, (cps / 10) * 10));
+
+    scoreNum.innerHTML = note.toFixed(1) + '<span class="over10">/10</span>';
+    scoreNum.style.color = note >= 7 ? 'var(--phosphor)' : (note >= 4 ? 'var(--amber)' : 'var(--red)');
+    scoreCps.innerHTML = '<b>' + cps.toFixed(2) + '</b>';
+
+    // Diagnostic des pertes
+    const originalErrors = resolved.filter(e => e.status === 'error').length;
+    const cancelledSameTick = resolved.filter(e => e.status === 'cancelled').length;
+    const totalValid = validSeq.length;
+
+    const tags = [];
+    let comment = '';
+
+    if(events.length < 3){
+      comment = 'Pas assez de clics pour établir un diagnostic fiable. Enchaînez davantage de cycles gauche/droit.';
+    } else {
+      const parts = [];
+
+      if(cps < 10){
+        const pct = (100 - (cps/10)*100).toFixed(0);
+        parts.push(`Cadence ${cps.toFixed(2)} crystal/s contre 10 crystal/s au maximum théorique — il vous manque ${pct}% de rythme.`);
+      } else {
+        parts.push('Cadence maximale atteinte : chaque cycle pose/casse tient dans deux ticks consécutifs.');
+      }
+
+      if(cancelledSameTick > 0){
+        parts.push(`${cancelledSameTick} clic${cancelledSameTick>1?'s':''} annulé${cancelledSameTick>1?'s':''} car tombé${cancelledSameTick>1?'s':''} dans un tick déjà utilisé par l'action précédente (le serveur ne traite qu'une action par tick) — trop d'annulations dues au même tick.`);
+        tags.push({cls:'tag-warn-cancel', label:'Annulations même-tick'});
+      }
+
+      if(originalErrors > 0){
+        parts.push(`${originalErrors} répétition${originalErrors>1?'s':''} détectée${originalErrors>1?'s':''} (même clic enchaîné deux fois de suite) — trop de répétitions originelles à corriger.`);
+        tags.push({cls:'tag-warn-rep', label:'Répétitions originelles'});
+      }
+
+      if(cancelledSameTick === 0 && originalErrors === 0 && cps < 8){
+        parts.push('Aucune erreur de séquence, mais le rythme reste trop lent : le temps entre les clics est trop long.');
+        tags.push({cls:'tag-warn-slow', label:'Trop lent'});
+      }
+
+      if(note >= 8.5) tags.push({cls:'tag-good', label:'Cadence quasi-optimale'});
+
+      comment = parts.join(' ');
+    }
+
+    scoreComment.textContent = comment;
+    scoreTags.innerHTML = tags.map(t => `<span class="score-tag ${t.cls}">${t.label}</span>`).join('');
+  }
+
+  function fillStat(deltas, msEl, tickEl, subEl){
+    if(deltas.length === 0){
+      msEl.innerHTML = '—<span class="unit">ms</span>';
+      tickEl.innerHTML = '— <b>ticks</b>';
+      subEl.textContent = 'Aucune donnée';
+      return;
+    }
+    const avgMs = deltas.reduce((s,d)=>s+d.ms,0) / deltas.length;
+    const avgTicks = deltas.reduce((s,d)=>s+d.ticks,0) / deltas.length;
+    msEl.innerHTML = avgMs.toFixed(1) + '<span class="unit">ms</span>';
+    tickEl.innerHTML = avgTicks.toFixed(2) + ' <b>ticks</b>';
+    subEl.textContent = deltas.length + ' mesure' + (deltas.length>1?'s':'') + ' valide' + (deltas.length>1?'s':'') + ' — min ' + Math.min(...deltas.map(d=>d.ms)).toFixed(0) + ' ms / max ' + Math.max(...deltas.map(d=>d.ms)).toFixed(0) + ' ms';
+  }
+
+  // ---------- Timeline SVG ----------
+  const PX_PER_TICK = 22;
+  const SVG_W = TOTAL_TICKS * PX_PER_TICK;
+  const SVG_H = 220;
+  const AXIS_Y = 88;          // axe de référence (repère temporel)
+  const MARK_Y = 52;          // position commune des marqueurs G et D (au-dessus de l'axe)
+  const GRID_TOP = AXIS_Y + 26;   // début de la zone de graduations agrandies (en dessous)
+  const GRID_BOTTOM = SVG_H - 14; // fin de la zone de graduations
+
+  function renderTimeline(){
+    svg.setAttribute('viewBox', '0 0 ' + SVG_W + ' ' + SVG_H);
+    svg.setAttribute('width', SVG_W);
+    svg.setAttribute('height', SVG_H);
+    svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+
+    let html = '';
+
+    // ---- Bande de fond alternée : une "case" pleine par tick pour bien voir la démarcation ----
+    for(let i=0;i<TOTAL_TICKS;i++){
+      const x = i * PX_PER_TICK;
+      if(i % 2 === 0){
+        html += `<rect x="${x}" y="${GRID_TOP}" width="${PX_PER_TICK}" height="${GRID_BOTTOM-GRID_TOP}" fill="rgba(255,255,255,0.025)"/>`;
+      }
+    }
+
+    // ---- Graduations agrandies et contrastées (zone basse) ----
+    for(let i=0;i<=TOTAL_TICKS;i++){
+      const x = i * PX_PER_TICK;
+      const isSecond = i % 20 === 0;  // repère chaque seconde
+      const isMid = i % 5 === 0;      // repère toutes les 5 ticks (250ms)
+
+      let h, color, width;
+      if(isSecond){ h = GRID_BOTTOM - GRID_TOP; color = 'var(--phosphor-dim)'; width = 1.6; }
+      else if(isMid){ h = (GRID_BOTTOM - GRID_TOP) * 0.72; color = '#4a6356'; width = 1.2; }
+      else { h = (GRID_BOTTOM - GRID_TOP) * 0.42; color = '#33473d'; width = 1; }
+
+      const yTop = GRID_TOP;
+      html += `<line x1="${x}" y1="${yTop}" x2="${x}" y2="${yTop + h}" stroke="${color}" stroke-width="${width}"/>`;
+
+      if(isSecond){
+        html += `<text x="${x}" y="${GRID_BOTTOM + 13}" font-size="10" fill="var(--phosphor-dim)" text-anchor="middle" font-family="var(--mono)" font-weight="600">${(i/20).toFixed(0)}s</text>`;
+      }
+      if(isMid){
+        html += `<text x="${x}" y="${GRID_TOP - 5}" font-size="7.5" fill="var(--text-dim)" text-anchor="middle" font-family="var(--mono)">t${i}</text>`;
+      }
+    }
+
+    // Cadre de la zone de graduations pour renforcer la lecture des cases
+    html += `<rect x="0" y="${GRID_TOP}" width="${SVG_W}" height="${GRID_BOTTOM-GRID_TOP}" fill="none" stroke="var(--grid-major)" stroke-width="1"/>`;
+
+    // Axe principal (référence temporelle)
+    html += `<line x1="0" y1="${AXIS_Y}" x2="${SVG_W}" y2="${AXIS_Y}" stroke="var(--grid-major)" stroke-width="1.2"/>`;
+
+    const resolved = resolveProcessedEvents();
+
+    // ---- Durée de vie du crystal : ligne mauve entre chaque D valide et le G valide suivant ----
+    const validSeq = resolved.filter(e => e.status === 'valid');
+    for(let i=1;i<validSeq.length;i++){
+      const a = validSeq[i-1], b = validSeq[i];
+      if(a.type === 'R' && b.type === 'L'){
+        const xa = (a.t / TICK_MS) * PX_PER_TICK;
+        const xb = (b.t / TICK_MS) * PX_PER_TICK;
+        const yLife = MARK_Y - 13;
+        html += `<line x1="${xa}" y1="${yLife}" x2="${xb}" y2="${yLife}" stroke="var(--crystal)" stroke-width="2"/>`;
+        html += `<circle cx="${xa}" cy="${yLife}" r="2.2" fill="var(--crystal)"/>`;
+        html += `<circle cx="${xb}" cy="${yLife}" r="2.2" fill="var(--crystal)"/>`;
+        const durMs = b.t - a.t;
+        const midX = (xa + xb) / 2;
+        if(xb - xa > 18){
+          html += `<text x="${midX}" y="${yLife - 5}" font-size="8" fill="var(--crystal)" text-anchor="middle" font-family="var(--mono)" font-weight="600">${durMs.toFixed(0)}ms</text>`;
+        }
+      }
+    }
+
+    // ---- Marqueurs d'évènements : même forme, même côté (au-dessus), distingués par couleur/label ----
+    resolved.forEach((ev, idx) => {
+      const x = (ev.t / TICK_MS) * PX_PER_TICK; // position réelle proportionnelle au temps
+
+      let color, label, opacity = 1;
+      if(ev.status === 'error'){
+        color = 'var(--red)'; label = '✕';
+      } else if(ev.status === 'cancelled'){
+        color = 'var(--cancel)'; label = '⌀'; opacity = 0.85; // annulé (même tick) : visible mais démarqué (couleur dédiée)
+      } else {
+        color = ev.type === 'L' ? 'var(--phosphor)' : 'var(--amber)';
+        label = ev.type === 'L' ? 'G' : 'D';
+      }
+
+      // ligne verticale reliant le marqueur à l'axe (jusque dans la zone de graduation, pour repérer le tick exact)
+      html += `<line x1="${x}" y1="${MARK_Y+9}" x2="${x}" y2="${GRID_TOP}" stroke="${color}" stroke-width="1" stroke-dasharray="${ev.status==='cancelled'?'1,3':'2,2'}" opacity="${opacity*0.6}"/>`;
+
+      // point exact sur l'axe (position temporelle précise)
+      html += `<circle cx="${x}" cy="${AXIS_Y}" r="2.6" fill="${color}" opacity="${opacity}"/>`;
+
+      // marqueur triangulaire (pointe vers le bas, identique pour G et D), forme distincte pour les annulés
+      if(ev.status === 'cancelled'){
+        html += `<circle cx="${x}" cy="${MARK_Y+4.5}" r="6" fill="none" stroke="${color}" stroke-width="1.6" opacity="${opacity}"/>`;
+      } else {
+        html += `<polygon points="${x-6},${MARK_Y} ${x+6},${MARK_Y} ${x},${MARK_Y+9}" fill="${color}" opacity="${opacity}"/>`;
+      }
+      html += `<text x="${x}" y="${MARK_Y-4}" font-size="9.5" fill="${color}" text-anchor="middle" font-family="var(--mono)" font-weight="700" opacity="${opacity}">${label}</text>`;
+    });
+
+    svg.innerHTML = html;
+
+    // auto-scroll pour garder le dernier évènement visible
+    const scrollContainer = svg.parentElement;
+    if(events.length){
+      const lastX = (events[events.length-1].t / TICK_MS) * PX_PER_TICK;
+      scrollContainer.scrollLeft = Math.max(0, lastX - scrollContainer.clientWidth + 100);
+    }
+  }
+
+  // ---------- Événements ----------
+  arena.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    if(!running) return;
+    if(e.button === 0) registerClick('L');
+    else if(e.button === 2) registerClick('R');
+  });
+  arena.addEventListener('contextmenu', (e) => e.preventDefault());
+
+  btnStart.addEventListener('click', () => {
+    if(!running) startClock();
+    arena.focus();
+  });
+
+  btnReset.addEventListener('click', resetState);
+
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'r' || e.key === 'R'){
+      if(!btnReset.disabled) resetState();
+    }
+  });
+
+  resetState();
+})();
+</script>
+
+</body>
+</html>
