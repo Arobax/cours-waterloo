@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Routine du retour</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+  :root {
+    --bg: #0e1116;
+    --bg-elev: #161a22;
+    --bg-elev-2: #1d222c;
+    --border: #2a303c;
+    --text: #eef1f6;
+    --text-dim: #8a92a3;
+    --text-faint: #565e6e;
+
+    --c-travail: #4d8dff;
+    --c-travail-bg: rgba(77,141,255,0.12);
+    --c-perso: #b389f9;
+    --c-perso-bg: rgba(179,137,249,0.12);
+    --c-etude: #ffc857;
+    --c-etude-bg: rgba(255,200,87,0.12);
+    --c-repas: #4ade80;
+    --c-repas-bg: rgba(74,222,128,0.12);
+    --c-sommeil: #6c7fff;
+    --c-sommeil-bg: rgba(108,127,255,0.12);
+    --c-event: #ff5d6c;
+    --c-event-bg: rgba(255,93,108,0.12);
+
+    --ok: #4ade80;
+    --warn: #ffc857;
+    --hard: #ff9a4d;
+    --extreme: #ff5d6c;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    background-image:
+      radial-gradient(circle at 15% 0%, rgba(77,141,255,0.07), transparent 45%),
+      radial-gradient(circle at 85% 100%, rgba(179,137,249,0.06), transparent 45%);
+    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+    min-height: 100vh;
+    padding: 32px 16px 80px;
+  }
+
+  .wrap { max-width: 720px; margin: 0 auto; }
+
+  header { margin-bottom: 28px; }
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin-bottom: 8px;
+  }
+  h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0 0 6px;
+    letter-spacing: -0.01em;
+  }
+  .subtitle { color: var(--text-dim); font-size: 14px; line-height: 1.5; max-width: 52ch; }
+
+  .card {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 22px;
+    margin-bottom: 16px;
+  }
+  .card.exc-wide { padding: 22px 14px; }
+
+  .card-title {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-dim);
+    margin: 0 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* Heure d'arrivée */
+  .arrival-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .time-display {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 34px;
+    font-weight: 700;
+    color: var(--c-travail);
+    min-width: 108px;
+    letter-spacing: -0.02em;
+  }
+  input[type="range"] {
+    flex: 1;
+    -webkit-appearance: none;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--border);
+    outline: none;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--c-travail);
+    border: 3px solid var(--bg-elev);
+    box-shadow: 0 0 0 2px var(--c-travail);
+    cursor: pointer;
+    transition: transform .15s;
+  }
+  input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.12); }
+  input[type="range"]::-moz-range-thumb {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--c-travail);
+    border: 3px solid var(--bg-elev);
+    box-shadow: 0 0 0 2px var(--c-travail);
+    cursor: pointer;
+  }
+
+  /* Mode switch */
+  .mode-toggle {
+    display: flex;
+    background: var(--bg-elev-2);
+    border-radius: 12px;
+    padding: 4px;
+    gap: 4px;
+    margin-bottom: 4px;
+  }
+  .mode-btn {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    background: transparent;
+    color: var(--text-dim);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 9px;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .mode-btn.active-normal { background: var(--c-travail); color: #06101f; }
+  .mode-btn.active-exception { background: var(--c-event); color: #250608; }
+  .mode-btn:not(.active-normal):not(.active-exception):hover { color: var(--text); }
+
+  /* Toggle étude */
+  .toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 0;
+  }
+  .toggle-label { font-size: 15px; font-weight: 500; }
+  .toggle-sub { font-size: 12.5px; color: var(--text-faint); margin-top: 2px; }
+  .switch {
+    position: relative;
+    width: 46px; height: 26px;
+    flex-shrink: 0;
+  }
+  .switch input { opacity: 0; width: 0; height: 0; }
+  .slider-switch {
+    position: absolute; cursor: pointer; inset: 0;
+    background: var(--bg-elev-2);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    transition: .2s;
+  }
+  .slider-switch:before {
+    content: "";
+    position: absolute;
+    height: 18px; width: 18px;
+    left: 3px; top: 50%;
+    transform: translateY(-50%);
+    background: var(--text-faint);
+    border-radius: 50%;
+    transition: .2s;
+  }
+  input:checked + .slider-switch { background: var(--c-etude-bg); border-color: var(--c-etude); }
+  input:checked + .slider-switch:before { transform: translate(20px,-50%); background: var(--c-etude); }
+
+  /* Grille de placement de l'évènement */
+  .event-grid-wrap { padding: 16px 12px; border-radius: 12px; background: var(--c-event-bg); border: 1px solid var(--border); margin-bottom: 18px; }
+  .event-grid-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+  .event-grid-sub { font-size: 12.5px; color: var(--text-faint); margin-bottom: 12px; }
+  .event-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(0, 1fr));
+    gap: 3px;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: none;
+  }
+  .event-cell {
+    height: 22px;
+    border-radius: 4px;
+    background: var(--bg-elev-2);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: background .1s, transform .1s;
+  }
+  .event-cell:hover { border-color: var(--c-event); }
+  .event-cell.filled { background: var(--c-event); border-color: var(--c-event); }
+  .event-cell.hour-start { border-left: 2px solid var(--text-faint); }
+  .event-grid-labels {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(0, 1fr));
+    margin-top: 4px;
+  }
+  .event-grid-label {
+    font-size: 9px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-faint);
+    text-align: left;
+  }
+  .event-grid-actions { display: flex; gap: 8px; margin-top: 12px; }
+  .event-grid-clear {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-dim);
+    background: var(--bg-elev-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 7px 12px;
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .event-grid-clear:hover { color: var(--text); border-color: var(--text-faint); }
+  .event-summary {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--c-event);
+  }
+
+  /* Sliders exceptionnels */
+  .exc-slider {
+    margin-bottom: 18px;
+    padding: 16px 10px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+  }
+  .exc-slider input[type="range"] { width: 100%; display: block; }
+  .exc-slider:last-child { margin-bottom: 0; }
+  .exc-slider.dim { opacity: .4; pointer-events: none; }
+  .exc-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .exc-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+  .exc-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .exc-slider[data-cat="event"] { background: var(--c-event-bg); }
+  .exc-slider[data-cat="travail"] { background: var(--c-travail-bg); }
+  .exc-slider[data-cat="etude"] { background: var(--c-etude-bg); }
+
+  /* Timeline */
+  .timeline { position: relative; padding-left: 8px; }
+  .tl-item {
+    position: relative;
+    display: flex;
+    gap: 14px;
+    padding: 12px 0;
+    border-left: 3px solid transparent;
+    padding-left: 16px;
+    padding-right: 10px;
+    margin-bottom: 2px;
+    border-radius: 0 10px 10px 0;
+    animation: slideIn .35s ease backwards;
+    align-items: center;
+  }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(-8px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  .tl-time {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-dim);
+    min-width: 60px;
+    padding-top: 2px;
+    flex-shrink: 0;
+  }
+  .tl-start {
+    font-size: 13px;
+    font-weight: 700;
+    color: inherit;
+  }
+  .tl-connector {
+    width: 1px;
+    height: 16px;
+    background: var(--border);
+    margin: 3px 0;
+  }
+  .tl-endtime {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-faint);
+  }
+  .tl-item.skip .tl-connector,
+  .tl-item.skip .tl-endtime { display: none; }
+  .tl-body { flex: 1; }
+  .tl-title { font-size: 15px; font-weight: 600; }
+  .tl-dur { font-size: 12.5px; color: var(--text-faint); margin-top: 2px; }
+  .tl-desc {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-top: 6px;
+    line-height: 1.55;
+    white-space: pre-line;
+    opacity: .85;
+  }
+  .notify-btn {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px; height: 34px;
+    border-radius: 9px;
+    border: 1px solid var(--border);
+    background: var(--bg-elev-2);
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 15px;
+    transition: all .15s;
+  }
+  .notify-btn:hover { color: var(--text); border-color: var(--text-faint); transform: translateY(-1px); }
+  .tl-item.travail { border-color: var(--c-travail); background: var(--c-travail-bg); }
+  .tl-item.perso { border-color: var(--c-perso); background: var(--c-perso-bg); }
+  .tl-item.etude { border-color: var(--c-etude); background: var(--c-etude-bg); }
+  .tl-item.repas { border-color: var(--c-repas); background: var(--c-repas-bg); }
+  .tl-item.sommeil { border-color: var(--c-sommeil); background: var(--c-sommeil-bg); }
+  .tl-item.event { border-color: var(--c-event); background: var(--c-event-bg); }
+  .tl-item.skip { opacity: .45; }
+  .tl-item.skip .tl-title::after { content: " — annulé"; font-weight: 400; color: var(--text-faint); }
+
+  .tl-end {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding-left: 16px;
+    margin: -2px 0 -2px;
+  }
+  .tl-end-time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-faint);
+    min-width: 92px;
+    text-align: right;
+    padding-right: 14px;
+  }
+  .tl-end-line {
+    flex: 1;
+    height: 1px;
+    background: repeating-linear-gradient(90deg, var(--border) 0 4px, transparent 4px 8px);
+  }
+  .tl-gap-label {
+    font-size: 10.5px;
+    color: var(--text-faint);
+    font-family: 'JetBrains Mono', monospace;
+    white-space: nowrap;
+    padding: 0 4px;
+  }
+
+  .tl-item .tl-time { color: inherit; }
+  .tl-item.travail .tl-time { color: var(--c-travail); }
+  .tl-item.perso .tl-time { color: var(--c-perso); }
+  .tl-item.etude .tl-time { color: var(--c-etude); }
+  .tl-item.repas .tl-time { color: var(--c-repas); }
+  .tl-item.sommeil .tl-time { color: var(--c-sommeil); }
+  .tl-item.event .tl-time { color: var(--c-event); }
+
+  /* Bedtime result */
+  .bed-result {
+    margin-top: 18px;
+    padding: 18px;
+    border-radius: 14px;
+    text-align: center;
+    border: 1px solid var(--border);
+    transition: all .3s;
+  }
+  .bed-time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 40px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .bed-sub { font-size: 13px; color: var(--text-dim); margin-top: 6px; }
+  .badge {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 5px 14px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .badge.ok { background: rgba(74,222,128,.15); color: var(--ok); }
+  .badge.warn { background: rgba(255,200,87,.15); color: var(--warn); }
+  .badge.hard { background: rgba(255,154,77,.15); color: var(--hard); }
+  .badge.extreme { background: rgba(255,93,108,.15); color: var(--extreme); animation: pulse 1.4s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.6} }
+
+  .sleep-hours { font-size: 12.5px; color: var(--text-faint); margin-top: 4px; }
+
+  footer { text-align: center; margin-top: 24px; font-size: 12px; color: var(--text-faint); }
+
+  /* Bloc-notes flottant */
+  .notepad-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    background: var(--c-perso);
+    color: #1a0f2e;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    box-shadow: 0 4px 18px rgba(179,137,249,0.4);
+    z-index: 50;
+    transition: transform .15s;
+  }
+  .notepad-toggle:hover { transform: scale(1.06); }
+  .notepad-panel {
+    position: fixed;
+    bottom: 84px;
+    right: 20px;
+    width: min(75vw, 560px);
+    max-height: 50vh;
+    display: none;
+    flex-direction: column;
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    padding: 14px;
+    z-index: 50;
+    overflow: hidden;
+  }
+  .notepad-panel.open { display: flex; animation: slideIn .2s ease; }
+  .notepad-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    flex-shrink: 0;
+  }
+  .notepad-title { font-size: 13px; font-weight: 700; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.05em; }
+  .notepad-clear { font-size: 11px; color: var(--text-faint); background: none; border: none; cursor: pointer; text-decoration: underline; }
+  .notepad-clear:hover { color: var(--text); }
+  .notepad-textarea {
+    width: 100%;
+    min-height: 160px;
+    flex: 1 1 auto;
+    resize: none;
+    background: var(--bg-elev-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px;
+    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13.5px;
+    line-height: 1.5;
+    outline: none;
+    overflow-y: auto;
+  }
+  .notepad-textarea:focus { border-color: var(--c-perso); }
+  .notepad-saved {
+    font-size: 10.5px;
+    color: var(--text-faint);
+    margin-top: 6px;
+    text-align: right;
+    height: 14px;
+    flex-shrink: 0;
+    visibility: hidden;
+  }
+  .notepad-saved.visible { visibility: visible; }
+
+  @media (max-width: 480px) {
+    .time-display { font-size: 26px; min-width: 88px; }
+    .bed-time { font-size: 32px; }
+    h1 { font-size: 23px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Routine · Retour à la maison</div>
+    <h1>Ta soirée, planifiée en un coup d'œil</h1>
+    <div class="subtitle">Règle ton heure d'arrivée, choisis ton mode, et regarde ta timeline se recalculer en direct — jusqu'à l'heure de coucher.</div>
+  </header>
+
+  <!-- Heure d'arrivée -->
+  <div class="card">
+    <div class="card-title">🚪 Heure d'arrivée</div>
+    <div class="arrival-row">
+      <div class="time-display" id="arrivalDisplay">15:45</div>
+      <input type="range" id="arrivalSlider" min="870" max="1020" step="15" value="945">
+    </div>
+  </div>
+
+  <!-- Mode -->
+  <div class="card">
+    <div class="card-title">⚙️ Mode</div>
+    <div class="mode-toggle">
+      <button class="mode-btn active-normal" id="btnNormal">Mode de base</button>
+      <button class="mode-btn" id="btnException">Mode exceptionnel</button>
+    </div>
+  </div>
+
+  <!-- Étude toggle (mode normal) -->
+  <div class="card" id="etudeCard">
+    <div class="card-title">📘 Étude</div>
+    <div class="toggle-row">
+      <div>
+        <div class="toggle-label">J'ai quelque chose à étudier ce soir</div>
+        <div class="toggle-sub">Ajoute un bloc étude 20h30–21h30</div>
+      </div>
+      <label class="switch">
+        <input type="checkbox" id="etudeToggleNormal">
+        <span class="slider-switch"></span>
+      </label>
+    </div>
+  </div>
+
+  <!-- Sliders exceptionnels -->
+  <div class="card exc-wide" id="excCard" style="display:none;">
+    <div class="card-title">🎚️ Estimations du mode exceptionnel</div>
+    <div class="toggle-sub" style="margin:-8px 0 18px;">Laisse un slider à 0h00 pour désactiver ce bloc.</div>
+
+    <div class="event-grid-wrap" id="eventGridWrap">
+      <div class="event-grid-head">
+        <div class="exc-label"><span class="dot" style="background:var(--c-event)"></span>Évènement inhabituel</div>
+        <div class="event-summary" id="eventSummary">Aucun</div>
+      </div>
+      <div class="event-grid-sub">Clique ou glisse pour peindre les créneaux occupés (pas de 15 min)</div>
+      <div class="event-grid" id="eventGrid"></div>
+      <div class="event-grid-labels" id="eventGridLabels"></div>
+      <div class="event-grid-actions">
+        <button type="button" class="event-grid-clear" id="eventClearBtn">Effacer</button>
+      </div>
+    </div>
+
+    <div class="exc-slider" data-cat="travail">
+      <div class="exc-head">
+        <div class="exc-label"><span class="dot" style="background:var(--c-travail)"></span>Travail estimé</div>
+        <div class="exc-val" id="travailVal" style="color:var(--c-travail)">2h00</div>
+      </div>
+      <input type="range" id="sliderTravail" min="0" max="10" step="0.25" value="2">
+    </div>
+
+    <div class="exc-slider" data-cat="etude">
+      <div class="exc-head">
+        <div class="exc-label"><span class="dot" style="background:var(--c-etude)"></span>Étude estimée</div>
+        <div class="exc-val" id="etudeVal" style="color:var(--c-etude)">0h00</div>
+      </div>
+      <input type="range" id="sliderEtude" min="0" max="10" step="0.25" value="0">
+    </div>
+  </div>
+
+  <!-- Timeline -->
+  <div class="card">
+    <div class="card-title">🗓️ Ta timeline</div>
+    <div class="timeline" id="timeline"></div>
+
+    <div class="bed-result" id="bedResult">
+      <div class="bed-sub">Au lit à</div>
+      <div class="bed-time" id="bedTime">23:30</div>
+      <div class="sleep-hours" id="sleepHours"></div>
+      <div class="badge ok" id="bedBadge">Confortable</div>
+    </div>
+  </div>
+
+  <footer>Unité minimale : 15 minutes · Réveil supposé à 7h00 pour l'estimation du sommeil</footer>
+</div>
+
+<button class="notepad-toggle" id="notepadToggle" title="Bloc-notes rapide">📝</button>
+<div class="notepad-panel" id="notepadPanel">
+  <div class="notepad-head">
+    <span class="notepad-title">Bloc-notes</span>
+    <button class="notepad-clear" id="notepadClear">Effacer</button>
+  </div>
+  <textarea class="notepad-textarea" id="notepadText" placeholder="Note ce qui te passe par la tête…"></textarea>
+  <div class="notepad-saved" id="notepadSaved"></div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+
+// ---------- Helpers temps ----------
+const WAKE_MIN = 7*60; // 7h00 le lendemain, pour calcul durée de sommeil
+const BEDTIME_TARGET = 23*60+30; // 23h30
+
+function fmt(mins){
+  mins = ((mins % 1440) + 1440) % 1440;
+  const h = Math.floor(mins/60);
+  const m = mins % 60;
+  return String(h).padStart(2,'0')+':'+String(m).padStart(2,'0');
+}
+function fmtDur(mins){
+  if (mins <= 0) return '0min';
+  const h = Math.floor(mins/60);
+  const m = mins % 60;
+  if (h === 0) return m+'min';
+  if (m === 0) return h+'h';
+  return h+'h'+String(m).padStart(2,'0');
+}
+function fmtSliderHours(v){
+  const h = Math.floor(v);
+  const m = Math.round((v-h)*60);
+  return h+'h'+String(m).padStart(2,'0');
+}
+function round15(mins){ return Math.round(mins/15)*15; }
+
+// ---------- State ----------
+let mode = 'normal'; // 'normal' | 'exception'
+let eventCells = new Set(); // indices de cases occupées (chaque case = 15min depuis GRID_START)
+const GRID_END_DEFAULT = 24*60; // minuit par défaut, la grille peut s'étendre si on peint après
+
+// ---------- DOM refs ----------
+const arrivalSlider = $('arrivalSlider');
+const arrivalDisplay = $('arrivalDisplay');
+const btnNormal = $('btnNormal');
+const btnException = $('btnException');
+const etudeCard = $('etudeCard');
+const excCard = $('excCard');
+const etudeToggleNormal = $('etudeToggleNormal');
+const sliderTravail = $('sliderTravail');
+const sliderEtude = $('sliderEtude');
+const eventGrid = $('eventGrid');
+const eventGridLabels = $('eventGridLabels');
+const eventSummary = $('eventSummary');
+const eventClearBtn = $('eventClearBtn');
+
+function updateSliderLabels(){
+  $('travailVal').textContent = fmtSliderHours(parseFloat(sliderTravail.value));
+  $('etudeVal').textContent = fmtSliderHours(parseFloat(sliderEtude.value));
+}
+
+arrivalSlider.addEventListener('input', () => {
+  arrivalDisplay.textContent = fmt(parseInt(arrivalSlider.value));
+  eventCells.clear(); // la grille change de bornes, on repart propre
+  buildEventGrid();
+  render();
+});
+etudeToggleNormal.addEventListener('change', render);
+[sliderTravail, sliderEtude].forEach(el => el.addEventListener('input', () => { updateSliderLabels(); render(); }));
+
+btnNormal.addEventListener('click', () => { mode='normal'; syncModeUI(); render(); });
+btnException.addEventListener('click', () => { mode='exception'; syncModeUI(); buildEventGrid(); render(); });
+
+function syncModeUI(){
+  btnNormal.classList.toggle('active-normal', mode==='normal');
+  btnException.classList.toggle('active-exception', mode==='exception');
+  etudeCard.style.display = mode==='normal' ? 'block' : 'none';
+  excCard.style.display = mode==='exception' ? 'block' : 'none';
+}
+
+// ---------- Grille évènement ----------
+function gridBounds(){
+  const arrival = parseInt(arrivalSlider.value);
+  const arrivalStart = Math.floor(arrival/15)*15;
+  // la grille s'étend jusqu'à minuit, ou plus tard si des cases peintes existent au-delà
+  let maxCell = (GRID_END_DEFAULT - arrivalStart)/15;
+  eventCells.forEach(idx => { if (idx+1 > maxCell) maxCell = idx+1; });
+  return { arrivalStart, nCells: maxCell };
+}
+
+let isPaintingGlobal = false;
+let paintValueGlobal = true;
+
+function buildEventGrid(){
+  const { arrivalStart, nCells } = gridBounds();
+  eventGrid.style.gridTemplateColumns = `repeat(${nCells}, 1fr)`;
+  eventGridLabels.style.gridTemplateColumns = `repeat(${nCells}, 1fr)`;
+  eventGrid.innerHTML = '';
+  eventGridLabels.innerHTML = '';
+
+  for (let i=0; i<nCells; i++){
+    const cellStart = arrivalStart + i*15;
+    const cell = document.createElement('div');
+    cell.className = 'event-cell' + (eventCells.has(i) ? ' filled' : '') + (cellStart % 60 === 0 ? ' hour-start' : '');
+    cell.dataset.idx = i;
+
+    cell.addEventListener('pointerdown', (e) => {
+      isPaintingGlobal = true;
+      paintValueGlobal = !eventCells.has(i);
+      if (paintValueGlobal) eventCells.add(i); else eventCells.delete(i);
+      cell.classList.toggle('filled', paintValueGlobal);
+      updateEventSummary();
+      render();
+      e.preventDefault();
+    });
+    cell.addEventListener('pointerenter', () => {
+      if (!isPaintingGlobal) return;
+      if (paintValueGlobal) eventCells.add(i); else eventCells.delete(i);
+      cell.classList.toggle('filled', paintValueGlobal);
+      updateEventSummary();
+      render();
+    });
+    eventGrid.appendChild(cell);
+
+    // Labels toutes les heures pleines
+    const label = document.createElement('div');
+    label.className = 'event-grid-label';
+    if (cellStart % 60 === 0){
+      label.textContent = fmt(cellStart);
+    }
+    eventGridLabels.appendChild(label);
+  }
+
+  updateEventSummary();
+}
+
+// Un seul listener global, permanent, pour terminer le drag et faire grandir la grille si besoin
+window.addEventListener('pointerup', () => {
+  if (isPaintingGlobal){
+    isPaintingGlobal = false;
+    buildEventGrid(); // reconstruit si la grille doit s'étendre (case peinte tout au bord)
+  }
+});
+
+eventClearBtn.addEventListener('click', () => {
+  eventCells.clear();
+  buildEventGrid();
+  render();
+});
+
+// Retourne la liste des plages [{start,end}] fusionnées à partir des cases peintes
+function getEventRanges(){
+  const { arrivalStart } = gridBounds();
+  const sorted = Array.from(eventCells).sort((a,b)=>a-b);
+  const ranges = [];
+  let curStart = null, curEnd = null;
+  sorted.forEach(idx => {
+    const s = arrivalStart + idx*15, e = s+15;
+    if (curStart === null){ curStart = s; curEnd = e; }
+    else if (s === curEnd){ curEnd = e; }
+    else { ranges.push({start:curStart,end:curEnd}); curStart=s; curEnd=e; }
+  });
+  if (curStart !== null) ranges.push({start:curStart,end:curEnd});
+  return ranges;
+}
+
+function updateEventSummary(){
+  const ranges = getEventRanges();
+  if (ranges.length === 0){ eventSummary.textContent = 'Aucun'; return; }
+  eventSummary.textContent = ranges.map(r => `${fmt(r.start)}–${fmt(r.end)}`).join(', ');
+}
+
+
+
+// ---------- Badge sommeil ----------
+function sleepBadge(bedMin){
+  // durée de sommeil estimée jusqu'à réveil 7h00
+  let sleepMins = WAKE_MIN - bedMin;
+  if (sleepMins < 0) sleepMins += 1440;
+  let delay = bedMin - BEDTIME_TARGET; // retard par rapport à 23h30
+  if (delay < 0) delay += 1440; // sécurité si jamais bedMin "avant" minuit mal calculé
+  // Seuils en heure de coucher absolue :
+  //   ≤ 23h30            -> Confortable
+  //   23h30 -> 01h30      -> Serré
+  //   01h30 -> 02h30      -> Difficile (retard 2h)
+  //   > 02h30             -> Extrême   (retard 3h)
+  let cls='ok', label='Confortable';
+  if (delay > 180) { cls='extreme'; label='Extrême'; }
+  else if (delay > 120) { cls='hard'; label='Difficile'; }
+  else if (delay > 0) { cls='warn'; label='Serré'; }
+  return {cls, label, sleepMins};
+}
+
+// ---------- Rendu timeline ----------
+function addItem(list, cat, icon, title, startMin, durMin, skip=false, desc=null){
+  list.push({cat, icon, title, start:startMin, dur:durMin, skip, desc});
+}
+
+const TRAVAIL_DESC = "- JDC\n- Mails/classroom/ÉeL\n- tasks/agenda\n🎵 lofi synthwave";
+const PERSO_DESC = "Tasks/ToDoLists/Agenda";
+
+function render(){
+  updateSliderLabels();
+  const arrival = parseInt(arrivalSlider.value);
+  const items = [];
+  let cursor = arrival;
+  let bedMin;
+
+  if (mode === 'normal'){
+    // Travail obligatoire 1h
+    addItem(items,'travail','💼','Travail obligatoire', cursor, 60, false, TRAVAIL_DESC);
+    cursor += 60;
+
+    const etude = etudeToggleNormal.checked;
+    const blockEnd = etude ? 20*60+30 : 21*60; // début repas selon étude
+    let persoDur = blockEnd - cursor;
+    if (persoDur < 0) persoDur = 0;
+    if (persoDur > 0){
+      addItem(items,'perso','🎯','Projets personnels', cursor, persoDur, false, PERSO_DESC);
+    } else if (blockEnd > arrival) {
+      // pas de place, item annulé informatif
+      addItem(items,'perso','🎯','Projets personnels', cursor, 0, true);
+    }
+    cursor = Math.max(cursor, blockEnd);
+
+    if (etude){
+      addItem(items,'etude','📘','Étude', 20*60+30, 60);
+      cursor = 21*60+30;
+      addItem(items,'repas','🍽️','Repas / corvées', cursor, 90);
+      cursor += 90; // 21h30 -> 23h00
+    } else {
+      addItem(items,'repas','🍽️','Repas / corvées', 21*60, 120);
+      cursor = 23*60; // 21h00 -> 23h00
+    }
+
+    addItem(items,'sommeil','🌙','Préparation sommeil', cursor, 30);
+    cursor += 30;
+    bedMin = cursor;
+
+  } else {
+    // ================= MODE EXCEPTIONNEL =================
+    const travailDur = round15(parseFloat(sliderTravail.value)*60);
+    const etudeDurTotal = round15(parseFloat(sliderEtude.value)*60);
+    const hasEtude = etudeDurTotal > 0;
+    const REPAS_IDEAL = 90, REPAS_MIN_EXTREME = 30;
+    const SOMMEIL_IDEAL = 30, SOMMEIL_MIN_EXTREME = 0;
+    const SOFT_START = 25*60, EXTREME_START = 26*60+30;
+
+    // Plages d'évènement peintes par l'utilisateur (fusionnées), triées
+    const eventRanges = getEventRanges();
+
+    // ---- Etape 1 : construire les segments LIBRES entre arrivée et le dernier évènement ----
+    // (le placement de repas/sommeil se fait après, une fois travail/étude/perso posés)
+    function freeSegmentsBetween(from, to, blocks){
+      // blocks = plages occupées triées, retourne les trous [from,to] non couverts
+      const segs = [];
+      let cur = from;
+      blocks.forEach(b => {
+        if (b.start > cur) segs.push({start:cur, end:Math.min(b.start,to)});
+        cur = Math.max(cur, b.end);
+      });
+      if (cur < to) segs.push({start:cur, end:to});
+      return segs.filter(s => s.end > s.start);
+    }
+
+    const lastEventEnd = eventRanges.length ? eventRanges[eventRanges.length-1].end : arrival;
+    const freeBeforeEnd = freeSegmentsBetween(arrival, lastEventEnd, eventRanges);
+
+    // ---- Etape 2 : placer le TRAVAIL en premier, dans les trous libres avant l'évènement puis après ----
+    let remainingTravail = travailDur;
+    const placed = []; // {cat,icon,title,start,dur}
+
+    freeBeforeEnd.forEach(seg => {
+      if (remainingTravail <= 0) return;
+      const d = Math.min(remainingTravail, seg.end-seg.start);
+      placed.push({cat:'travail', icon:'💼', title:'Travail', start:seg.start, dur:d, desc:TRAVAIL_DESC});
+      remainingTravail -= d;
+    });
+    if (remainingTravail > 0){
+      // Pas assez de place avant l'évènement -> le reste du travail passe juste après
+      placed.push({cat:'travail', icon:'💼', title:'Travail', start:lastEventEnd, dur:remainingTravail, desc:TRAVAIL_DESC});
+      remainingTravail = 0;
+    }
+
+    // ---- Etape 3 : combler avec Projets perso l'espace libre restant (après travail), ----
+    // jusqu'au point d'ancrage idéal avant repas, en respectant l'ordre Travail -> Perso -> Étude.
+    const REPAS_IDEAL_ANCHOR = 90, SOMMEIL_IDEAL_ANCHOR = 30;
+    const idealRepasStart = BEDTIME_TARGET - REPAS_IDEAL_ANCHOR - SOMMEIL_IDEAL_ANCHOR; // 23h30 - 1h30 - 30min = 21h30
+
+    let occupiedSoFar = eventRanges.concat(placed.map(p=>({start:p.start,end:p.start+p.dur})))
+      .sort((a,b)=>a.start-b.start);
+    const tlEndAfterTravail = occupiedSoFar.length ? Math.max(...occupiedSoFar.map(b=>b.end)) : arrival;
+    const persoScanEnd = Math.max(tlEndAfterTravail, idealRepasStart);
+    const freeForPerso = freeSegmentsBetween(arrival, persoScanEnd, occupiedSoFar);
+    freeForPerso.forEach(seg => {
+      const d = seg.end - seg.start;
+      if (d > 0) placed.push({cat:'perso', icon:'🎯', title:'Projets personnels', start:seg.start, dur:d, desc:PERSO_DESC});
+    });
+
+    // ---- Etape 4 : placer l'ÉTUDE en dernier, dans les trous restants (avant l'évènement en priorité, sinon après) ----
+    let remainingEtude = etudeDurTotal;
+    if (remainingEtude > 0){
+      occupiedSoFar = eventRanges.concat(placed.map(p=>({start:p.start,end:p.start+p.dur})))
+        .sort((a,b)=>a.start-b.start);
+      const freeBeforeEventForEtude = freeSegmentsBetween(arrival, lastEventEnd, occupiedSoFar.filter(o=>o.end<=lastEventEnd));
+      freeBeforeEventForEtude.forEach(seg => {
+        if (remainingEtude <= 0) return;
+        const d = Math.min(remainingEtude, seg.end-seg.start);
+        placed.push({cat:'etude', icon:'📘', title:'Étude', start:seg.start, dur:d});
+        remainingEtude -= d;
+      });
+      if (remainingEtude > 0){
+        const endPoint = Math.max(lastEventEnd, ...placed.map(p=>p.start+p.dur), lastEventEnd);
+        placed.push({cat:'etude', icon:'📘', title:'Étude', start:endPoint, dur:remainingEtude});
+        remainingEtude = 0;
+      }
+    }
+
+    // Trier tout ce qui est placé (évènements + travail/perso/étude) par heure de début
+    let timeline = eventRanges.map(r => ({cat:'event', icon:'⚡', title:'Évènement inhabituel', start:r.start, dur:r.end-r.start}))
+      .concat(placed)
+      .sort((a,b)=>a.start-b.start);
+
+    // Point d'ancrage pour repas/sommeil : juste après le dernier bloc de la timeline
+    const anchorEnd = timeline.length ? Math.max(...timeline.map(b=>b.start+b.dur)) : arrival;
+
+    // ---- Etape 4 : décider placement du repas (avant le dernier évènement, ou après tout) ----
+    // Par défaut : repas juste après tout (anchorEnd), sommeil juste après.
+    function bedIfRepasAfter(){
+      const repasStart = anchorEnd;
+      return computeCompressed(repasStart);
+    }
+    function computeCompressed(repasStart){
+      const naturalBed = repasStart + REPAS_IDEAL + SOMMEIL_IDEAL;
+      let repasDur, sommeilDur;
+      if (naturalBed <= SOFT_START){
+        repasDur = REPAS_IDEAL; sommeilDur = SOMMEIL_IDEAL;
+      } else {
+        const span = EXTREME_START - SOFT_START;
+        let frac = Math.min(1, Math.max(0, (naturalBed-SOFT_START)/span));
+        const eased = frac*frac*(3-2*frac);
+        repasDur = round15(REPAS_IDEAL - eased*(REPAS_IDEAL-REPAS_MIN_EXTREME));
+        sommeilDur = round15(SOMMEIL_IDEAL - eased*(SOMMEIL_IDEAL-SOMMEIL_MIN_EXTREME));
+      }
+      const bed = repasStart + repasDur + sommeilDur;
+      return {repasStart, repasDur, sommeilDur, bed};
+    }
+
+    let repasPlan = bedIfRepasAfter();
+
+    // Option "repas avant le dernier évènement" : seulement si ça améliore significativement
+    // un coucher déjà en zone difficile/extrême (repasPlan.bed dans une zone grave)
+    if (eventRanges.length){
+      const lastEvt = eventRanges[eventRanges.length-1];
+      // cherche un trou juste avant ce dernier évènement, assez grand pour un repas même compressé
+      const occupiedForGap = timeline.map(b=>({start:b.start,end:b.start+b.dur})).sort((a,b)=>a.start-b.start);
+      const freeBeforeLastEvt = freeSegmentsBetween(arrival, lastEvt.start,
+        occupiedForGap.filter(o => o.end <= lastEvt.start));
+      const gapBeforeEvt = freeBeforeLastEvt.length ? freeBeforeLastEvt[freeBeforeLastEvt.length-1] : null;
+
+      const bedIsGrave = repasPlan.bed - SOFT_START > 0; // au-delà de 01h00 de coucher naturel/compressé
+      if (bedIsGrave && gapBeforeEvt && (gapBeforeEvt.end - gapBeforeEvt.start) >= REPAS_MIN_EXTREME){
+        const altRepasStart = Math.max(gapBeforeEvt.start, gapBeforeEvt.end - REPAS_IDEAL);
+        const altRepasDur = Math.min(REPAS_IDEAL, gapBeforeEvt.end - altRepasStart);
+        // sommeil reste après tout le reste (anchorEnd, qui n'a pas bougé car repas n'y est plus)
+        const altSommeilNatural = computeCompressed(anchorEnd - 0); // approx: sommeil calé sur anchorEnd si repas ailleurs
+        const altSommeilDur = round15(Math.max(SOMMEIL_MIN_EXTREME, Math.min(SOMMEIL_IDEAL,
+          SOMMEIL_IDEAL - (repasPlan.repasDur - altRepasDur >= 0 ? 0 : 0)))); // garde idéal par défaut
+        const altBed = anchorEnd + SOMMEIL_IDEAL; // sommeil idéal puisque repas ne pousse plus le cursor
+        if (altBed < repasPlan.bed){
+          repasPlan = {repasStart: altRepasStart, repasDur: altRepasDur, sommeilDur: SOMMEIL_IDEAL, bed: altBed, repasBeforeEvent:true};
+        }
+      }
+    }
+
+    if (repasPlan.repasDur > 0){
+      timeline.push({cat:'repas', icon:'🍽️', title:'Repas / corvées', start:repasPlan.repasStart, dur:repasPlan.repasDur});
+    } else {
+      timeline.push({cat:'repas', icon:'🍽️', title:'Repas / corvées', start:repasPlan.repasStart, dur:0, skip:true});
+    }
+
+    const sommeilStart = repasPlan.repasBeforeEvent ? anchorEnd : (repasPlan.repasStart + repasPlan.repasDur);
+    if (repasPlan.sommeilDur > 0){
+      timeline.push({cat:'sommeil', icon:'🌙', title:'Préparation sommeil', start:sommeilStart, dur:repasPlan.sommeilDur});
+    } else {
+      timeline.push({cat:'sommeil', icon:'🌙', title:'Préparation sommeil', start:sommeilStart, dur:0, skip:true});
+    }
+
+    bedMin = sommeilStart + repasPlan.sommeilDur;
+
+    // Marquer travail/étude annulés si durée 0 dès le départ (slider à 0h)
+    timeline = timeline.filter(b => !(b.dur===0 && !b.skip && (b.cat==='travail'||b.cat==='etude') ));
+    if (travailDur === 0) timeline.push({cat:'travail', icon:'💼', title:'Travail', start:arrival, dur:0, skip:true});
+    if (hasEtude === false) {
+      // pas de bloc étude du tout si slider à 0 (on ne l'affiche pas comme "annulé" car jamais demandé)
+    }
+
+    timeline.sort((a,b)=>a.start-b.start);
+    items.push(...timeline);
+  }
+
+  renderTimeline(items);
+  renderBedtime(bedMin);
+}
+
+function fmt15Zero(n){ return String(n).padStart(2,'0'); }
+
+// Construit l'URL Google Calendar "create event" préremplie
+function gcalUrl(title, startMin, durMin){
+  const now = new Date();
+  const base = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  // startMin peut dépasser 1440 -> report sur le(s) jour(s) suivant(s)
+  const dayOffset = Math.floor(startMin/1440);
+  const minutesInDay = ((startMin % 1440)+1440)%1440;
+  const start = new Date(base);
+  start.setDate(start.getDate()+dayOffset);
+  start.setHours(Math.floor(minutesInDay/60), minutesInDay%60, 0, 0);
+  const end = new Date(start.getTime() + Math.max(durMin,15)*60000);
+
+  const toGcal = d => d.getFullYear()+fmt15Zero(d.getMonth()+1)+fmt15Zero(d.getDate())+'T'+fmt15Zero(d.getHours())+fmt15Zero(d.getMinutes())+'00';
+  const dates = toGcal(start)+'/'+toGcal(end);
+  const params = new URLSearchParams({
+    action: 'TEMPLATE',
+    text: title,
+    dates: dates,
+  });
+  return 'https://calendar.google.com/calendar/render?'+params.toString();
+}
+
+function renderTimeline(items){
+  const tl = $('timeline');
+  tl.innerHTML = '';
+  const visible = items.filter(it => !it.skip || it.dur >= 0); // on garde tout, skip affichés en pâle
+
+  visible.forEach((it, i) => {
+    const div = document.createElement('div');
+    div.className = 'tl-item ' + it.cat + (it.skip ? ' skip' : '');
+    div.style.animationDelay = (i*0.04)+'s';
+    const notifyBtn = it.skip ? '' : `<a class="notify-btn" href="${gcalUrl(it.title, it.start, it.dur)}" target="_blank" rel="noopener" title="Ajouter à Google Calendar">🔔</a>`;
+    div.innerHTML = `
+      <div class="tl-time">
+        <div class="tl-start">${fmt(it.start)}</div>
+        <div class="tl-connector"></div>
+        <div class="tl-endtime">${fmt(it.start + it.dur)}</div>
+      </div>
+      <div class="tl-body">
+        <div class="tl-title">${it.icon} ${it.title}</div>
+        <div class="tl-dur">${it.skip ? 'pas de créneau disponible' : fmtDur(it.dur)}</div>
+        ${it.desc && !it.skip ? `<div class="tl-desc">${it.desc}</div>` : ''}
+      </div>
+      ${notifyBtn}
+    `;
+    tl.appendChild(div);
+
+    // Ligne de transition vers le bloc suivant (heure de fin -> heure de début suivante)
+    const next = visible[i+1];
+    const end = it.start + it.dur;
+    if (next){
+      const gap = next.start - end;
+      const row = document.createElement('div');
+      row.className = 'tl-end';
+      row.style.animationDelay = (i*0.04+0.02)+'s';
+      row.innerHTML = `
+        <div class="tl-end-time">${fmt(end)}</div>
+        <div class="tl-end-line"></div>
+        ${gap > 0 ? `<div class="tl-gap-label">+${fmtDur(gap)}</div><div class="tl-end-line"></div>` : ''}
+      `;
+      tl.appendChild(row);
+    }
+  });
+}
+
+function renderBedtime(bedMin){
+  const {cls, label, sleepMins} = sleepBadge(bedMin);
+  $('bedTime').textContent = fmt(bedMin);
+  $('bedTime').style.color = {ok:'var(--ok)', warn:'var(--warn)', hard:'var(--hard)', extreme:'var(--extreme)'}[cls];
+  const badge = $('bedBadge');
+  badge.className = 'badge ' + cls;
+  badge.textContent = label;
+
+  const h = Math.floor(sleepMins/60), m = sleepMins%60;
+  $('sleepHours').textContent = `≈ ${h}h${String(m).padStart(2,'0')} de sommeil si réveil à 7h00`;
+
+  const result = $('bedResult');
+  result.style.borderColor = {ok:'var(--ok)', warn:'var(--warn)', hard:'var(--hard)', extreme:'var(--extreme)'}[cls];
+}
+
+// ---------- Init ----------
+syncModeUI();
+updateSliderLabels();
+buildEventGrid();
+render();
+
+// ---------- Bloc-notes flottant ----------
+(function(){
+  const NOTE_KEY = 'routine_notepad_v1';
+  const toggleBtn = $('notepadToggle');
+  const panel = $('notepadPanel');
+  const textarea = $('notepadText');
+  const clearBtn = $('notepadClear');
+  const savedLabel = $('notepadSaved');
+  let saveTimeout = null;
+  let savedFadeTimeout = null;
+
+  try {
+    const stored = localStorage.getItem(NOTE_KEY);
+    if (stored) textarea.value = stored;
+  } catch(e) { /* localStorage indisponible, on continue sans persistance */ }
+
+  // Fait grandir le textarea avec son contenu, dans la limite fixée par le CSS du panneau (max-height: 50vh)
+  function autoGrow(){
+    textarea.style.height = 'auto';
+    textarea.style.height = textarea.scrollHeight + 'px';
+  }
+
+  toggleBtn.addEventListener('click', () => {
+    panel.classList.toggle('open');
+    if (panel.classList.contains('open')){ textarea.focus(); autoGrow(); }
+  });
+
+  textarea.addEventListener('input', () => {
+    autoGrow();
+    clearTimeout(saveTimeout);
+    saveTimeout = setTimeout(() => {
+      try {
+        localStorage.setItem(NOTE_KEY, textarea.value);
+        savedLabel.textContent = 'Enregistré';
+        savedLabel.classList.add('visible');
+        clearTimeout(savedFadeTimeout);
+        savedFadeTimeout = setTimeout(() => { savedLabel.classList.remove('visible'); }, 1200);
+      } catch(e) { /* silencieux si pas de stockage dispo */ }
+    }, 300);
+  });
+
+  clearBtn.addEventListener('click', () => {
+    textarea.value = '';
+    autoGrow();
+    try { localStorage.removeItem(NOTE_KEY); } catch(e) {}
+    textarea.focus();
+  });
+
+  // Ferme le panneau si on clique en dehors
+  document.addEventListener('click', (e) => {
+    if (!panel.contains(e.target) && !toggleBtn.contains(e.target) && panel.classList.contains('open')){
+      panel.classList.remove('open');
+    }
+  });
+})();
+
+// ---------- Confirmation avant de fermer la page ----------
+window.addEventListener('beforeunload', (e) => {
+  e.preventDefault();
+  e.returnValue = '';
+});
+
+</script>
+</body>
+</html>
