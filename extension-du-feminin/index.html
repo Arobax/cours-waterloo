@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>📖♀️</text></svg>">
+<title>Carte mentale — Le français n'est pas en péril</title>
+<style>
+  :root{
+    --bg:#FFFFFF;
+    --ink:#111111;
+    --red:#C1272D;
+    --blue:#1E4D8C;
+    --green:#2E6B3E;
+    --grey:#666666;
+    --line:#111111;
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0; padding:0; background:var(--bg); color:var(--ink);
+    font-family:'Arial', 'Helvetica', sans-serif;
+    width:100%; height:100%;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .slide{
+    width:1600px; height:1000px;
+    flex:none;
+    padding:36px 48px;
+    position:relative;
+    display:flex;
+    flex-direction:column;
+  }
+
+  /* ---- ZONE CENTRALE : THESE + BRANCHES ---- */
+  .map{
+    position:relative;
+    flex:1;
+    min-height:0;
+  }
+
+  /* thèse au centre */
+  .thesis{
+    position:absolute;
+    top:50%; left:50%;
+    transform:translate(-50%,-50%);
+    width:440px;
+    background:var(--red);
+    color:#FFFFFF;
+    border-radius:14px;
+    padding:28px 32px;
+    text-align:center;
+    font-size:23px;
+    font-weight:700;
+    line-height:1.32;
+    z-index:5;
+    box-shadow:0 0 0 6px #FFFFFF, 0 0 0 8px var(--ink);
+  }
+
+  /* lignes de connexion (SVG) */
+  .connectors{
+    position:absolute;
+    top:0; left:0;
+    width:100%; height:100%;
+    z-index:1;
+  }
+
+  /* les 6 blocs autour */
+  .node{
+    position:absolute;
+    width:400px;
+    z-index:4;
+  }
+  .node .num{
+    font-size:15px;
+    font-weight:700;
+    color:#FFFFFF;
+    width:34px; height:34px;
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    margin-bottom:10px;
+  }
+  .node .b-title{
+    font-size:19px;
+    font-weight:700;
+    margin:0 0 8px 0;
+    line-height:1.25;
+    color:var(--ink);
+  }
+  .node .b-dev{
+    font-size:14px;
+    line-height:1.42;
+    color:#333333;
+    margin:0 0 10px 0;
+  }
+  .node .examples{
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+  }
+  .node .ex{
+    font-size:13px;
+    line-height:1.35;
+    padding:4px 0 4px 10px;
+    border-left:4px solid;
+  }
+  .ex-book{ border-left-color:var(--green); color:#1E4526; }
+  .ex-perso{ border-left-color:var(--blue); color:#12315C; }
+  .ex b{ font-weight:700; }
+
+  /* couleurs des cercles numérotés (neutres, distincts de la thèse) */
+  .node .num{ background:var(--ink); }
+
+  /* positionnement des 6 nœuds autour du centre (grille 3 colonnes x 2 lignes, centre au milieu) */
+  .n1{ top:6px;   left:20px; }
+  .n2{ top:6px;   right:20px; }
+  .n3{ top:6px;   left:600px; width:400px; text-align:center; }
+
+  .n4{ bottom:10px; left:20px; }
+  .n5{ bottom:10px; right:20px; }
+  .n6{ bottom:10px; left:600px; width:400px; text-align:center; }
+  .n3 .examples, .n6 .examples{ text-align:left; }
+
+  /* ---- QUESTION FINALE ---- */
+  .question{
+    border-top:3px solid var(--ink);
+    padding-top:18px;
+    margin-top:14px;
+    display:flex;
+    align-items:center;
+    gap:22px;
+  }
+  .question .qmark{
+    font-size:44px;
+    font-weight:900;
+    color:var(--red);
+    line-height:1;
+    flex:none;
+  }
+  .question .qtext{
+    font-size:20px;
+    font-weight:700;
+    color:var(--ink);
+    line-height:1.35;
+  }
+</style>
+</head>
+<body>
+<div class="slide">
+
+  <div class="map">
+
+    <div class="thesis">
+      La langue française n'est pas en danger : elle a toujours évolué, et l'extension du féminin est un changement légitime, pas une menace.
+    </div>
+
+    <div class="node n1">
+      <div class="num">1</div>
+      <p class="b-title">Genre grammatical ≠ genre social</p>
+      <p class="b-dev">Le français n'a que 2 genres (pas de neutre comme l'allemand). Pour les noms d'humains, on interprète souvent le genre grammatical comme un genre social réel (la "sexuisemblance").</p>
+      <div class="examples">
+        <span class="ex ex-book"><b>Chapitre —</b> "un/une élève", "la petite belette est sortie"</span>
+        <span class="ex ex-perso"><b>Perso —</b> "un/une camarade" : même mot, deux genres possibles</span>
+      </div>
+    </div>
+
+    <div class="node n3">
+      <div class="num">2</div>
+      <p class="b-title">Féminisation des noms de métiers</p>
+      <p class="b-dev">Des féminins existaient dès le XVIIe s. (autrice, ambassadrice) puis ont disparu. L'Académie française s'y est opposée jusqu'en 2019 ; le Québec a été pionnier dès la fin du XXe s.</p>
+      <div class="examples">
+        <span class="ex ex-book"><b>Chapitre —</b> autrice, ambassadrice, une avocate, une juge</span>
+        <span class="ex ex-perso"><b>Perso —</b> "professeure", "cheffe" : usage récent et courant</span>
+      </div>
+    </div>
+
+    <div class="node n2">
+      <div class="num">3</div>
+      <p class="b-title">Le masculin générique pose problème</p>
+      <p class="b-dev">Le masculin est utilisé "par défaut" pour parler de tout le monde, mais il n'est pas neutre : il évoque d'abord des hommes, ce qui influence réellement les comportements.</p>
+      <div class="examples">
+        <span class="ex ex-book"><b>Chapitre —</b> une offre d'emploi 100 % masculine attire moins de candidatures féminines</span>
+        <span class="ex ex-perso"><b>Perso —</b> "les Français" dans un discours : pense-t-on aussi aux Françaises ?</span>
+      </div>
+    </div>
+
+    <div class="node n4">
+      <div class="num">4</div>
+      <p class="b-title">L'écriture dite inclusive</p>
+      <p class="b-dev">Terme qui désigne soit toutes les techniques d'équilibre (doublets, parenthèses), soit le seul point médian, qui permet aussi de désigner des personnes non binaires.</p>
+      <div class="examples">
+        <span class="ex ex-book"><b>Chapitre —</b> les étudiant.e.s / étudiant-e-s / étudiant·es</span>
+        <span class="ex ex-perso"><b>Perso —</b> "Cher·ère·s ami·es" déjà vu</span>
+      </div>
+    </div>
+
+    <div class="node n6">
+      <div class="num">5</div>
+      <p class="b-title">L'accord au masculin "qui l'emporte"</p>
+      <p class="b-dev">Règle enseignée depuis Vaugelas (XVIIe s.), qui la justifiait par la "noblesse" du masculin. Avant, l'accord de proximité (avec le nom le plus proche) existait et reste possible aujourd'hui.</p>
+      <div class="examples">
+        <span class="ex ex-book"><b>Chapitre —</b> "des chants et danses bretonnes" : accord de proximité correct</span>
+        <span class="ex ex-perso"><b>Perso —</b> Des langues comme le turc, le japonais, le coréen, le chinois n'ont pas de genre donc pas de problème d'accord.</span>
+      </div>
+    </div>
+
+    <div class="node n5">
+      <div class="num">6</div>
+      <p class="b-title">Les pronoms non genrés</p>
+      <p class="b-dev">Le français a peu de marques de genre à certaines personnes (je, tu, nous, vous). Le néopronom "iel", apparu au XXIe s., comble un vide pour désigner sans genre binaire.</p>
+      <div class="examples">
+        <span class="ex ex-book"><b>Chapitre —</b> iel, ellui, celleux, toustes</span>
+        <span class="ex ex-perso"><b>Perso —</b> They/them/their en anglais comme pronoms singuliers neutres, utilisés depuis des siècles, servant à la fois pour l'incertitude et l'absence de genre.</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="question">
+    <span class="qmark">?</span>
+    <p class="qtext">Et vous : penseriez-vous différemment d'une candidate si l'annonce disait "poste de chercheur" plutôt que "poste de chercheuse ou chercheur" ?</p>
+  </div>
+
+</div>
+</body>
+</html>
