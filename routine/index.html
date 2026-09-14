@@ -856,7 +856,7 @@ function render(){
     const hasEtude = etudeDurTotal > 0;
     const REPAS_IDEAL = 90, REPAS_MIN_EXTREME = 30;
     const SOMMEIL_IDEAL = 30, SOMMEIL_MIN_EXTREME = 0;
-    const SOFT_START = 25*60, EXTREME_START = 26*60+30;
+    const SOFT_START = 24*60+30, EXTREME_START = 26*60+30; // compression repas/sommeil démarre dès 00h30 (au lieu de 01h00)
 
     // Plages d'évènement peintes par l'utilisateur (fusionnées), triées
     const eventRanges = getEventRanges();
@@ -895,9 +895,10 @@ function render(){
     }
 
     // ---- Etape 3 : combler avec Projets perso l'espace libre restant (après travail), ----
-    // jusqu'au point d'ancrage idéal avant repas, en respectant l'ordre Travail -> Perso -> Étude.
+    // jusqu'au point d'ancrage idéal avant repas, MOINS le temps d'étude à venir
+    // (l'étude doit aussi pouvoir comprimer perso, comme le travail).
     const REPAS_IDEAL_ANCHOR = 90, SOMMEIL_IDEAL_ANCHOR = 30;
-    const idealRepasStart = BEDTIME_TARGET - REPAS_IDEAL_ANCHOR - SOMMEIL_IDEAL_ANCHOR; // 23h30 - 1h30 - 30min = 21h30
+    const idealRepasStart = BEDTIME_TARGET - REPAS_IDEAL_ANCHOR - SOMMEIL_IDEAL_ANCHOR - etudeDurTotal + 30; // marge +30min : perso résiste un peu plus avant de céder
 
     let occupiedSoFar = eventRanges.concat(placed.map(p=>({start:p.start,end:p.start+p.dur})))
       .sort((a,b)=>a.start-b.start);
