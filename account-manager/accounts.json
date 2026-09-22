@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "updatedAt": "2026-01-01T00:00:00.000Z",
+  "active": {
+    "main":   { "number": "000", "address": "daalamain000@proton.me" },
+    "second": { "number": "000", "address": "daalasecond000@proton.me" },
+    "third":  { "number": "000", "address": "daalathird000@proton.me" },
+    "fourth": { "number": "000", "address": "daalafourth000@proton.me" },
+    "fifth":  { "number": "000", "address": "daalafifth000@proton.me" }
+  },
+  "archive": []
+}

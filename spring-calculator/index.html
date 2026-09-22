@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mouvement harmonique simple — explorateur interactif</title>
+<style>
+:root{
+  --bg:#0a0d16;
+  --panel:#121826;
+  --line:#212a40;
+  --txt:#e6ebf5;
+  --muted:#8b97b0;
+  --cx:#5aa9ff;
+  --cv:#3ddc97;
+  --ca:#ff6b8a;
+  --ct:#ffc857;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  background:radial-gradient(1200px 800px at 12% -10%, #16203a 0%, #0a0d16 55%) fixed;
+  color:var(--txt);
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  font-size:14px;
+  -webkit-font-smoothing:antialiased;
+  overflow:hidden;
+}
+.app{display:grid;grid-template-columns:340px 1fr;height:100vh;}
+
+/* ---------- Sidebar ---------- */
+.sidebar{
+  overflow-y:auto;
+  padding:20px 18px 40px;
+  border-right:1px solid var(--line);
+  background:rgba(16,22,36,.72);
+  backdrop-filter:blur(10px);
+}
+.sidebar::-webkit-scrollbar{width:8px}
+.sidebar::-webkit-scrollbar-thumb{background:#232d45;border-radius:4px}
+.brand h1{
+  font-size:15px;margin:0 0 8px;letter-spacing:.02em;
+  font-weight:600;color:#cfd8ea;
+}
+.eq{
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:13px;color:var(--cx);
+  background:#0d1322;border:1px solid var(--line);
+  border-radius:9px;padding:9px 11px;margin-bottom:18px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.group{margin-bottom:20px}
+.group h2{
+  font-size:10.5px;text-transform:uppercase;letter-spacing:.13em;
+  color:#5f6d8a;margin:0 0 12px;font-weight:700;
+}
+.ctrl{margin-bottom:14px}
+.ctrl-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.ctrl-head label{font-size:12.5px;color:#aab6cf}
+.ctrl-head output{
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:12px;color:#e6ebf5;background:#0d1322;
+  padding:2px 7px;border-radius:5px;border:1px solid var(--line);
+}
+
+input[type=range]{
+  -webkit-appearance:none;appearance:none;
+  width:100%;height:5px;border-radius:3px;
+  background:#242e46;outline:none;cursor:pointer;
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:17px;height:17px;border-radius:50%;
+  background:#e6ebf5;border:3px solid #0a0d16;
+  box-shadow:0 0 0 1.5px #4a5a80, 0 2px 6px rgba(0,0,0,.6);
+  transition:transform .12s;
+}
+input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.12)}
+input[type=range]::-moz-range-thumb{
+  width:14px;height:14px;border-radius:50%;
+  background:#e6ebf5;border:3px solid #0a0d16;
+  box-shadow:0 0 0 1.5px #4a5a80;cursor:pointer;
+}
+
+/* toggles */
+.tg{display:flex;align-items:center;gap:10px;padding:6px 0;cursor:pointer;user-select:none}
+.tg input{display:none}
+.tg-track{
+  width:34px;height:19px;border-radius:10px;background:#242e46;
+  position:relative;transition:background .18s;flex:none;
+}
+.tg-knob{
+  position:absolute;top:2.5px;left:2.5px;width:14px;height:14px;border-radius:50%;
+  background:#7b88a6;transition:transform .18s, background .18s;
+}
+.tg input:checked + .tg-track{background:var(--ac,#3a6ea8)}
+.tg input:checked + .tg-track .tg-knob{transform:translateX(15px);background:#fff}
+.tg-lbl{font-size:12.5px;color:#aab6cf}
+
+button{
+  width:100%;padding:9px 12px;border-radius:9px;cursor:pointer;
+  background:#1b2540;color:#dfe7f7;border:1px solid #2b3855;
+  font-size:13px;font-weight:600;font-family:inherit;
+  transition:background .15s,border-color .15s;
+  margin-bottom:14px;
+}
+button:hover{background:#243256;border-color:#3d4f78}
+
+/* Résultats */
+.big{
+  background:linear-gradient(145deg,#1a1030,#131a2e);
+  border:1px solid #33254a;border-radius:12px;
+  padding:14px 16px;margin-bottom:12px;
+  display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;
+}
+.big-eq{width:100%;font-size:11px;color:#9d8fc0;letter-spacing:.06em;margin-bottom:4px}
+.big-val{font-size:30px;font-weight:700;color:var(--ca);
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;line-height:1}
+.big-unit{font-size:13px;color:#8b97b0}
+
+.kv{display:flex;justify-content:space-between;padding:5px 0;font-size:12.5px;border-bottom:1px solid #1a2236}
+.kv:last-child{border-bottom:none}
+.kv span{color:#8b97b0}
+.kv b{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:#dfe7f7;font-weight:600}
+
+.times{margin-top:10px;font-size:11.5px}
+.time-row{
+  display:flex;justify-content:space-between;gap:8px;
+  padding:4px 8px;border-radius:6px;background:#0d1322;margin-bottom:4px;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+.time-row em{font-style:normal}
+.time-row em.pos{color:var(--cv)}
+.time-row em.neg{color:var(--ct)}
+.warn{color:#ff8a5c;font-size:11.5px;margin-top:8px;line-height:1.4}
+
+/* ---------- Stage ---------- */
+.stage{
+  display:grid;grid-template-rows:118px 1fr 1fr 1fr;
+  gap:11px;padding:14px;min-height:0;
+}
+.card{
+  background:var(--panel);border:1px solid var(--line);
+  border-radius:13px;position:relative;overflow:hidden;
+  box-shadow:0 4px 24px rgba(0,0,0,.28);
+}
+.card canvas{display:block;width:100%;height:100%}
+
+@media (max-width:920px){
+  body{overflow:auto}
+  .app{grid-template-columns:1fr;grid-template-rows:auto auto;height:auto}
+  .sidebar{border-right:none;border-bottom:1px solid var(--line)}
+  .stage{height:auto;grid-template-rows:130px 250px 250px 250px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <aside class="sidebar">
+    <div class="brand">
+      <h1>Mouvement harmonique simple</h1>
+      <div class="eq" id="eq"></div>
+    </div>
+
+    <section class="group">
+      <h2>Paramètres</h2>
+
+      <div class="ctrl">
+        <div class="ctrl-head"><label for="sA">Amplitude A</label><output id="oA">0.080 m</output></div>
+        <input type="range" id="sA" min="0.01" max="0.20" step="0.001" value="0.08">
+      </div>
+
+      <div class="ctrl">
+        <div class="ctrl-head"><label for="sW">Pulsation ω</label><output id="oW">12.0 rad/s</output></div>
+        <input type="range" id="sW" min="1" max="30" step="0.1" value="12">
+      </div>
+
+      <div class="ctrl">
+        <div class="ctrl-head"><label for="sP">Phase φ</label><output id="oP">0.30 rad</output></div>
+        <input type="range" id="sP" min="-3.14" max="3.14" step="0.01" value="0.3">
+      </div>
+
+      <div class="ctrl">
+        <div class="ctrl-head"><label for="sX0">Position cible x₀</label><output id="oX0">−0.050 m</output></div>
+        <input type="range" id="sX0" min="-0.08" max="0.08" step="0.0005" value="-0.05">
+      </div>
+
+      <div class="ctrl">
+        <div class="ctrl-head"><label for="sN">Périodes affichées</label><output id="oN">3</output></div>
+        <input type="range" id="sN" min="1" max="6" step="1" value="3">
+      </div>
+    </section>
+
+    <section class="group">
+      <h2>Affichage</h2>
+      <label class="tg" style="--ac:#3a6ea8">
+        <input type="checkbox" id="tgX" checked><span class="tg-track"><span class="tg-knob"></span></span>
+        <span class="tg-lbl">Position x(t)</span>
+      </label>
+      <label class="tg" style="--ac:#2b8f68">
+        <input type="checkbox" id="tgV" checked><span class="tg-track"><span class="tg-knob"></span></span>
+        <span class="tg-lbl">Vitesse v(t)</span>
+      </label>
+      <label class="tg" style="--ac:#a8405c">
+        <input type="checkbox" id="tgA" checked><span class="tg-track"><span class="tg-knob"></span></span>
+        <span class="tg-lbl">Accélération a(t)</span>
+      </label>
+      <label class="tg" style="--ac:#a8802b">
+        <input type="checkbox" id="tgT" checked><span class="tg-track"><span class="tg-knob"></span></span>
+        <span class="tg-lbl">Ligne cible</span>
+      </label>
+      <label class="tg" style="--ac:#a8802b">
+        <input type="checkbox" id="tgI" checked><span class="tg-track"><span class="tg-knob"></span></span>
+        <span class="tg-lbl">Instants où x = x₀</span>
+      </label>
+      <label class="tg" style="--ac:#5a6a92">
+        <input type="checkbox" id="tgC" checked><span class="tg-track"><span class="tg-knob"></span></span>
+        <span class="tg-lbl">Curseur animé</span>
+      </label>
+    </section>
+
+    <section class="group">
+      <h2>Animation</h2>
+      <button id="btnPlay">⏸  Pause</button>
+      <div class="ctrl">
+        <div class="ctrl-head"><label for="sSpd">Vitesse de lecture</label><output id="oSpd">0.30×</output></div>
+        <input type="range" id="sSpd" min="0.05" max="2" step="0.05" value="0.3">
+      </div>
+    </section>
+
+    <section class="group">
+      <h2>Résultats</h2>
+      <div class="big">
+        <div class="big-eq">a = −ω² · x₀</div>
+        <div class="big-val" id="bigVal">+7.20</div>
+        <div class="big-unit">m/s²</div>
+      </div>
+      <div class="kv"><span>Vitesse |v| en x₀</span><b id="rV">0.749 m/s</b></div>
+      <div class="kv"><span>Période T</span><b id="rT">0.524 s</b></div>
+      <div class="kv"><span>Pulsation ω</span><b id="rW">12.0 rad/s</b></div>
+      <div class="kv"><span>Instants dans la fenêtre</span><b id="rN">4</b></div>
+      <div class="times" id="times"></div>
+      <div class="warn" id="warn" style="display:none"></div>
+    </section>
+  </aside>
+
+  <main class="stage">
+    <div class="card"><canvas id="cvTrack"></canvas></div>
+    <div class="card"><canvas id="cvX"></canvas></div>
+    <div class="card"><canvas id="cvV"></canvas></div>
+    <div class="card"><canvas id="cvA"></canvas></div>
+  </main>
+</div>
+
+<script>
+"use strict";
+const $ = id => document.getElementById(id);
+
+/* ======================= ÉTAT ======================= */
+const state = {
+  A: 0.08, w: 12, phi: 0.3, x0: -0.05, nPer: 3,
+  speed: 0.3, playing: true, t: 0,
+  show: { x:true, v:true, a:true, tgt:true, inter:true, cur:true }
+};
+
+/* ======================= OUTILS ======================= */
+function niceStep(range, target){
+  const raw = range / target;
+  const mag = Math.pow(10, Math.floor(Math.log10(raw)));
+  const n = raw / mag;
+  let s;
+  if (n <= 1) s = 1; else if (n <= 2) s = 2; else if (n <= 5) s = 5; else s = 10;
+  return s * mag;
+}
+function fmt(v, step){
+  if (Math.abs(v) < step * 1e-6) return "0";
+  if (Math.abs(v) >= 1e5 || (Math.abs(v) < 1e-4 && v !== 0)) return v.toExponential(1);
+  const dec = Math.max(0, Math.min(4, Math.ceil(-Math.log10(step) - 1e-9)));
+  return v.toFixed(dec);
+}
+function shortNum(v){
+  if (Math.abs(v) < 1e-9) return "0";
+  const s = v.toFixed(3).replace(/\.?0+$/, "");
+  return s === "" || s === "-" ? "0" : s;
+}
+function sgn(v){ return v >= 0 ? "+" : "−"; }
+
+/* Résolution de sin(ωt+φ) = x0/A */
+function timesAtX(A, w, phi, x0, tMax){
+  if (A <= 0 || Math.abs(x0) > A + 1e-9) return [];
+  let s = x0 / A;
+  s = Math.max(-1, Math.min(1, s));
+  const th1 = Math.asin(s);
+  const th2 = Math.PI - th1;
+  const out = [];
+  for (let k = -60; k <= 60; k++){
+    for (const th of [th1, th2]){
+      const t = (th + 2 * Math.PI * k - phi) / w;
+      if (t >= -1e-9 && t <= tMax + 1e-9) out.push(t < 0 ? 0 : t);
+    }
+  }
+  out.sort((a, b) => a - b);
+  const res = [];
+  for (const t of out){
+    if (!res.length || t - res[res.length - 1] > 1e-6) res.push(t);
+  }
+  return res;
+}
+
+/* ======================= CANVAS ======================= */
+function makeCanvas(canvas){
+  const o = { canvas, ctx: canvas.getContext("2d"), w: 0, h: 0 };
+  o.resize = () => {
+    const r = canvas.getBoundingClientRect();
+    if (r.width < 2 || r.height < 2) return;
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.round(r.width * dpr);
+    canvas.height = Math.round(r.height * dpr);
+    o.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    o.w = r.width; o.h = r.height;
+  };
+  return o;
+}
+const P = {
+  track: makeCanvas($("cvTrack")),
+  x: makeCanvas($("cvX")),
+  v: makeCanvas($("cvV")),
+  a: makeCanvas($("cvA"))
+};
+function resizeAll(){ Object.values(P).forEach(p => p.resize()); }
+
+/* ======================= TRACÉ DES GRAPHES ======================= */
+function drawPlot(p, cfg){
+  const ctx = p.ctx, w = p.w, h = p.h;
+  ctx.clearRect(0, 0, w, h);
+  if (w < 30 || h < 30) return;
+
+  const m = { l: 70, r: 20, t: 20, b: 26 };
+  const pw = w - m.l - m.r, ph = h - m.t - m.b;
+  if (pw < 20 || ph < 20) return;
+
+  const tMax = cfg.tMax, yMin = cfg.yMin, yMax = cfg.yMax;
+  const X = t => m.l + (t / tMax) * pw;
+  const Y = v => m.t + (1 - (v - yMin) / (yMax - yMin)) * ph;
+
+  const yStep = niceStep(yMax - yMin, 4);
+  const tStep = niceStep(tMax, 6);
+
+  /* ---- grille + contenu clippé ---- */
+  ctx.save();
+  ctx.beginPath(); ctx.rect(m.l, m.t, pw, ph); ctx.clip();
+
+  ctx.strokeStyle = "#1b2438"; ctx.lineWidth = 1;
+  ctx.beginPath();
+  for (let i = Math.ceil(yMin / yStep); i * yStep <= yMax + 1e-9; i++){
+    const yy = Y(i * yStep);
+    ctx.moveTo(m.l, yy); ctx.lineTo(m.l + pw, yy);
+  }
+  for (let i = 0; i * tStep <= tMax + 1e-9; i++){
+    const xx = X(i * tStep);
+    ctx.moveTo(xx, m.t); ctx.lineTo(xx, m.t + ph);
+  }
+  ctx.stroke();
+
+  if (yMin < 0 && yMax > 0){
+    ctx.strokeStyle = "#3a4767";
+    ctx.beginPath();
+    ctx.moveTo(m.l, Y(0)); ctx.lineTo(m.l + pw, Y(0));
+    ctx.stroke();
+  }
+
+  /* ---- lignes horizontales cibles ---- */
+  if (cfg.hLines){
+    for (const hl of cfg.hLines){
+      if (hl.y < yMin || hl.y > yMax) continue;
+      ctx.save();
+      ctx.strokeStyle = hl.color;
+      ctx.lineWidth = 1.6;
+      ctx.setLineDash([7, 5]);
+      ctx.beginPath();
+      ctx.moveTo(m.l, Y(hl.y)); ctx.lineTo(m.l + pw, Y(hl.y));
+      ctx.stroke();
+      ctx.restore();
+    }
+  }
+
+  /* ---- marques verticales (instants) ---- */
+  if (cfg.vMarks && cfg.vMarks.length){
+    ctx.save();
+    ctx.strokeStyle = "rgba(255,200,87,0.30)";
+    ctx.lineWidth = 1;
+    ctx.setLineDash([3, 4]);
+    ctx.beginPath();
+    for (const t of cfg.vMarks){
+      const xx = X(t);
+      ctx.moveTo(xx, m.t); ctx.lineTo(xx, m.t + ph);
+    }
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  /* ---- courbe ---- */
+  if (cfg.curve){
+    const N = 700;
+    ctx.save();
+    ctx.strokeStyle = cfg.curve.color;
+    ctx.lineWidth = 2.2;
+    ctx.lineJoin = "round";
+    ctx.shadowColor = cfg.curve.color;
+    ctx.shadowBlur = 8;
+    ctx.beginPath();
+    for (let i = 0; i <= N; i++){
+      const t = tMax * i / N;
+      const px = X(t), py = Y(cfg.curve.fn(t));
+      if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+    }
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  /* ---- points d'intersection ---- */
+  if (cfg.dots){
+    for (const d of cfg.dots){
+      ctx.beginPath();
+      ctx.arc(X(d.t), Y(d.y), 4.5, 0, Math.PI * 2);
+      ctx.fillStyle = d.color; ctx.fill();
+      ctx.strokeStyle = "#0a0d16"; ctx.lineWidth = 1.6; ctx.stroke();
+    }
+  }
+
+  /* ---- curseur animé ---- */
+  if (cfg.cursorT != null && cfg.cursorT >= 0 && cfg.cursorT <= tMax){
+    const cx = X(cfg.cursorT);
+    ctx.strokeStyle = "rgba(255,255,255,0.22)";
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(cx, m.t); ctx.lineTo(cx, m.t + ph); ctx.stroke();
+    if (cfg.curve){
+      const cy = Y(cfg.curve.fn(cfg.cursorT));
+      ctx.beginPath(); ctx.arc(cx, cy, 5.5, 0, Math.PI * 2);
+      ctx.fillStyle = cfg.curve.color; ctx.fill();
+      ctx.strokeStyle = "#0a0d16"; ctx.lineWidth = 2; ctx.stroke();
+    }
+  }
+
+  ctx.restore();
+
+  /* ---- axes ---- */
+  ctx.strokeStyle = "#2a3550"; ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(m.l, m.t); ctx.lineTo(m.l, m.t + ph); ctx.lineTo(m.l + pw, m.t + ph);
+  ctx.stroke();
+
+  /* ---- graduations ---- */
+  ctx.fillStyle = "#6b7893";
+  ctx.font = "11px ui-monospace,SFMono-Regular,Menlo,monospace";
+  ctx.textAlign = "right"; ctx.textBaseline = "middle";
+  for (let i = Math.ceil(yMin / yStep); i * yStep <= yMax + 1e-9; i++){
+    const v = i * yStep;
+    ctx.fillText(fmt(v, yStep), m.l - 9, Y(v));
+  }
+  ctx.textAlign = "center"; ctx.textBaseline = "top";
+  for (let i = 0; i * tStep <= tMax + 1e-9; i++){
+    ctx.fillText(fmt(i * tStep, tStep), X(i * tStep), m.t + ph + 7);
+  }
+
+  /* ---- étiquettes des lignes cibles ---- */
+  if (cfg.hLines){
+    ctx.textAlign = "right"; ctx.textBaseline = "bottom";
+    ctx.font = "700 11px Inter,sans-serif";
+    for (const hl of cfg.hLines){
+      if (!hl.label || hl.y < yMin || hl.y > yMax) continue;
+      ctx.fillStyle = hl.color;
+      ctx.fillText(hl.label, m.l + pw - 6, Y(hl.y) - 5);
+    }
+  }
+
+  /* ---- titre de l'axe ---- */
+  ctx.textAlign = "left"; ctx.textBaseline = "top";
+  ctx.font = "700 12px Inter,sans-serif";
+  ctx.fillStyle = cfg.labelColor || "#8b97b0";
+  ctx.fillText(cfg.yLabel, m.l + 8, m.t + 6);
+}
+
+/* ======================= PISTE (particule) ======================= */
+function hArrow(ctx, x, y, dx, color, lw){
+  if (Math.abs(dx) < 2) return;
+  const s = Math.sign(dx), hs = 7;
+  ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = lw;
+  ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + dx, y); ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(x + dx, y);
+  ctx.lineTo(x + dx - s * hs, y - hs * 0.62);
+  ctx.lineTo(x + dx - s * hs, y + hs * 0.62);
+  ctx.closePath(); ctx.fill();
+}
+
+function drawTrack(p, cfg){
+  const ctx = p.ctx, w = p.w, h = p.h;
+  ctx.clearRect(0, 0, w, h);
+  if (w < 60 || h < 50) return;
+
+  const A = cfg.A;
+  const padX = 70;
+  const x1 = padX, x2 = w - padX;
+  const yc = h * 0.55;
+  const X = v => x1 + (v + A) / (2 * A) * (x2 - x1);
+  const maxLen = (x2 - x1) * 0.30;
+
+  /* ligne de fond */
+  const grad = ctx.createLinearGradient(x1, 0, x2, 0);
+  grad.addColorStop(0, "#1d2740");
+  grad.addColorStop(0.5, "#33405e");
+  grad.addColorStop(1, "#1d2740");
+  ctx.strokeStyle = grad; ctx.lineWidth = 3; ctx.lineCap = "round";
+  ctx.beginPath(); ctx.moveTo(x1, yc); ctx.lineTo(x2, yc); ctx.stroke();
+
+  /* graduations */
+  ctx.font = "10px ui-monospace,SFMono-Regular,Menlo,monospace";
+  ctx.textAlign = "center"; ctx.textBaseline = "top";
+  for (const v of [-A, -A / 2, 0, A / 2, A]){
+    ctx.strokeStyle = "#2a3550"; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(X(v), yc - 6); ctx.lineTo(X(v), yc + 6); ctx.stroke();
+    ctx.fillStyle = "#5b6884";
+    ctx.fillText(shortNum(v), X(v), yc + 11);
+  }
+
+  /* équilibre */
+  ctx.fillStyle = "#5a6a92";
+  ctx.beginPath();
+  ctx.moveTo(X(0), yc + 24);
+  ctx.lineTo(X(0) - 5, yc + 33);
+  ctx.lineTo(X(0) + 5, yc + 33);
+  ctx.closePath(); ctx.fill();
+  ctx.font = "10px Inter,sans-serif";
+  ctx.fillText("O", X(0), yc + 35);
+
+  /* cible x0 */
+  if (cfg.showTarget){
+    ctx.save();
+    ctx.strokeStyle = "rgba(255,200,87,0.55)";
+    ctx.lineWidth = 1.4; ctx.setLineDash([4, 4]);
+    ctx.beginPath();
+    ctx.moveTo(X(cfg.x0), yc - 34); ctx.lineTo(X(cfg.x0), yc + 22);
+    ctx.stroke();
+    ctx.restore();
+    ctx.fillStyle = "#ffc857";
+    ctx.font = "700 10.5px Inter,sans-serif";
+    ctx.textAlign = "center"; ctx.textBaseline = "bottom";
+    ctx.fillText("x₀", X(cfg.x0), yc - 37);
+  }
+
+  /* flèche vitesse (au-dessus) */
+  const vRel = cfg.v / (cfg.w * A);
+  hArrow(ctx, X(cfg.x), yc - 30, vRel * maxLen, "#3ddc97", 2.4);
+
+  /* flèche accélération (en dessous) */
+  const aRel = cfg.a / (cfg.w * cfg.w * A);
+  hArrow(ctx, X(cfg.x), yc + 46, aRel * maxLen, "#ff6b8a", 2.4);
+
+  /* particule */
+  const px = X(cfg.x);
+  ctx.save();
+  ctx.shadowColor = "#5aa9ff"; ctx.shadowBlur = 16;
+  ctx.beginPath(); ctx.arc(px, yc, 9, 0, Math.PI * 2);
+  ctx.fillStyle = "#5aa9ff"; ctx.fill();
+  ctx.restore();
+  ctx.beginPath(); ctx.arc(px, yc, 9, 0, Math.PI * 2);
+  ctx.strokeStyle = "#0a0d16"; ctx.lineWidth = 2.5; ctx.stroke();
+
+  /* légende des flèches */
+  ctx.font = "10px Inter,sans-serif";
+  ctx.textAlign = "left"; ctx.textBaseline = "middle";
+  ctx.fillStyle = "#3ddc97"; ctx.fillText("v", 14, yc - 30);
+  ctx.fillStyle = "#ff6b8a"; ctx.fillText("a", 14, yc + 46);
+}
+
+/* ======================= RENDU PRINCIPAL ======================= */
+function draw(){
+  const { A, w, phi, x0 } = state;
+  const T = 2 * Math.PI / w;
+  const tMax = state.nPer * T;
+  if (state.t > tMax) state.t = state.t % tMax;
+
+  const xFn = t => A * Math.sin(w * t + phi);
+  const vFn = t => A * w * Math.cos(w * t + phi);
+  const aFn = t => -w * w * A * Math.sin(w * t + phi);
+
+  const reachable = Math.abs(x0) <= A + 1e-12;
+  const aCible = -w * w * x0;
+  const vAbs = reachable ? w * Math.sqrt(Math.max(0, A * A - x0 * x0)) : 0;
+  const times = reachable ? timesAtX(A, w, phi, x0, tMax) : [];
+
+  const yX = A * 1.25;
+  const yV = A * w * 1.25;
+  const yA = A * w * w * 1.25;
+
+  const tCur = state.show.cur ? state.t : null;
+
+  /* --- piste --- */
+  drawTrack(P.track, {
+    A, w, x0, showTarget: state.show.tgt,
+    x: xFn(state.t), v: vFn(state.t), a: aFn(state.t)
+  });
+
+  /* --- x(t) --- */
+  drawPlot(P.x, {
+    tMax, yMin: -yX, yMax: yX, yLabel: "x (m)", labelColor: "#5aa9ff",
+    curve: state.show.x ? { fn: xFn, color: "#5aa9ff" } : null,
+    hLines: (state.show.tgt && reachable) ? [{ y: x0, color: "#ffc857", label: "x₀" }] : null,
+    vMarks: state.show.inter ? times : null,
+    dots: state.show.inter ? times.map(t => ({ t, y: x0, color: "#ffc857" })) : null,
+    cursorT: tCur
+  });
+
+  /* --- v(t) --- */
+  drawPlot(P.v, {
+    tMax, yMin: -yV, yMax: yV, yLabel: "v (m/s)", labelColor: "#3ddc97",
+    curve: state.show.v ? { fn: vFn, color: "#3ddc97" } : null,
+    hLines: (state.show.tgt && reachable) ? [
+      { y: +vAbs, color: "rgba(255,200,87,0.75)", label: "+|v₀|" },
+      { y: -vAbs, color: "rgba(255,200,87,0.75)", label: "−|v₀|" }
+    ] : null,
+    vMarks: state.show.inter ? times : null,
+    dots: state.show.inter ? times.map(t => ({ t, y: vFn(t), color: "#ffc857" })) : null,
+    cursorT: tCur
+  });
+
+  /* --- a(t) --- */
+  drawPlot(P.a, {
+    tMax, yMin: -yA, yMax: yA, yLabel: "a (m/s²)", labelColor: "#ff6b8a",
+    curve: state.show.a ? { fn: aFn, color: "#ff6b8a" } : null,
+    hLines: (state.show.tgt && reachable) ? [{ y: aCible, color: "#ffc857", label: "a(x₀)" }] : null,
+    vMarks: state.show.inter ? times : null,
+    dots: state.show.inter ? times.map(t => ({ t, y: aCible, color: "#ffc857" })) : null,
+    cursorT: tCur
+  });
+}
+
+/* ======================= TEXTES / RÉSULTATS ======================= */
+function updateReadouts(){
+  const { A, w, phi, x0, nPer } = state;
+  const T = 2 * Math.PI / w;
+  const tMax = nPer * T;
+  const reachable = Math.abs(x0) <= A + 1e-12;
+  const aCible = -w * w * x0;
+  const vAbs = reachable ? w * Math.sqrt(Math.max(0, A * A - x0 * x0)) : NaN;
+  const times = reachable ? timesAtX(A, w, phi, x0, tMax) : [];
+
+  $("eq").textContent =
+    `x(t) = ${A.toFixed(3)}·sin(${w.toFixed(1)}·t ${phi >= 0 ? "+" : "−"} ${Math.abs(phi).toFixed(2)})`;
+
+  $("oA").textContent  = A.toFixed(3) + " m";
+  $("oW").textContent  = w.toFixed(1) + " rad/s";
+  $("oP").textContent  = phi.toFixed(2) + " rad";
+  $("oX0").textContent = (x0 < 0 ? "−" : "") + Math.abs(x0).toFixed(3) + " m";
+  $("oN").textContent  = nPer;
+  $("oSpd").textContent = state.speed.toFixed(2) + "×";
+
+  $("bigVal").textContent = sgn(aCible) + Math.abs(aCible).toFixed(2);
+  $("rV").textContent = reachable ? vAbs.toFixed(3) + " m/s" : "—";
+  $("rT").textContent = T.toFixed(3) + " s";
+  $("rW").textContent = w.toFixed(1) + " rad/s";
+  $("rN").textContent = times.length;
+
+  /* liste des instants avec le signe de v */
+  const box = $("times");
+  if (!reachable){
+    box.innerHTML = "";
+    $("warn").style.display = "block";
+    $("warn").textContent =
+      "⚠ |x₀| > A : la particule n'atteint jamais cette position. Aucun instant solution.";
+  } else {
+    $("warn").style.display = "none";
+    const shown = times.slice(0, 6);
+    box.innerHTML = shown.map(t => {
+      const v = A * w * Math.cos(w * t + phi);
+      const pos = v > 0;
+      return `<div class="time-row"><span>t = ${t.toFixed(3)} s</span>` +
+             `<em class="${pos ? "pos" : "neg"}">v ${pos ? ">" : "<"} 0</em></div>`;
+    }).join("") + (times.length > 6
+      ? `<div class="time-row" style="justify-content:center;color:#5f6d8a">… ${times.length - 6} autre(s)</div>`
+      : "");
+  }
+}
+
+/* ======================= CONTRÔLES ======================= */
+function syncX0Range(){
+  const s = $("sX0");
+  s.min = (-state.A).toFixed(4);
+  s.max = (state.A).toFixed(4);
+  if (Math.abs(state.x0) > state.A) state.x0 = Math.sign(state.x0 || 1) * state.A * 0.6;
+  s.value = state.x0;
+}
+
+$("sA").addEventListener("input", e => {
+  state.A = +e.target.value; syncX0Range(); updateReadouts(); draw();
+});
+$("sW").addEventListener("input", e => {
+  state.w = +e.target.value; updateReadouts(); draw();
+});
+$("sP").addEventListener("input", e => {
+  state.phi = +e.target.value; updateReadouts(); draw();
+});
+$("sX0").addEventListener("input", e => {
+  state.x0 = +e.target.value; updateReadouts(); draw();
+});
+$("sN").addEventListener("input", e => {
+  state.nPer = +e.target.value; updateReadouts(); draw();
+});
+$("sSpd").addEventListener("input", e => {
+  state.speed = +e.target.value; updateReadouts();
+});
+
+$("tgX").addEventListener("change", e => { state.show.x = e.target.checked; draw(); });
+$("tgV").addEventListener("change", e => { state.show.v = e.target.checked; draw(); });
+$("tgA").addEventListener("change", e => { state.show.a = e.target.checked; draw(); });
+$("tgT").addEventListener("change", e => { state.show.tgt = e.target.checked; draw(); });
+$("tgI").addEventListener("change", e => { state.show.inter = e.target.checked; draw(); });
+$("tgC").addEventListener("change", e => { state.show.cur = e.target.checked; draw(); });
+
+function togglePlay(){
+  state.playing = !state.playing;
+  $("btnPlay").textContent = state.playing ? "⏸  Pause" : "▶  Lecture";
+}
+$("btnPlay").addEventListener("click", togglePlay);
+
+window.addEventListener("keydown", e => {
+  if (e.code === "Space" && e.target.tagName !== "INPUT"){
+    e.preventDefault(); togglePlay();
+  }
+});
+
+/* ======================= BOUCLE ======================= */
+let last = performance.now();
+function loop(now){
+  const dt = Math.min(0.05, (now - last) / 1000);
+  last = now;
+
+  if (state.playing){
+    const T = 2 * Math.PI / state.w;
+    const tMax = state.nPer * T;
+    state.t += dt * state.speed;
+    if (state.t > tMax) state.t -= tMax;
+    draw();
+  }
+  requestAnimationFrame(loop);
+}
+
+/* ======================= INIT ======================= */
+const ro = new ResizeObserver(() => { resizeAll(); draw(); });
+ro.observe(document.querySelector(".stage"));
+window.addEventListener("resize", () => { resizeAll(); draw(); });
+
+requestAnimationFrame(() => {
+  resizeAll();
+  syncX0Range();
+  updateReadouts();
+  draw();
+  requestAnimationFrame(loop);
+});
+</script>
+</body>
+</html>

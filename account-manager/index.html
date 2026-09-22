@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Account Manager</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header class="topbar">
+  <h1>Account Manager</h1>
+  <div class="topbar-actions">
+    <button id="btn-export" class="btn btn-ghost">Export JSON</button>
+    <button id="btn-reset" class="btn btn-ghost">Reset local state</button>
+  </div>
+</header>
+
+<main>
+  <section class="panel">
+    <h2>Active accounts</h2>
+    <table class="grid">
+      <thead>
+        <tr><th>Function</th><th>Number</th><th>Address</th><th>Status</th></tr>
+      </thead>
+      <tbody id="active-body"></tbody>
+    </table>
+  </section>
+
+  <section class="panel">
+    <h2>Archive</h2>
+    <table class="grid">
+      <thead>
+        <tr><th>Function</th><th>Number</th><th>Address</th><th>Archived</th><th>Status</th><th></th></tr>
+      </thead>
+      <tbody id="archive-body"></tbody>
+    </table>
+    <p id="archive-empty" class="empty hidden">No archived accounts.</p>
+  </section>
+</main>
+
+<div id="modal" class="modal hidden">
+  <div class="modal-box">
+    <h3 id="modal-title">Confirm</h3>
+    <div id="modal-body"></div>
+    <input id="modal-input" type="password" placeholder="Password" autocomplete="off" />
+    <p id="modal-error" class="error"></p>
+    <div class="modal-actions">
+      <button id="modal-cancel" class="btn btn-ghost">Cancel</button>
+      <button id="modal-ok" class="btn btn-orange">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast hidden"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
