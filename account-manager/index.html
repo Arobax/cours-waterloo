@@ -11,10 +11,12 @@
 <header class="topbar">
   <h1>Account Manager</h1>
   <div class="topbar-actions">
-    <button id="btn-export" class="btn btn-ghost">Export JSON</button>
-    <button id="btn-reset" class="btn btn-ghost">Reset local state</button>
+    <button id="btn-refresh" class="btn btn-ghost">Refresh</button>
+    <button id="btn-settings" class="btn btn-ghost">⚙</button>
   </div>
 </header>
+
+<div id="pat-banner" class="banner hidden"></div>
 
 <main>
   <section class="panel">
@@ -43,7 +45,6 @@
   <div class="modal-box">
     <h3 id="modal-title">Confirm</h3>
     <div id="modal-body"></div>
-    <input id="modal-input" type="password" placeholder="Password" autocomplete="off" />
     <p id="modal-error" class="error"></p>
     <div class="modal-actions">
       <button id="modal-cancel" class="btn btn-ghost">Cancel</button>

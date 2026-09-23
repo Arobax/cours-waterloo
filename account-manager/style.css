@@ -87,3 +87,33 @@ a.addr:hover{text-decoration:underline}
   .grid th:nth-child(2),.grid td:nth-child(2){display:none}
   main{padding:12px}
 }
+
+/* Bandeau d'expiration PAT */
+.banner{
+  padding:11px 20px;font-size:13px;border-bottom:1px solid;
+  display:flex;align-items:center;gap:8px;
+}
+.banner.hidden{display:none}
+.banner a{color:inherit;text-decoration:underline}
+.banner.warn{
+  background:#3a2708;border-color:#f39c12;color:#f39c12;
+}
+.banner.danger{
+  background:#3a1010;border-color:#e74c3c;color:#e74c3c;
+}
+
+/* Champs du modal (body) */
+#modal-body label{
+  display:block;font-size:11px;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.6px;margin:12px 0 5px;
+}
+#modal-body label:first-child{margin-top:0}
+#modal-body input{
+  display:block;width:100%;margin-top:5px;
+  padding:9px 11px;background:var(--bg);border:1px solid var(--border);
+  border-radius:6px;color:var(--text);font:inherit;font-size:13px;
+  text-transform:none;letter-spacing:normal;
+}
+#modal-body input:focus{outline:none;border-color:var(--blue)}
+#modal-body .pat-label input{font-family:ui-monospace,Consolas,monospace}
+#modal-body .hint{font-size:11px;color:var(--gray);margin:6px 0 0;text-transform:none;letter-spacing:normal}
