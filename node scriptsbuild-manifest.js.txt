@@ -1,3 +1,6 @@
+node scriptsbuild-manifest.js
+
+
 keywords google : "other closes cities"
 
 CV olympiades

@@ -67,6 +67,12 @@
       padding: 5px 16px; border-radius: 99px; margin-bottom: 1.1rem;
     }
 
+    .hero-note { display: flex; width: fit-content; max-width: 100%; align-items: center; gap: 8px; margin: 0 0 .9rem; padding: 10px 24px; border-radius: 99px; background: rgba(255,255,255,.1); border: 1px solid rgba(212,128,74,.7); color: #fff; font-size: .95rem; font-weight: 500; text-decoration: none; transition: background .2s, border-color .2s; }
+    .hero-note:hover { background: var(--terra); border-color: var(--terra); }
+    .footer-more { margin-top: 16px; }
+    .footer-more a { color: rgba(255,255,255,.6); font-size: .92rem; text-decoration: underline; text-underline-offset: 3px; transition: color .2s; }
+    .footer-more a:hover { color: #fff; }
+
     .tag {
       display: inline-block; background: var(--sand); color: var(--bark);
       font-size: .84rem; font-weight: 500; padding: 4px 13px;
@@ -308,6 +314,7 @@
 <!-- HERO -->
 <section class="hero" id="top">
   <div class="container hero-inner">
+    <a class="hero-note animate" href="/syntheses/">&#128218; Synth&egrave;ses en acc&egrave;s libre &mdash; consulter &rarr;</a>
     <div class="badge animate">&#127979; Waterloo &middot; Belgique</div>
     <h1 class="animate delay-1">Cours particuliers<br>primaire &amp; secondaire</h1>
     <p class="hero-sub animate delay-2">Des &eacute;l&egrave;ves motiv&eacute;s qui aident d&rsquo;autres &eacute;l&egrave;ves &agrave; comprendre, progresser et r&eacute;ussir.</p>
@@ -643,8 +650,10 @@
 <footer>
   <p class="footer-main">&copy; 2026 Cours particuliers Waterloo &mdash; <span>Damien &amp; Mathieu</span> &middot; 6<sup>e</sup> secondaire</p>
   <p class="footer-sub">Par des &eacute;l&egrave;ves, pour des &eacute;l&egrave;ves &#x1F393;</p>
+  <p class="footer-more"><a href="/home">Tous les services</a></p>
 </footer>
 
+<script src="/db.js"></script>
 <script>
 /* ============================================================
    LIENS DE CONTACT
@@ -699,56 +708,47 @@ document.addEventListener('click', function(e) {
 
 /* ============================================================
    DISPONIBILITES
-   Chargées depuis data/disponibilites.json
-   Le paramètre ?v=timestamp force le rechargement sans cache.
+   Rendues depuis la base de données (voir plus bas).
    ============================================================ */
 function renderDispos(id, items) {
   var el = document.getElementById('dispo-' + id);
   if (!el || !items || !items.length) return;
   el.innerHTML = items.map(function(d) {
     return '<div class="dispo-row">'
-         + '<span>' + d.label + '</span>'
-         + '<span class="dispo-status ' + d.status + '">' + d.text + '</span>'
+         + '<span>' + esc(d.label) + '</span>'
+         + '<span class="dispo-status ' + esc(d.status) + '">' + esc(d.text) + '</span>'
          + '</div>';
   }).join('');
 }
 
-fetch('data/disponibilites.json?v=' + Date.now())
-  .then(function(r) {
-    if (!r.ok) throw new Error('HTTP ' + r.status);
-    return r.json();
-  })
-  .then(function(data) {
-    renderDispos('damien',  data.damien);
-    renderDispos('mathieu', data.mathieu);
-  })
-  .catch(function(err) {
-    console.warn('disponibilites.json non chargé :', err);
-    /* Les valeurs HTML par défaut restent affichées */
+function esc(s) {
+  return String(s == null ? '' : s).replace(/[&<>"]/g, function(c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
   });
+}
 
 /* ============================================================
-   EMAILS depuis data/config.json (optionnel — écrase les
-   valeurs JS ci-dessus si le fichier est présent)
+   DONNEES (disponibilités + contacts) : lues dans la base GitHub
+   via db.js. En cas d'échec, les valeurs par défaut ci-dessus
+   restent affichées.
    ============================================================ */
-fetch('data/config.json?v=' + Date.now())
-  .then(function(r) {
-    if (!r.ok) throw new Error('HTTP ' + r.status);
-    return r.json();
-  })
-  .then(function(c) {
-    if (c.damien && c.damien.email) {
-      var d = document.getElementById('mail-damien');
-      d.href        = 'mailto:' + c.damien.email;
-      d.textContent = c.damien.email;
+loadDB().then(function(db) {
+  if (db.disponibilites) {
+    renderDispos('damien',  db.disponibilites.damien);
+    renderDispos('mathieu', db.disponibilites.mathieu);
+  }
+  var c = db.config || {};
+  ['damien', 'mathieu'].forEach(function(k) {
+    var p = c[k];
+    if (!p) return;
+    if (p.phone) document.getElementById('wa-' + k).href = 'https://wa.me/' + String(p.phone).replace(/\D/g, '');
+    if (p.email) {
+      var a = document.getElementById('mail-' + k);
+      a.href = 'mailto:' + p.email;
+      a.textContent = p.email;
     }
-    if (c.mathieu && c.mathieu.email) {
-      var m = document.getElementById('mail-mathieu');
-      m.href        = 'mailto:' + c.mathieu.email;
-      m.textContent = c.mathieu.email;
-    }
-  })
-  .catch(function() {});
+  });
+}).catch(function(err) { console.warn('Base de données non chargée :', err.message); });
 
 /* ============================================================
    ANIMATIONS AU SCROLL

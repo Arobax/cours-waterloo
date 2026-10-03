@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tous les services · Cours Waterloo</title>
+<meta name="description" content="Cours particuliers, synthèses gratuites, outils et archives de présentations.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600&family=Playfair+Display:wght@600;700&display=swap">
+<style>
+:root{--e:#211009;--t:#b85c38;--t2:#d4804a;--c:#fdf0e0;--p:#f5e0c8;--f:#fffaf4;--m:#7a5a45}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font:16px/1.6 'DM Sans',sans-serif;background:var(--f);color:var(--e)}
+h2,h3{font-family:'Playfair Display',serif;margin:0;line-height:1.1}
+.split{position:relative;display:grid;grid-template-columns:1fr 1fr;height:100vh;height:100svh;transition:grid-template-columns .5s ease}
+@media(hover:hover) and (min-width:801px){
+  .split:has(.l:hover){grid-template-columns:1.3fr .7fr}
+  .split:has(.r:hover){grid-template-columns:.7fr 1.3fr}
+}
+.half{position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:center;padding:0 clamp(32px,6vw,110px);text-decoration:none;color:inherit}
+.half:focus-visible{outline:4px solid var(--t2);outline-offset:-4px}
+.l{background:var(--e);color:var(--c)}
+.r{background:var(--p);color:var(--e)}
+.half::before{content:"";position:absolute;width:64vmin;height:64vmin;border-radius:50%;right:-14vmin;bottom:-20vmin;border:2px solid currentColor;opacity:.14;transition:transform .6s ease}
+.half::after{content:"";position:absolute;width:30vmin;height:30vmin;border-radius:50%;right:9vmin;bottom:3vmin;background:currentColor;opacity:.06}
+.half:hover::before{transform:scale(1.12)}
+.half>*{position:relative;z-index:1}
+.half h2{font-size:clamp(2.6rem,5.4vw,5.2rem)}
+.rule{height:3px;width:64px;background:linear-gradient(90deg,var(--t),var(--t2));border-radius:3px;margin:22px 0}
+.half p{max-width:430px;font-size:1.12rem;opacity:.82;margin:0 0 32px}
+.pill{align-self:flex-start;border-radius:99px;padding:12px 28px;font-weight:600;transition:background .2s}
+.l .pill{background:var(--t);color:#fff}.r .pill{background:var(--e);color:var(--c)}
+.half:hover .pill{background:var(--t2);color:var(--e)}
+.hint{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);z-index:3;color:#fff;mix-blend-mode:difference;font-size:.9rem;text-decoration:none}
+.sec{padding:clamp(56px,8vw,110px) clamp(24px,4vw,72px)}
+.sec.p{background:var(--p)}
+.sec h2{font-size:clamp(1.8rem,3vw,2.6rem)}
+.sec .in{color:var(--m);margin:10px 0 30px}
+.rows{display:grid;gap:14px}
+.row{display:flex;align-items:center;gap:24px;padding:22px 30px;border-radius:16px;text-decoration:none;border:1px solid rgba(33,16,9,.12);transition:transform .2s,box-shadow .2s}
+.row:hover{transform:translateX(6px);box-shadow:0 6px 18px rgba(33,16,9,.15)}
+.row:focus-visible{outline:3px solid var(--t2);outline-offset:2px}
+.em{font-size:2rem;min-width:3.2rem;text-align:center}
+.row div{flex:1}.row h3{font-size:1.3rem}
+.row small{display:block;opacity:.82;font-size:.95rem;margin-top:3px}
+.row i{font-style:normal;font-size:1.6rem;opacity:.7}
+.msg{color:var(--m)}
+.ft{background:var(--e);border-top:3px solid var(--t);color:rgba(255,255,255,.6);text-align:center;padding:44px 24px;font-size:.95rem}
+.ft a{color:#f5c4a0;margin:0 14px;text-decoration:none}.ft a:hover{color:#fff;text-decoration:underline}
+.adm{max-width:1100px;margin:26px auto 0}.adm summary{list-style:none;cursor:pointer;font-size:.72rem;color:rgba(255,255,255,.16)}.adm summary:hover{color:rgba(255,255,255,.5)}
+.ft p{margin:14px 0 0;font-size:.85rem;color:rgba(255,255,255,.4)}
+@media(max-width:800px){
+  .split{grid-template-columns:1fr;grid-template-rows:1fr 1fr}
+  .hint{display:none}
+  .half h2{font-size:clamp(2rem,9vw,3rem)}
+  .half p{margin-bottom:20px}
+}
+</style>
+</head>
+<body>
+<main>
+  <div class="split">
+    <a class="half l" href="/">
+      <h2>Cours particuliers</h2><div class="rule"></div>
+      <p>Primaire et secondaire, avec des élèves motivés qui t'aident à comprendre et à réussir.</p>
+      <span class="pill">Réserver un cours</span>
+    </a>
+    <a class="half r" href="/syntheses/">
+      <h2>Synthèses</h2><div class="rule"></div>
+      <p>Des résumés de cours gratuits, en accès libre, classés par matière et par année.</p>
+      <span class="pill">Ouvrir les synthèses</span>
+    </a>
+    <a class="hint" href="#services">Autres services ↓</a>
+  </div>
+
+  <section class="sec" id="services">
+    <h2>Autres services</h2>
+    <p class="in">Des outils pratiques, ouverts à tous.</p>
+    <div class="rows" id="o"><p class="msg">Chargement…</p></div>
+  </section>
+
+  <section class="sec p" id="archives">
+    <h2>Archives de présentations</h2>
+    <p class="in">Des exposés scolaires, gardés ici pour mémoire.</p>
+    <div class="rows" id="a"><p class="msg">Chargement…</p></div>
+  </section>
+</main>
+
+<footer class="ft">
+  <a href="/">Cours particuliers</a><a href="/syntheses/">Synthèses</a>
+  <p>© 2026 Cours particuliers Waterloo · Par des élèves, pour des élèves 🎓</p>
+  <details class="adm"><summary>Administration</summary><div id="adm"></div></details>
+</footer>
+
+<script src="/db.js"></script>
+<script>
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const HEX=/^#[0-9a-f]{6}$/i,url=u=>/^(\/|https?:)/.test(u||'')?u:'#';
+const rows=l=>l.length?l.map(o=>`<a class="row" href="${esc(url(o.lien))}" style="background:${HEX.test(o.couleurFond)?o.couleurFond:'#fdf0e0'};color:${HEX.test(o.couleurTexte)?o.couleurTexte:'#211009'}"><span class="em">${esc(o.emojis)}</span><div><h3>${esc(o.nom)}</h3><small>${esc(o.description)}</small></div><i>›</i></a>`).join(''):'<p class="msg">Rien à afficher pour le moment.</p>';
+document.querySelector('.adm').addEventListener('toggle',function(){
+  if(!this.open||this.dataset.l)return;this.dataset.l=1;
+  const s=document.createElement('script');s.src='/home/admin.js';s.onload=()=>cwAdmin(document.querySelector('#adm'));document.body.append(s);
+});
+loadDB().then(db=>{
+  document.querySelector('#o').innerHTML=rows(db.outils||[]);
+  document.querySelector('#a').innerHTML=rows(db.presentations||[]);
+}).catch(e=>{
+  document.querySelectorAll('.rows').forEach(r=>r.innerHTML=`<p class="msg">${esc(e.message)}</p>`);
+});
+</script>
+</body>
+</html>

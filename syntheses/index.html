@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Synthèses · Cours Waterloo</title>
+<meta name="description" content="Synthèses gratuites en accès libre, faites par des élèves, pour des élèves.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600&family=Playfair+Display:wght@600;700&display=swap">
+<style>
+:root{--e:#211009;--t:#b85c38;--t2:#d4804a;--c:#fdf0e0;--p:#f5e0c8;--f:#fffaf4;--b:#dfc4a0;--m:#7a5a45}
+*{box-sizing:border-box}
+body{margin:0;font:16px/1.5 'DM Sans',sans-serif;background:var(--f);color:var(--e)}
+h1,h2,h3{font-family:'Playfair Display',serif;margin:0;line-height:1.2}
+.hd{position:sticky;top:0;z-index:5;padding:calc(12px + env(safe-area-inset-top)) 20px 12px;background:rgba(255,250,244,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--b)}
+.hd a{font-family:'Playfair Display',serif;font-weight:700;text-decoration:none;color:var(--e)}
+.wrap{width:100%;padding:40px clamp(24px,4vw,72px) 80px}
+.ban{display:block;background:var(--e);color:var(--c);border-radius:16px;padding:64px 56px;margin-bottom:48px;text-decoration:none}
+.ban h1{font-size:clamp(2rem,3.4vw,3rem);max-width:640px}.ban:hover .pill{background:var(--t2)}
+.rule{height:3px;width:56px;background:linear-gradient(90deg,var(--t),var(--t2));border-radius:3px;margin:16px 0}
+.ban p{color:var(--b);max-width:480px;margin:0 0 22px}
+.pill{transition:background .2s;display:inline-block;border-radius:99px;padding:10px 22px;background:var(--t);color:#fff;font-weight:600}
+.in{color:var(--m);margin:6px 0 0}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}
+.chip{border:1px solid var(--b);background:var(--c);border-radius:99px;padding:6px 14px;font:inherit;font-size:.9rem;cursor:pointer;color:var(--e)}
+.chip.on{background:var(--e);color:var(--c);border-color:var(--e)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;align-items:start}
+.card{border-radius:16px;overflow:hidden;transition:box-shadow .2s}.card:hover{box-shadow:0 6px 20px rgba(33,16,9,.18)}
+.hb{all:unset;box-sizing:border-box;display:flex;gap:14px;align-items:center;width:100%;padding:18px;cursor:pointer}
+.hb:focus-visible{outline:3px solid var(--t2);outline-offset:-3px}
+.em{font-size:2rem}.tx{flex:1}.tx h3{font-size:1.2rem}.tx small{opacity:.85}
+.hb i{font-style:normal;transition:transform .2s}.open .hb i{transform:rotate(180deg)}
+.ys{display:flex;gap:6px;flex-wrap:wrap;padding:0 18px 14px}
+.ys span{font-size:.72rem;border:1px solid currentColor;border-radius:99px;padding:1px 9px;opacity:.85}
+.un{display:none;list-style:none;margin:0;padding:0 12px 14px;gap:6px}.open .un{display:grid}
+.un a{display:block;padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.22);text-decoration:none;color:inherit;font-weight:600;font-size:.95rem}
+.un a:hover{background:rgba(255,255,255,.4)}
+.msg{text-align:center;color:var(--m);padding:40px 16px;margin:auto}
+/* player */
+#pl{position:fixed;inset:0;display:none;flex-direction:column;background:var(--f);z-index:10}
+#pl.on{display:flex}
+.bar{display:flex;align-items:center;gap:12px;padding:calc(8px + env(safe-area-inset-top)) calc(14px + env(safe-area-inset-right)) 8px calc(14px + env(safe-area-inset-left));border-bottom:1px solid var(--b)}
+.bar a,.bar button{font:inherit;font-size:.9rem;color:var(--e);text-decoration:none;background:var(--c);border:1px solid var(--b);border-radius:99px;padding:6px 14px;cursor:pointer;white-space:nowrap}
+.tt{flex:1;min-width:0;display:flex;flex-direction:column}
+.tt b,.tt small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tt b{font-family:'Playfair Display',serif}.tt small{color:var(--m)}
+#zm{display:flex;gap:6px}#zm[hidden]{display:none}
+.stage{flex:1;min-height:0;position:relative;background:var(--p)}
+.vw{position:absolute;inset:0;overflow:auto;display:flex;-webkit-overflow-scrolling:touch}
+.vw>.pg{margin:0 auto;width:max-content;min-width:100%;padding:12px;display:flex;flex-direction:column;align-items:center;gap:10px}
+.pg canvas{background:#fff;box-shadow:0 2px 12px rgba(33,16,9,.2)}
+.vw iframe{width:100%;height:100%;border:0;background:#fff}
+.vw video{width:100%;height:100%;background:#000}
+.vw img{max-width:100%;max-height:100%;margin:auto;object-fit:contain}
+.ar{position:absolute;top:50%;transform:translateY(-50%);z-index:2;width:56px;height:56px;border-radius:50%;border:1px solid var(--b);background:rgba(255,250,244,.92);color:var(--e);font-size:2rem;line-height:1;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.ar.l{left:20px}.ar.r{right:20px}.ar:not(:disabled):hover{background:#fff}.ar:disabled{opacity:.3;cursor:default}
+.promo{display:flex;align-items:center;justify-content:center;gap:10px;padding:6px 14px calc(6px + env(safe-area-inset-bottom));background:var(--e);font-size:.82rem;text-align:center}
+.promo[hidden]{display:none}.promo a{color:var(--c);text-decoration:none}
+.promo button{all:unset;cursor:pointer;color:var(--b);padding:2px 8px;font-size:1.2rem}
+#xf{display:none;position:absolute;top:calc(10px + env(safe-area-inset-top));right:10px;z-index:3;border:0;border-radius:50%;width:38px;height:38px;background:rgba(33,16,9,.7);color:#fff;cursor:pointer}
+.fs .bar,.fs .promo{display:none}.fs #xf{display:block}
+</style>
+</head>
+<body>
+<div id="ls">
+  <header class="hd"><a href="/">🎓 Cours Waterloo</a></header>
+  <main class="wrap">
+    <a class="ban" href="/">
+      <h1>Un coup de pouce en plus des synthèses ?</h1><div class="rule"></div>
+      <p>Réserve un cours particulier avec un élève qui est passé par là.</p>
+      <span class="pill">Voir les cours particuliers</span>
+    </a>
+    <h2>Synthèses en accès libre</h2>
+    <p class="in">Choisis une matière, ouvre une unité, puis passe d'un fichier à l'autre avec les flèches.</p>
+    <div id="ch" class="chips"></div>
+    <div id="grid" class="grid"><p class="msg">Chargement…</p></div>
+  </main>
+</div>
+
+<section id="pl">
+  <div class="bar">
+    <a id="bk" href="/syntheses/" data-nav>← Retour</a>
+    <div class="tt"><b id="pt"></b><small id="ps"></small></div>
+    <span id="zm" hidden><button data-z="-1" aria-label="Dézoomer">−</button><button data-z="1" aria-label="Zoomer">+</button></span>
+    <button id="fb" aria-label="Plein écran">Plein écran</button>
+  </div>
+  <div class="stage">
+    <div id="vw" class="vw"></div>
+    <button class="ar l" id="pv" aria-label="Fichier précédent">‹</button>
+    <button class="ar r" id="nx" aria-label="Fichier suivant">›</button>
+    <button id="xf" aria-label="Quitter le plein écran">✕</button>
+  </div>
+  <div id="promo" class="promo"><a href="/">🎓 Envie d'un coup de pouce ? Réserve une séance de cours particulier avec l'étudiant qui a créé cette synthèse.</a><button id="xp" aria-label="Fermer">×</button></div>
+</section>
+
+<script src="/db.js"></script>
+<script>
+const $=s=>$d.querySelector(s),$d=document;
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const HEX=/^#[0-9a-f]{6}$/i,col=m=>HEX.test(m.couleur)?m.couleur:'#b85c38';
+const lum=h=>{const n=parseInt(h.slice(1),16),f=v=>(v/=255)<=.03928?v/12.92:((v+.055)/1.055)**2.4;return .2126*f(n>>16)+.7152*f(n>>8&255)+.0722*f(n&255)};
+const ink=h=>lum(h)>.4?'#211009':'#fffaf4';
+const ttl=f=>f.replace(/\.[^.]+$/,'').replace(/^\d+[\s_.-]*/,'').replace(/_/g,' ')||f;
+let S={annees:[],matieres:[]},M={},F=[],X,I=0,Z=1,ZR,tok=0,DK=0,fy='',lw=0,D,zmin=.2;
+
+function drawList(){
+  const ms=(S.matieres||[]).filter(m=>(m.unites||[]).some(u=>u.statut==='visible'));
+  const ys=(S.annees||[]).filter(a=>ms.some(m=>(m.annees||[]).includes(a)));
+  $('#ch').innerHTML=ys.length>1?['',...ys].map(a=>`<button class="chip${a===fy?' on':''}" data-y="${esc(a)}">${a?esc(a):'Toutes'}</button>`).join(''):'';
+  const sh=ms.filter(m=>!fy||(m.annees||[]).includes(fy));
+  $('#grid').innerHTML=sh.length?sh.map(m=>{const c=col(m);return `<article class="card" style="background:${c};color:${ink(c)}"><button class="hb" aria-expanded="false"><span class="em">${esc(m.emoji)}</span><span class="tx"><h3>${esc(m.titre)}</h3><small>${esc(m.sousTitre)}</small></span><i>▾</i></button><div class="ys">${(m.annees||[]).map(a=>`<span>${esc(a)}</span>`).join('')}</div><ul class="un">${(m.unites||[]).filter(u=>u.statut==='visible').map(u=>`<li><a data-nav href="/syntheses/?u=${encodeURIComponent(u.id)}">${esc(u.titre)}</a></li>`).join('')}</ul></article>`}).join(''):'<p class="msg">Les premières synthèses arrivent bientôt.</p>';
+}
+
+function route(){
+  const p=new URLSearchParams(location.search),u=p.get('u');
+  fs(false);$('#ls').hidden=!!u;$('#pl').classList.toggle('on',!!u);
+  if(!u){document.title='Synthèses · Cours Waterloo';return}
+  let m;X=null;
+  for(const a of S.matieres||[])for(const x of a.unites||[])if(x.id===u&&x.statut==='visible'){m=a;X=x}
+  $('#pt').textContent=X?X.titre:'Synthèse introuvable';
+  $('#ps').textContent=m?m.titre+(m.sousTitre?' · '+m.sousTitre:''):'';
+  document.title=(X?X.titre:'Synthèses')+' · Cours Waterloo';
+  F=X?M[X.dossier]||[]:[];I=0;++tok;
+  if(!F.length){$('#vw').innerHTML=`<p class="msg">${X?'Les fichiers de cette synthèse arrivent bientôt.':'Cette synthèse n\'existe pas ou n\'est plus disponible.'}</p>`;ctl();return}
+  show(Math.min(Math.max(+p.get('f')||0,0),F.length-1));
+}
+
+function ctl(){
+  $('#zm').hidden=!/\.(pdf|png|jpe?g|webp)$/i.test(F[I]||'');
+  $('#pv').hidden=$('#nx').hidden=F.length<2;
+  $('#pv').disabled=I<1;$('#nx').disabled=I>=F.length-1;
+}
+const go=i=>{if(i>=0&&i<F.length)show(i)};
+
+async function show(i){
+  I=i;Z=1;ZR=null;const t=++tok,f=F[i],v=$('#vw'),e=f.split('.').pop().toLowerCase();
+  const src=`/syntheses/content/${encodeURIComponent(X.dossier)}/${encodeURIComponent(f)}`;
+  history.replaceState(0,'',`/syntheses/?u=${encodeURIComponent(X.id)}&f=${i}`);
+  zmin=e==='pdf'?.2:1;ctl();v.innerHTML='';v.scrollTo(0,0);
+  if(e==='pdf')return pdf(src,v,t);
+  if(e==='mp4')v.innerHTML=`<video src="${src}" controls playsinline></video>`;
+  else if(e==='txt'){
+    try{
+      const x=(await(await fetch(src)).text()).match(/(?:v=|youtu\.be\/|embed\/|shorts\/)([\w-]{11})/);
+      if(t!==tok)return;
+      v.innerHTML=x?`<iframe src="https://www.youtube-nocookie.com/embed/${x[1]}?rel=0" allow="fullscreen;picture-in-picture;encrypted-media"></iframe>`:'<p class="msg">Lien vidéo invalide : colle une adresse YouTube dans le fichier texte.</p>';
+    }catch{v.innerHTML='<p class="msg">Vidéo indisponible.</p>'}
+  }else{
+    v.innerHTML=`<img src="${src}" alt="${esc(ttl(f))}">`;
+    const im=v.firstChild;
+    ZR=()=>{lw=v.clientWidth;im.style.cssText='';const bw=im.clientWidth;if(Z>1)im.style.cssText=`width:${bw*Z}px;max-width:none;max-height:none`};
+    im.onload=ZR;
+  }
+}
+
+async function pdf(src,v,t){
+  try{
+    const L=await import('/syntheses/vendor/pdfjs/pdf.mjs');
+    L.GlobalWorkerOptions.workerSrc='/syntheses/vendor/pdfjs/pdf.worker.mjs';
+    const d=await L.getDocument({url:src}).promise;if(t!==tok)return;
+    const box=$d.createElement('div');box.className='pg';v.append(box);
+    ZR=async()=>{
+      const k=++DK;box.innerHTML='';lw=v.clientWidth;const w=(lw-24)*Z,r=devicePixelRatio||1;
+      for(let n=1;n<=d.numPages;n++){
+        const pg=await d.getPage(n);if(t!==tok||k!==DK)return;
+        const vp=pg.getViewport({scale:w/pg.getViewport({scale:1}).width*r}),c=$d.createElement('canvas');
+        c.width=vp.width;c.height=vp.height;c.style.width=vp.width/r+'px';box.append(c);
+        await pg.render({canvas:c,canvasContext:c.getContext('2d'),viewport:vp}).promise;
+      }
+    };
+    const z0=ZR;ZR=()=>z0().catch(e=>console.error('Rendu PDF :',e));ZR();
+  }catch(err){console.error('PDF.js indisponible, lecteur du navigateur utilisé :',err);v.innerHTML=`<iframe src="${src}"></iframe>`}
+}
+
+function fs(on){
+  const p=$('#pl');p.classList.toggle('fs',on);
+  if(on&&p.requestFullscreen)p.requestFullscreen().catch(()=>{});
+  else if(!on&&$d.fullscreenElement)$d.exitFullscreen().catch(()=>{});
+}
+
+$d.addEventListener('click',e=>{
+  const t=e.target,a=t.closest('a[data-nav]');
+  if(a){e.preventDefault();history.pushState(0,'',a.href);route();scrollTo(0,0);return}
+  const y=t.closest('[data-y]');if(y){fy=y.dataset.y;drawList();return}
+  const h=t.closest('.hb');if(h){h.setAttribute('aria-expanded',h.parentElement.classList.toggle('open'));return}
+});
+$d.querySelectorAll('[data-z]').forEach(b=>b.onclick=()=>{Z=Math.min(4,Math.max(zmin,Z+b.dataset.z*.25));ZR&&ZR()});
+$('#pv').onclick=()=>go(I-1);$('#nx').onclick=()=>go(I+1);
+$('#fb').onclick=()=>fs(true);$('#xf').onclick=()=>fs(false);
+$('#xp').onclick=()=>$('#promo').hidden=true;
+$d.addEventListener('fullscreenchange',()=>{if(!$d.fullscreenElement)$('#pl').classList.remove('fs')});
+addEventListener('keydown',e=>{
+  if(!$('#pl').classList.contains('on'))return;
+  if(e.key==='ArrowLeft')go(I-1);if(e.key==='ArrowRight')go(I+1);if(e.key==='Escape')fs(false);
+});
+let sx,sy,rt;
+$('.stage').addEventListener('touchstart',e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY},{passive:true});
+$('.stage').addEventListener('touchend',e=>{
+  if(e.target.closest('video'))return;
+  const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;
+  if(Math.abs(dx)>80&&Math.abs(dy)<40&&Z<=1)go(I+(dx<0?1:-1));
+},{passive:true});
+addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{if(ZR&&$('#vw').clientWidth!==lw)ZR()},250)});
+addEventListener('popstate',route);
+
+(async()=>{
+  try{
+    [D,M]=await Promise.all([loadDB(),fetch('/syntheses/content/manifest.json').then(r=>r.ok?r.json():{}).catch(()=>({}))]);
+    S=Object.assign({annees:[],matieres:[]},D.syntheses);
+  }catch(e){$('#grid').innerHTML=`<p class="msg">${esc(e.message)}</p>`;return}
+  drawList();route();
+})();
+</script>
+</body>
+</html>
