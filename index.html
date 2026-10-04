@@ -5,7 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cours particuliers &ndash; Waterloo &ndash; Par des &eacute;l&egrave;ves pour des &eacute;l&egrave;ves</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🎓</text></svg>">
+  <link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <style>
     /* =====================================================
        PALETTE
@@ -70,6 +72,7 @@
     .hero-note { display: flex; width: fit-content; max-width: 100%; align-items: center; gap: 8px; margin: 0 0 .9rem; padding: 10px 24px; border-radius: 99px; background: rgba(255,255,255,.1); border: 1px solid rgba(212,128,74,.7); color: #fff; font-size: .95rem; font-weight: 500; text-decoration: none; transition: background .2s, border-color .2s; }
     .hero-note:hover { background: var(--terra); border-color: var(--terra); }
     .footer-more { margin-top: 16px; }
+    .footer-zone { max-width: 780px; margin: 14px auto 0; font-size: .72rem; line-height: 1.8; color: rgba(255,255,255,.32); }
     .footer-more a { color: rgba(255,255,255,.6); font-size: .92rem; text-decoration: underline; text-underline-offset: 3px; transition: color .2s; }
     .footer-more a:hover { color: #fff; }
 
@@ -199,6 +202,12 @@
     }
     .profile-meta { margin: 1rem 0; list-style: none; }
     .profile-meta li { display: flex; align-items: flex-start; gap: 9px; font-size: .92rem; color: var(--muted); margin-bottom: 7px; }
+    .bonus { margin-top: 1.1rem; padding-top: 1rem; border-top: 1px dashed var(--border); }
+    .bonus-title { font-size: .72rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--terra); margin-bottom: .6rem; }
+    .bonus-list { list-style: none; margin: 0; padding: 0; }
+    .bonus-list li { display: flex; align-items: baseline; gap: 12px; font-size: .88rem; color: var(--muted); margin-bottom: 6px; }
+    .bonus-list b { flex: 0 0 2.6rem; font-family: 'Playfair Display', serif; font-size: .95rem; color: var(--bark); }
+    .bonus-list em { font-style: normal; font-weight: 600; color: var(--terra); margin-left: 6px; }
     .dot { color: var(--terra); font-weight: 700; margin-top: 1px; }
 
     /* SERVICE CARDS */
@@ -371,6 +380,15 @@
           <li><span class="dot">&#9658;</span>Style&nbsp;: p&eacute;dagogue, patient, adaptatif</li>
           <li><span class="dot">&#9658;</span>Cours chez lui <em>ou</em> chez vous (Waterloo)</li>
         </ul>
+        <div class="bonus">
+          <div class="bonus-title">Palmar&egrave;s &middot; Olympiades belges</div>
+          <ul class="bonus-list">
+          <li><b>2023</b><span>Olympiade math&eacute;matique (cat. mini)<em>Finaliste, 4<sup>e</sup> prix</em></span></li>
+          <li><b>2026</b><span>Olympiade de Chimie<em>Finaliste, 27<sup>e</sup> place</em></span></li>
+          <li><b>2026</b><span>Olympiade de Physique<em>Laur&eacute;at, 8<sup>e</sup> place</em></span></li>
+          <li><b>2026</b><span>Olympiade de Biologie<em>Laur&eacute;at, 6<sup>e</sup> place</em></span></li>
+          </ul>
+        </div>
         <div style="margin-top:1rem;">
           <span class="tag">&#128205; Waterloo</span>
           <span class="tag">&#127968; Chez lui</span>
@@ -396,6 +414,14 @@
           <li><span class="dot">&#9658;</span>Style&nbsp;: clair, structur&eacute;, m&eacute;thodique</li>
           <li><span class="dot">&#9658;</span>Cours uniquement chez lui</li>
         </ul>
+        <div class="bonus">
+          <div class="bonus-title">Atouts &middot; Parcours</div>
+          <ul class="bonus-list">
+          <li><b>&#10022;</b><span>Aide dans son &eacute;cole<em>Pilier</em></span></li>
+          <li><b>&#10022;</b><span>Accompagnement des &eacute;l&egrave;ves<em>Grande exp&eacute;rience</em></span></li>
+          <li><b>&#10022;</b><span>Cr&eacute;ation d'outils sur mesure pour votre apprentissage<em>Ma&icirc;trise exceptionnelle</em></span></li>
+          </ul>
+        </div>
         <div style="margin-top:1rem;">
           <span class="tag">&#128205; Waterloo / Linkebeek</span>
           <span class="tag">&#127968; Chez lui uniquement</span>
@@ -651,6 +677,7 @@
   <p class="footer-main">&copy; 2026 Cours particuliers Waterloo &mdash; <span>Damien &amp; Mathieu</span> &middot; 6<sup>e</sup> secondaire</p>
   <p class="footer-sub">Par des &eacute;l&egrave;ves, pour des &eacute;l&egrave;ves &#x1F393;</p>
   <p class="footer-more"><a href="/home">Tous les services</a></p>
+  <p class="footer-zone">Cours particuliers par des &eacute;l&egrave;ves, pour des &eacute;l&egrave;ves &middot; Prix r&eacute;duits &middot; Waterloo et alentours&nbsp;: Braine-l'Alleud &middot; Lasne &middot; Ohain &middot; Ransbeke &middot; La Hulpe &middot; Rixensart &middot; Genval &middot; Couture-Saint-Germain &middot; Rhode-Saint-Gen&egrave;se &middot; Uccle (Fort Jaco) &middot; Uccle (Vivier d'Oie) &middot; Boitsfort &middot; Auderghem &middot; Ixelles (La Cambre)</p>
 </footer>
 
 <script src="/db.js"></script>

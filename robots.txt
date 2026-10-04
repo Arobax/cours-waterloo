@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Disallow: /account-manager/
+Disallow: /arctique/
+Disallow: /extension-du-feminin/
+Disallow: /nucleaire/
+Disallow: /sable/
+Disallow: /videoclub/
+Disallow: /www.flandria-nieuws.be/
+
+Sitemap: https://cours-waterloo.be/sitemap.xml
