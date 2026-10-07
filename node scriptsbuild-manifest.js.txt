@@ -1,1 +1,1 @@
-node scriptsbuild-manifest.js
+node scripts/build-manifest.js
