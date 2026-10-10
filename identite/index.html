@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Identité : qu'est-ce qui nous définit ?</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🪪</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,800;1,9..144,500&family=Manrope:wght@500;700&display=swap" rel="stylesheet">
+<!--
+STORYBOARD (une idée par slide)
+1 Titre | 2 Autrice | 3 Thèse + plan
+4 La carte d'identité (9 critères) et l'enquête
+5 Ce qui est donné (corps, origines, milieu)
+6 Ce qui est choisi, et la mosaïque
+7 Les autres en nous (Freud, Lacan, oignon)
+8 Quand l'identité devient un mur
+9 Une passerelle (dialogue, doute, temps)
+10 L'identité se raconte (récit, indicible)
+11 Approfondissement : effacer l'identité (Springora)
+12 Approfondissement : la carte devenue arme (recherches)
+13 Approfondissement : Arendt, Eco et une nuance
+14 Positionnement du groupe
+15 Question pour le débat
+DA : "Carte d'identité" - nuit bleutée, ambre, turquoise. Signature : petites cartes qui dérivent.
+-->
+<style>
+:root{
+  --bg:#0f1220; --panel:#1a1f36; --a1:#f2c14e; --a2:#5ad1c8; --warn:#ff7b72; --txt:#f4f1ea; --muted:#bcc4da;
+  --ease-out:cubic-bezier(.22,1,.36,1); --ease-in:cubic-bezier(.55,0,1,.45); --ease-bounce:cubic-bezier(.34,1.56,.64,1);
+  --t-enter:.75s; --t-exit:.60s; --t-overlap:.14s; --lead:.20s;
+  --dir:1; --tdir:1; --speed:1;
+}
+.slide.back{--dir:-1;--speed:.75}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--txt);font-family:'Manrope',system-ui,sans-serif}
+#bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.2}
+#deck{position:relative;z-index:1;width:100vw;height:100vh;overflow:hidden;perspective:1800px}
+.slide{position:absolute;inset:0;z-index:0;isolation:isolate;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:2.4vh;padding:5vh 7vw;opacity:0;pointer-events:none;background:transparent}
+.slide::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:var(--slide-bg,none)}
+.slide.active{opacity:1;pointer-events:all}
+#s1{--slide-bg:radial-gradient(ellipse at 25% 60%,#27204a 0%,transparent 70%)}
+#s11,#s12,#s13{--slide-bg:radial-gradient(ellipse at 80% 30%,#3a1c2e 0%,transparent 65%)}
+#s15{--slide-bg:radial-gradient(ellipse at 50% 50%,#12353a 0%,transparent 70%)}
+.badge{display:inline-block;border:1.5px solid var(--a1);color:var(--a1);border-radius:99px;padding:.6vh 1.4vw;font-weight:700;font-size:clamp(.95rem,1.15vw,1.3rem);letter-spacing:.18em;text-transform:uppercase}
+.badge.red{border-color:var(--warn);color:var(--warn)}
+.title{font-family:'Fraunces',serif;font-weight:800;font-size:clamp(2.2rem,4.3vw,5rem);line-height:1.08;letter-spacing:-.02em;max-width:84vw}
+.display{font-family:'Fraunces',serif;font-weight:800;font-size:clamp(3rem,7vw,8.5rem);line-height:1.02;letter-spacing:-.03em;max-width:84vw;animation:glow 4s ease-in-out infinite}
+@keyframes glow{0%,100%{text-shadow:0 0 20px rgba(242,193,78,.2)}50%{text-shadow:0 0 50px rgba(242,193,78,.5)}}
+.sub{font-size:clamp(1.3rem,2vw,2.3rem);color:var(--muted);max-width:80vw;line-height:1.4}
+.divider{width:8vw;height:4px;background:linear-gradient(90deg,var(--a1),var(--a2));border-radius:3px}
+.row{display:flex;gap:1.8vw;width:100%}
+.card{flex:1;padding:2.6vh 1.7vw;background:rgba(26,31,54,.88);border:1px solid rgba(244,241,234,.16);border-radius:16px;font-size:clamp(1.1rem,1.55vw,1.8rem);line-height:1.4;backdrop-filter:blur(6px)}
+.card b{display:block;font-family:'Fraunces',serif;color:var(--a1);font-size:1.25em;line-height:1.15;margin-bottom:.8vh}
+.card.t b{color:var(--a2)} .card.r b{color:var(--warn)}
+.card small{display:block;color:var(--muted);font-size:.8em;margin-top:.8vh}
+.big{font-family:'Fraunces',serif;font-weight:800;font-size:clamp(5rem,13vw,14rem);line-height:.95;color:var(--a1)}
+.big.t{color:var(--a2)}
+.quote{border-left:6px solid var(--a1);padding-left:2vw;font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:clamp(1.8rem,3.2vw,3.6rem);line-height:1.25;max-width:84vw}
+.note{font-size:clamp(1.1rem,1.4vw,1.5rem);color:var(--muted);max-width:84vw}
+.tags{display:flex;gap:1.2vw;flex-wrap:wrap}
+.tag{padding:.8vh 1.4vw;border-radius:99px;background:rgba(90,209,200,.14);border:1px solid var(--a2);color:var(--a2);font-weight:700;font-size:clamp(1.1rem,1.5vw,1.7rem)}
+.tag.a{background:rgba(242,193,78,.14);border-color:var(--a1);color:var(--a1)}
+.split{display:flex;gap:4vw;align-items:center;width:100%}
+.split>*{flex:1}
+/* raccord */
+@keyframes slideIn{
+ 0%{opacity:0;transform:translateX(calc(var(--tdir)*9vw)) rotateY(calc(var(--tdir)*-10deg)) scale(.94);filter:blur(6px);animation-timing-function:cubic-bezier(.2,.9,.3,1)}
+ 50%{opacity:1;transform:translateX(calc(var(--tdir)*-1.4vw)) rotateY(calc(var(--tdir)*1.6deg)) scale(1.012);filter:blur(0);animation-timing-function:ease-in-out}
+ 75%{transform:translateX(calc(var(--tdir)*.5vw)) rotateY(calc(var(--tdir)*-.4deg)) scale(.997);animation-timing-function:ease-in-out}
+ 100%{opacity:1;transform:none;filter:blur(0)}}
+@keyframes slideOut{
+ 0%{opacity:1;transform:none;filter:blur(0);animation-timing-function:ease-out}
+ 18%{opacity:1;transform:translateX(calc(var(--tdir)*1.2vw)) scale(1.012);animation-timing-function:cubic-bezier(.55,0,1,.45)}
+ 100%{opacity:0;transform:translateX(calc(var(--tdir)*-9vw)) rotateY(calc(var(--tdir)*9deg)) scale(.94);filter:blur(5px)}}
+.slide.entering{z-index:2;will-change:transform,opacity,filter;animation:slideIn var(--t-enter) linear var(--t-overlap) both}
+.slide.leaving{z-index:1;will-change:transform,opacity,filter;pointer-events:none;animation:slideOut var(--t-exit) linear both}
+@keyframes nudge{0%{transform:none;animation-timing-function:cubic-bezier(.2,.9,.3,1)}30%{transform:translateX(calc(var(--tdir)*-2.4vw)) rotateY(calc(var(--tdir)*3deg));animation-timing-function:ease-in-out}62%{transform:translateX(calc(var(--tdir)*.8vw));animation-timing-function:ease-in-out}100%{transform:none}}
+.slide.nudge{animation:nudge .6s linear both}
+/* éléments */
+@keyframes stampIn{0%{opacity:0;transform:scale(1.7) rotate(calc(var(--dir)*-6deg));filter:blur(3px);animation-timing-function:cubic-bezier(.2,.9,.3,1)}45%{opacity:1;transform:scale(.9) rotate(calc(var(--dir)*1.5deg));filter:blur(0);animation-timing-function:ease-in-out}70%{transform:scale(1.06) rotate(calc(var(--dir)*-.5deg));animation-timing-function:ease-in-out}100%{opacity:1;transform:none;filter:blur(0)}}
+@keyframes smashDown{0%{opacity:0;transform:translateY(calc(var(--dir)*-70px)) scale(1.06);animation-timing-function:cubic-bezier(.5,0,.9,.6)}50%{opacity:1;transform:translateY(calc(var(--dir)*12px)) scale(.985);animation-timing-function:ease-out}72%{transform:translateY(calc(var(--dir)*-5px)) scale(1.004);animation-timing-function:ease-in-out}100%{opacity:1;transform:none}}
+@keyframes slideInLeft{0%{opacity:0;transform:translateX(calc(var(--dir)*-70px)) skewX(calc(var(--dir)*6deg));animation-timing-function:cubic-bezier(.2,.8,.3,1)}55%{opacity:1;transform:translateX(calc(var(--dir)*10px)) skewX(calc(var(--dir)*-2deg));animation-timing-function:ease-in-out}80%{transform:translateX(calc(var(--dir)*-3px)) skewX(0);animation-timing-function:ease-in-out}100%{opacity:1;transform:none}}
+@keyframes smashUp{0%{opacity:0;transform:translateY(calc(var(--dir)*70px)) scale(.94);animation-timing-function:cubic-bezier(.2,.9,.3,1)}55%{opacity:1;transform:translateY(calc(var(--dir)*-10px)) scale(1.02);animation-timing-function:ease-in-out}78%{transform:translateY(calc(var(--dir)*3px)) scale(.998);animation-timing-function:ease-in-out}100%{opacity:1;transform:none}}
+@keyframes rulerGrow{0%{opacity:.6;transform:scaleX(0);animation-timing-function:cubic-bezier(.2,.9,.3,1)}60%{opacity:1;transform:scaleX(1.18);animation-timing-function:ease-in-out}80%{transform:scaleX(.96);animation-timing-function:ease-in-out}100%{opacity:1;transform:scaleX(1)}}
+@keyframes glitchIn{0%{opacity:0;transform:translateX(-8px);filter:saturate(3) blur(2px)}20%{opacity:1;transform:translateX(5px);filter:saturate(0) blur(0)}40%{transform:translateX(-3px);filter:saturate(2)}60%{transform:translateX(1.5px);filter:saturate(1)}80%{transform:translateX(-.5px)}100%{opacity:1;transform:none;filter:saturate(1) blur(0)}}
+@keyframes popBounce{0%{opacity:0;transform:scale(.4) rotate(calc(var(--dir)*-8deg));animation-timing-function:cubic-bezier(.2,.9,.3,1)}45%{opacity:1;transform:scale(1.2) rotate(calc(var(--dir)*2deg));animation-timing-function:ease-in-out}65%{transform:scale(.92) rotate(calc(var(--dir)*-1deg));animation-timing-function:ease-in-out}82%{transform:scale(1.05) rotate(0);animation-timing-function:ease-in-out}100%{opacity:1;transform:none}}
+.anim-1{--d:0s}.anim-2{--d:.10s}.anim-3{--d:.22s}.anim-4{--d:.34s}.anim-5{--d:.48s}.anim-6{--d:.62s}
+.slide.anim [class*="anim-"],.slide.anim .stagger>*,.slide.anim .split-words{--delay:calc(var(--lead) + var(--d,0s)*var(--speed))}
+.slide.anim .anim-1{animation:stampIn .75s linear var(--delay) both}
+.slide.anim .anim-2{animation:smashDown .85s linear var(--delay) both}
+.slide.anim .divider.anim-3{animation:rulerGrow .7s linear var(--delay) both}
+.slide.anim .anim-3:not(.divider){animation:slideInLeft .8s linear var(--delay) both}
+.slide.anim .anim-4{animation:smashUp .85s linear var(--delay) both}
+.slide.anim .anim-5{animation:glitchIn .6s linear var(--delay) both}
+.slide.anim .anim-6{animation:popBounce .85s linear var(--delay) both}
+.slide.anim .display.anim-2{animation:smashDown .85s linear var(--delay) both,glow 4s ease-in-out 1.2s infinite}
+.divider{transform-origin:left}.slide.back .divider{transform-origin:right}
+.stagger>*{--d:calc(var(--s0,.34s) + var(--i,0)*.11s)}
+.slide.anim .stagger>*{animation:smashUp .85s linear var(--delay) both}
+.slide.anim .stagger.left>*{animation:slideInLeft .8s linear var(--delay) both}
+#progress{position:fixed;right:2vw;bottom:2.2vh;z-index:5;font-size:clamp(1rem,1.2vw,1.3rem);color:var(--muted);font-weight:700;transform-origin:right center}
+#progress.bump #cur{display:inline-block;animation:popBounce .55s linear both}
+#progbar{position:fixed;left:0;bottom:0;height:4px;width:0;z-index:5;background:linear-gradient(90deg,var(--a1),var(--a2));transition:width .8s cubic-bezier(.34,1.56,.64,1)}
+@keyframes softIn{from{opacity:0}to{opacity:1}}
+@keyframes softOut{from{opacity:1}to{opacity:0}}
+@media (prefers-reduced-motion:reduce){
+ .slide.entering{animation:softIn .4s ease var(--t-overlap) both}
+ .slide.leaving{animation:softOut .3s ease both}
+ .slide.nudge{animation:none}
+ .slide.anim [class*="anim-"],.slide.anim .stagger>*,.slide.anim .split-words .w>span{animation:softIn .4s ease var(--delay,0s) both!important}
+ #bg-canvas{display:none}}
+.split-words{--d:.10s}.split-words .w{display:inline-block}.split-words .w>span{display:inline-block}
+.slide.anim .split-words .w>span{animation:smashDown .85s linear calc(var(--delay) + var(--i)*.07s) both}
+</style>
+</head>
+<body>
+<canvas id="bg-canvas"></canvas>
+<div id="deck">
+
+<div class="slide" id="s1">
+  <span class="badge anim-1">Lire un essai</span>
+  <div class="display anim-2">Identité : qu'est-ce qui nous définit ?</div>
+  <div class="divider anim-3"></div>
+  <div class="sub anim-4">Vanessa Springora · collection ALT</div>
+</div>
+
+<div class="slide" id="s2">
+  <span class="badge anim-1">L'autrice</span>
+  <div class="title anim-2">Vanessa Springora</div>
+  <div class="divider anim-3"></div>
+  <div class="row stagger" style="--s0:.34s">
+    <div class="card"><b>Née en 1972</b>à Paris</div>
+    <div class="card t"><b>Écrivaine et éditrice</b>Le monde du livre de l'intérieur</div>
+    <div class="card"><b>Le Consentement (2020)</b>Récit autobiographique qui a fait date</div>
+    <div class="card t"><b>Ici</b>Un essai court, personnel, à la première personne</div>
+  </div>
+</div>
+
+<div class="slide" id="s3">
+  <span class="badge anim-1">La thèse</span>
+  <div class="quote anim-2">L'identité n'est pas une fiche ni un bloc : c'est une mosaïque en mouvement, qui se raconte et se construit avec les autres.</div>
+  <div class="tags stagger" style="--s0:.34s"><span class="tag">Plurielle</span><span class="tag a">Relationnelle</span><span class="tag">Mouvante</span><span class="tag a">Narrative</span></div>
+  <div class="note anim-5">Notre fil : la fiche → le donné et le choisi → les autres → murs ou passerelles → le récit</div>
+</div>
+
+<div class="slide" id="s4">
+  <span class="badge anim-1">Point de départ</span>
+  <div class="title anim-2">La carte d'identité dit-elle qui nous sommes ?</div>
+  <div class="split">
+    <div class="anim-4"><div class="big" data-count="9">9</div><div class="note">critères sur la carte d'identité : nationalité, nom, prénoms, sexe, naissance, taille, photo, adresse</div></div>
+    <div class="anim-4"><div class="big t" data-count="11">11</div><div class="note">proches à qui elle demande de se définir en 9 points, à leur façon</div></div>
+  </div>
+  <div class="quote anim-6" style="font-size:clamp(1.5rem,2.4vw,2.8rem)">Identité juridique : elle atteste notre existence, elle ne dit pas grand-chose de nous.</div>
+</div>
+
+<div class="slide" id="s5">
+  <span class="badge anim-1">Ce qui nous est donné</span>
+  <div class="title anim-2">Une part de nous, on ne l'a pas choisie</div>
+  <div class="row stagger" style="--s0:.34s">
+    <div class="card"><b>Le corps</b>ADN, sexe biologique, couleur de peau<small>"Brune bouclée, grand nez"</small></div>
+    <div class="card t"><b>Les origines</b>Un territoire, une culture<small>À l'étranger, l'autrice devient "la Française"</small></div>
+    <div class="card"><b>Le milieu</b>Classe sociale, valeurs, politique<small>"Fille et petite-fille de communiste"</small></div>
+  </div>
+  <div class="note anim-5">Les jumeaux monozygotes : même ADN, vies différentes. L'expérience fabrique des personnes.</div>
+</div>
+
+<div class="slide" id="s6">
+  <span class="badge anim-1">Choisi, flou, mélangé</span>
+  <div class="title anim-2">Une mosaïque plutôt qu'un monolithe</div>
+  <div class="row stagger" style="--s0:.34s">
+    <div class="card t"><b>Choisi</b>Goûts, convictions, métier<small>artiste, comédien, "de gauche", pacifiste</small></div>
+    <div class="card"><b>Impossible à trancher</b>Inné ou acquis ?<small>santé mentale, addictions, orientation sexuelle</small></div>
+    <div class="card t"><b>Plusieurs à la fois</b>"Parisienne de l'Atlantique", métis<small>Sébastien : "une somme d'influences"</small></div>
+  </div>
+  <div class="note anim-5">Le "soi" sert à relier ces morceaux pour leur donner un semblant d'unité.</div>
+</div>
+
+<div class="slide" id="s7">
+  <span class="badge anim-1">Les autres en nous</span>
+  <div class="title anim-2">"Je est un autre"</div>
+  <div class="row stagger" style="--s0:.34s">
+    <div class="card"><b>Le regard des autres</b>Mère, amie, "élu de ma chérie"<small>On se définit par ses liens</small></div>
+    <div class="card t"><b>Freud</b>Un enfant souvent traité d'idiot par ses parents<small>Il se croira idiot une fois adulte, sans s'en souvenir</small></div>
+    <div class="card"><b>Lacan : l'oignon</b>Des couches, pas de noyau<small>Pas d'identité "première", intacte</small></div>
+  </div>
+</div>
+
+<div class="slide" id="s8">
+  <span class="badge red anim-1">Quand l'identité se referme</span>
+  <div class="title anim-2">L'identité peut devenir un mur</div>
+  <div class="row stagger" style="--s0:.34s">
+    <div class="card r"><b>Le stigmate</b>Un nom, un handicap, une couleur de peau comme cibles</div>
+    <div class="card r"><b>Le repli</b>"Identité nationale" fantasmée : l'histoire montre des peuples toujours mêlés</div>
+    <div class="card r"><b>La réduction</b>Un matricule, un chiffre sur Excel, un "identifiant"</div>
+  </div>
+  <div class="quote anim-6" style="font-size:clamp(1.5rem,2.4vw,2.8rem)">"Je suis un être humain" : la première définition.</div>
+</div>
+
+<div class="slide" id="s9">
+  <span class="badge anim-1">Ouvrir l'identité</span>
+  <div class="title anim-2">Une passerelle, pas une forteresse</div>
+  <div class="row stagger" style="--s0:.34s">
+    <div class="card t"><b>Dialoguer</b>Écouter sans adopter : la démocratie fait coexister des identités multiples</div>
+    <div class="card"><b>Douter, être curieux</b>Justine, Anne : rester "vivantes"</div>
+    <div class="card t"><b>Évoluer</b>Barnaby "non-fumeur", Anouck "en ce moment"<small>Identité fluide, vaporeuse : comme les nuages, toujours en mouvement</small></div>
+  </div>
+</div>
+
+<div class="slide" id="s10">
+  <span class="badge anim-1">Dernier mouvement</span>
+  <div class="title anim-2">Une identité, ça se raconte</div>
+  <div class="row stagger" style="--s0:.34s">
+    <div class="card"><b>Auteur</b>Autonomie, autorité, authenticité : "nommer par soi-même"</div>
+    <div class="card t"><b>Des registres variés</b>Administratif, affectif, poétique<small>Benjamin : une seule phrase continue</small></div>
+    <div class="card"><b>Un horizon</b>Impossible à définir, elle nous échappe toujours</div>
+  </div>
+  <div class="note anim-5">Elle résiste "à l'enclos du langage".</div>
+</div>
+
+<div class="slide" id="s11">
+  <span class="badge red anim-1">Approfondissement · le fascisme</span>
+  <div class="title anim-2">"Effacer l'identité de son semblable est l'essence même du fascisme"</div>
+  <div class="row stagger" style="--s0:.34s">
+    <div class="card r"><b>Le Prisonnier</b>"Je ne suis pas un numéro"</div>
+    <div class="card r"><b>Les déportés</b>Réduits à un matricule tatoué</div>
+    <div class="card r"><b>Kafka</b>K., sans nom, plus facile à condamner</div>
+    <div class="card r"><b>Un peuple</b>Arraché à sa terre, privé de son histoire</div>
+  </div>
+</div>
+
+<div class="slide" id="s12">
+  <span class="badge red anim-1">Nos recherches (1/2)</span>
+  <div class="title anim-2">Quand la carte d'identité devient une arme</div>
+  <div class="row stagger" style="--s0:.34s">
+    <div class="card r"><b>1938, Allemagne nazie</b>Tampon "J" sur les passeports, prénoms imposés "Israël" et "Sara"</div>
+    <div class="card r"><b>Rwanda</b>Mention ethnique sur la carte, héritée de la période coloniale belge, utilisée en 1994</div>
+    <div class="card r"><b>Primo Levi</b>Déporté à Auschwitz, il devient le numéro 174517, tatoué sur son bras<small>Récit : "Si c'est un homme" (1947)</small></div>
+  </div>
+</div>
+
+<div class="slide" id="s13">
+  <span class="badge red anim-1">Nos recherches (2/2)</span>
+  <div class="title anim-2">Deux penseurs, et une nuance</div>
+  <div class="row stagger" style="--s0:.34s">
+    <div class="card r"><b>Hannah Arendt (1951)</b>Le totalitarisme dépouille la personne juridique : le "droit d'avoir des droits"</div>
+    <div class="card r"><b>Umberto Eco (1995)</b>"Le fascisme éternel" : culte de la tradition, rejet de la différence, peur de l'autre</div>
+    <div class="card t"><b>Nuance apportée par l'essai</b>Le danger vient aussi de l'identité collective fermée : la loyauté à un seul clan mène à l'exclusion</div>
+  </div>
+</div>
+
+<div class="slide" id="s14">
+  <span class="badge anim-1">Notre positionnement</span>
+  <div class="title anim-2">Ce que nous en pensons</div>
+  <div class="row stagger" style="--s0:.34s">
+    <div class="card t"><b>Nous la suivons</b>Identité plurielle, liée aux autres, qui se raconte. Le repli est un piège.</div>
+    <div class="card"><b>Nous nuançons</b>La fiche est limitée, mais elle protège aussi : droit à un nom, à une nationalité.</div>
+    <div class="card r"><b>Nous discutons</b>"Je suis un être humain" : un socle universel, mais trop vaste pour nous définir</div>
+  </div>
+</div>
+
+<div class="slide" id="s15">
+  <span class="badge anim-1">Pour le débat</span>
+  <div class="quote anim-2" style="font-size:clamp(2rem,4vw,4.6rem)">Notre identité, est-ce quelque chose que l'on choisit, que l'on reçoit, ou que les autres nous attribuent ?</div>
+  <div class="divider anim-3"></div>
+  <div class="sub anim-6">Merci de votre attention</div>
+</div>
+
+</div>
+<div id="progress"><span id="cur">1</span> / <span id="tot">15</span></div>
+<div id="progbar"></div>
+<script>
+(function(){
+  var c=document.getElementById('bg-canvas'),g=c.getContext('2d'),W,H,P=[];
+  function size(){W=c.width=innerWidth;H=c.height=innerHeight}
+  size();addEventListener('resize',size);
+  function spawn(p,any){p.x=Math.random()*W;p.y=any?Math.random()*H:-30;p.w=Math.random()*26+22;p.vx=(Math.random()-.5)*.3;p.vy=Math.random()*.35+.1;p.a=Math.random()*.5+.2;p.c=Math.random()>.5?'#f2c14e':'#5ad1c8';p.rot=(Math.random()-.5)*.5;return p}
+  for(var i=0;i<28;i++)P.push(spawn({},true));
+  (function frame(){
+    g.clearRect(0,0,W,H);
+    P.forEach(function(p){
+      p.x+=p.vx;p.y+=p.vy;
+      if(p.y>H+40||p.x<-60||p.x>W+60)spawn(p,false);
+      g.save();g.translate(p.x,p.y);g.rotate(p.rot);g.globalAlpha=p.a;g.strokeStyle=p.c;g.lineWidth=1;
+      g.strokeRect(-p.w/2,-p.w*.32,p.w,p.w*.64);
+      g.beginPath();g.arc(-p.w*.28,-p.w*.05,p.w*.1,0,6.3);g.stroke();
+      g.beginPath();g.moveTo(0,-p.w*.12);g.lineTo(p.w*.38,-p.w*.12);g.moveTo(0,p.w*.06);g.lineTo(p.w*.3,p.w*.06);g.stroke();
+      g.restore();
+    });
+    requestAnimationFrame(frame);
+  })();
+})();
+(function(){
+  'use strict';
+  var root=document.documentElement;
+  function ms(v){return parseFloat(getComputedStyle(root).getPropertyValue(v))*1000}
+  var T_ENTER=ms('--t-enter'),T_EXIT=ms('--t-exit'),T_OVERLAP=ms('--t-overlap');
+  var slides=[].slice.call(document.querySelectorAll('.slide'));
+  var total=slides.length,current=0,locked=false,pending=null,started=false;
+  var curEl=document.getElementById('cur'),totEl=document.getElementById('tot');
+  var progBar=document.getElementById('progbar'),progress=document.getElementById('progress');
+  totEl.textContent=total;
+  [].forEach.call(document.querySelectorAll('.stagger'),function(g){[].forEach.call(g.children,function(c,i){c.style.setProperty('--i',i)})});
+  function runCounters(slide){
+    [].forEach.call(slide.querySelectorAll('[data-count]'),function(el){
+      if(el._orig===undefined)el._orig=el.textContent;
+      var to=parseFloat(el.getAttribute('data-count')),dec=+(el.getAttribute('data-dec')||0);
+      var pre=el.getAttribute('data-prefix')||'',suf=el.getAttribute('data-suffix')||'';
+      var wait=(parseFloat(el.getAttribute('data-delay'))||.55)*1000,dur=1200;
+      var token=(el._tk=(el._tk||0)+1);
+      function fmt(v){return pre+v.toLocaleString('fr-FR',{minimumFractionDigits:dec,maximumFractionDigits:dec})+suf}
+      el.textContent=fmt(0);
+      setTimeout(function(){
+        var t0=null;
+        (function step(ts){
+          if(el._tk!==token)return;
+          if(t0===null)t0=ts;
+          var p=Math.min((ts-t0)/dur,1),e=1-Math.pow(1-p,4);
+          el.textContent=fmt(to*e);
+          if(p<1)requestAnimationFrame(step);
+        })(performance.now());
+      },wait);
+    });
+  }
+  function cancelCounters(slide){
+    [].forEach.call(slide.querySelectorAll('[data-count]'),function(el){
+      el._tk=(el._tk||0)+1;
+      if(el._orig!==undefined)el.textContent=el._orig;
+    });
+  }
+  function showProgress(){
+    curEl.textContent=current+1;
+    progBar.style.width=((current+1)/total*100)+'%';
+    progress.classList.remove('bump');void progress.offsetWidth;progress.classList.add('bump');
+  }
+  function enter(next,dir){
+    next.style.setProperty('--tdir',dir);
+    next.classList.toggle('back',dir<0);
+    next.classList.add('active','entering');
+    void next.offsetWidth;
+    next.classList.add('anim');
+    runCounters(next);
+    setTimeout(function(){next.classList.remove('entering')},T_OVERLAP+T_ENTER+30);
+  }
+  function leave(s){s.classList.remove('active','leaving','anim','back');cancelCounters(s)}
+  function goTo(idx){
+    if(idx<0||idx>=total){nudge(idx<0?-1:1);return}
+    if(idx===current)return;
+    if(locked){pending=idx;return}
+    locked=true;
+    var prev=slides[current],next=slides[idx],dir=idx>current?1:-1;
+    prev.style.setProperty('--tdir',dir);
+    prev.classList.add('leaving');
+    current=idx;
+    enter(next,dir);
+    showProgress();
+    setTimeout(function(){leave(prev)},T_EXIT+40);
+    setTimeout(function(){
+      locked=false;
+      if(pending!==null){var p=pending;pending=null;goTo(p)}
+    },T_OVERLAP+T_ENTER+40);
+  }
+  function nudge(dir){
+    var s=slides[current];
+    if(locked||s.classList.contains('nudge'))return;
+    s.style.setProperty('--tdir',dir);
+    s.classList.add('nudge');
+    setTimeout(function(){s.classList.remove('nudge')},640);
+  }
+  function start(){
+    if(started)return;started=true;
+    locked=true;
+    enter(slides[0],1);
+    progBar.style.width=(1/total*100)+'%';
+    setTimeout(function(){locked=false},T_OVERLAP+T_ENTER+40);
+  }
+  var fontsReady=(document.fonts&&document.fonts.ready)?document.fonts.ready:Promise.resolve();
+  fontsReady.then(function(){requestAnimationFrame(start)});
+  setTimeout(start,1500);
+  function toggleFS(){
+    if(!document.fullscreenElement){if(root.requestFullscreen)root.requestFullscreen()}
+    else{document.exitFullscreen()}
+  }
+  document.addEventListener('keydown',function(e){
+    var k=e.key;
+    if(k==='ArrowRight'||k==='ArrowDown'||k===' '||k==='PageDown'){e.preventDefault();goTo(current+1)}
+    else if(k==='ArrowLeft'||k==='ArrowUp'||k==='PageUp'){e.preventDefault();goTo(current-1)}
+    else if(k==='Home'){goTo(0)}
+    else if(k==='End'){goTo(total-1)}
+    else if(k==='f'||k==='F'){toggleFS()}
+  });
+  document.addEventListener('click',function(e){
+    if(e.target.closest&&e.target.closest('a, button, input, video, .no-nav'))return;
+    goTo(e.clientX>window.innerWidth/2?current+1:current-1);
+  });
+  var touchX=null;
+  document.addEventListener('touchstart',function(e){touchX=e.touches[0].clientX},{passive:true});
+  document.addEventListener('touchend',function(e){
+    if(touchX===null)return;
+    var dx=e.changedTouches[0].clientX-touchX;
+    if(Math.abs(dx)>40)goTo(dx<0?current+1:current-1);
+    touchX=null;
+  });
+})();
+</script>
+</body>
+</html>
