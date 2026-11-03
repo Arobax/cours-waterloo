@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Ideal School</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏫</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Manrope:wght@500;700;800&display=swap" rel="stylesheet">
+<!--
+STORYBOARD — DA « Chalk & Sunrise » (tableau vert profond + soleil levant + craie) — 14 slides
+1 Title · 2 Plan · 3 Location · 4 Building zones · 5 Start later (9:00) · 6 Sport daily · 7 No homework
+8 Learning through fun · 9 AI partner · 10 Subjects + electives · 11 Money (fees + scholarships)
+12 Feelings · 13 Summary · 14 Final question
+Navigation : ← → / clic / swipe · Home/End · F = plein écran
+-->
+<style>
+:root{
+  --bg:#0e2a2f; --panel:#15383f; --sun:#ffb347; --mint:#5fe3b5; --coral:#ff7a68; --chalk:#f7f3e8;
+  --muted:rgba(247,243,232,.82); --line:rgba(247,243,232,.2);
+  --disp:'Bricolage Grotesque',Georgia,serif; --body:'Manrope',system-ui,sans-serif;
+  --ease-bounce:cubic-bezier(.34,1.56,.64,1);
+  --t-enter:.75s; --t-exit:.60s; --t-overlap:.14s; --lead:.20s;
+  --dir:1; --tdir:1; --speed:1;
+}
+.slide.back{--dir:-1;--speed:.75}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--chalk);font-family:var(--body);font-weight:500}
+#bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.2}
+#deck{position:relative;z-index:1;width:100vw;height:100vh;overflow:hidden;perspective:1800px}
+.slide{position:absolute;inset:0;z-index:0;isolation:isolate;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2.2vh;padding:4vh 6vw;opacity:0;pointer-events:none;background:transparent;text-align:center}
+.slide::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:var(--slide-bg,none)}
+.slide.active{opacity:1;pointer-events:all}
+.slide.leaving{pointer-events:none}
+#s1{--slide-bg:radial-gradient(ellipse at 25% 70%,rgba(255,179,71,.22),transparent 60%)}
+#s9,#s16{--slide-bg:radial-gradient(ellipse at 70% 30%,rgba(95,227,181,.2),transparent 65%)}
+#s5{--slide-bg:radial-gradient(ellipse at 80% 20%,rgba(255,179,71,.25),transparent 55%)}
+
+/* typographie */
+.display{font-family:var(--disp);font-weight:800;font-size:clamp(4rem,9.5vw,12rem);line-height:1;letter-spacing:-.03em}
+.h{font-family:var(--disp);font-weight:800;font-size:clamp(2.4rem,4.4vw,5rem);line-height:1.05;letter-spacing:-.02em}
+.lead{font-size:clamp(1.3rem,1.9vw,2.3rem);line-height:1.4;color:var(--muted);max-width:60vw}
+.txt{font-size:clamp(1.2rem,1.6vw,2rem);line-height:1.4}
+.sun{color:var(--sun)}.mint{color:var(--mint)}.coral{color:var(--coral)}
+.badge{font-size:clamp(.95rem,1.15vw,1.4rem);font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:var(--sun);border:2px solid var(--sun);border-radius:99px;padding:.5vh 1.4vw}
+.divider{width:8vw;height:.6vh;border-radius:9px;background:linear-gradient(90deg,var(--sun),var(--mint));transform-origin:left}
+.slide.back .divider{transform-origin:right}
+.tag{display:inline-block;font-weight:800;font-size:clamp(1rem,1.25vw,1.5rem);padding:.7vh 1.2vw;border-radius:99px;background:rgba(95,227,181,.16);border:1.5px solid var(--mint);color:var(--mint)}
+.tag.s{background:rgba(255,179,71,.16);border-color:var(--sun);color:var(--sun)}
+.tag.c{background:rgba(255,122,104,.16);border-color:var(--coral);color:var(--coral)}
+.card{background:rgba(21,56,63,.9);border:1.5px solid var(--line);border-radius:1.2vw;padding:2.2vh 1.6vw;backdrop-filter:blur(6px);text-align:left;transition:transform .25s var(--ease-bounce),border-color .25s}
+.card:hover{transform:translateY(-4px);border-color:var(--sun)}
+.card.s{border-color:var(--sun)}.card.m{border-color:var(--mint)}.card.c{border-color:var(--coral)}
+.card h3{font-family:var(--disp);font-weight:800;font-size:clamp(1.5rem,2.1vw,2.6rem);line-height:1.1;margin-bottom:.8vh}
+.card p,.card li{font-size:clamp(1.15rem,1.5vw,1.9rem);line-height:1.35;color:var(--muted)}
+.card ul{list-style:none}
+.ico{font-size:clamp(2.4rem,3.6vw,4.4rem);line-height:1;margin-bottom:.6vh;display:block}
+.row{display:flex;gap:1.6vw;width:100%;justify-content:center;align-items:stretch}
+.row>*{flex:1}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:1.6vw;width:100%}
+.big{font-family:var(--disp);font-weight:800;font-size:clamp(5rem,12vw,15rem);line-height:.95;letter-spacing:-.04em}
+.label{font-weight:800;font-size:clamp(1.1rem,1.5vw,1.9rem);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.wide{width:88vw}
+.plan{list-style:none;display:flex;flex-direction:column;gap:1.8vh;width:70vw;text-align:left}
+.plan li{display:flex;align-items:center;gap:2vw;padding:1.4vh 1.6vw;border-left:6px solid var(--sun);background:rgba(21,56,63,.8);border-radius:0 1vw 1vw 0}
+.plan b{font-family:var(--disp);font-size:clamp(2.6rem,4.4vw,5.4rem);color:var(--sun);min-width:7vw}
+.plan span{font-size:clamp(1.2rem,1.6vw,2rem);color:var(--muted)}.plan em{font-style:normal;display:block;font-family:var(--disp);font-weight:800;font-size:clamp(1.7rem,2.6vw,3.2rem);color:var(--chalk)}
+.quote{border-left:8px solid var(--sun);padding:1vh 2vw;text-align:left;font-family:var(--disp);font-weight:800;font-size:clamp(2.2rem,4vw,5rem);line-height:1.1;max-width:80vw}
+.tl{display:grid;grid-template-columns:1fr 1fr;gap:1.4vh 1.6vw;width:88vw}
+.tl>div{display:flex;align-items:center;gap:1.4vw;background:rgba(21,56,63,.9);border:1.5px solid var(--line);border-radius:1vw;padding:1.8vh 1.4vw;text-align:left;font-size:clamp(1.2rem,1.65vw,2.1rem);font-weight:700}
+.tl b{font-family:var(--disp);font-size:clamp(1.6rem,2.3vw,2.9rem);color:var(--sun);min-width:6.6vw}
+.tl .m b{color:var(--mint)}
+.tl small{display:block;font-size:clamp(1rem,1.2vw,1.5rem);font-weight:500;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:1vw;justify-content:center}
+.chips span{font-size:clamp(2rem,3vw,3.6rem);background:rgba(21,56,63,.9);border:1.5px solid var(--line);border-radius:1vw;padding:1vh 1.1vw}
+.node{width:17vw;height:17vw;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-direction:column;background:radial-gradient(circle,var(--sun),#e8892a);color:var(--bg);font-family:var(--disp);font-weight:800;font-size:clamp(3rem,5.4vw,6.5rem);box-shadow:0 0 5vw rgba(255,179,71,.45);flex:none}
+.node small{font-family:var(--body);font-size:clamp(1rem,1.3vw,1.6rem)}
+.arrow{font-size:clamp(2.4rem,3.6vw,4.4rem);color:var(--sun);align-self:center;flex:none}
+.rule{background:rgba(255,179,71,.14);border:2px dashed var(--sun);border-radius:1vw;padding:1.6vh 2vw;font-weight:800;font-size:clamp(1.2rem,1.7vw,2.1rem)}
+.cap{position:fixed;left:2vw;bottom:2vh;z-index:5}
+#progress{position:fixed;right:2vw;bottom:2vh;z-index:5;font-weight:800;font-size:clamp(1rem,1.2vw,1.5rem);color:var(--muted);transform-origin:right center}
+#progress #cur{color:var(--sun)}
+#progbar{position:fixed;left:0;bottom:0;height:.6vh;width:0;z-index:5;background:linear-gradient(90deg,var(--sun),var(--mint));transition:width .8s cubic-bezier(.34,1.56,.64,1)}
+#progress.bump #cur{display:inline-block;animation:popBounce .55s linear both}
+svg.scene{width:100%;height:100%;max-height:52vh}
+
+/* raccord entre slides */
+@keyframes slideIn{
+ 0%{opacity:0;transform:translateX(calc(var(--tdir)*9vw)) rotateY(calc(var(--tdir)*-10deg)) scale(.94);filter:blur(6px);animation-timing-function:cubic-bezier(.2,.9,.3,1)}
+ 50%{opacity:1;transform:translateX(calc(var(--tdir)*-1.4vw)) rotateY(calc(var(--tdir)*1.6deg)) scale(1.012);filter:blur(0);animation-timing-function:ease-in-out}
+ 75%{transform:translateX(calc(var(--tdir)*.5vw)) rotateY(calc(var(--tdir)*-.4deg)) scale(.997);animation-timing-function:ease-in-out}
+ 100%{opacity:1;transform:none;filter:blur(0)}}
+@keyframes slideOut{
+ 0%{opacity:1;transform:none;filter:blur(0);animation-timing-function:ease-out}
+ 18%{opacity:1;transform:translateX(calc(var(--tdir)*1.2vw)) scale(1.012);animation-timing-function:cubic-bezier(.55,0,1,.45)}
+ 100%{opacity:0;transform:translateX(calc(var(--tdir)*-9vw)) rotateY(calc(var(--tdir)*9deg)) scale(.94);filter:blur(5px)}}
+.slide.entering{z-index:2;will-change:transform,opacity,filter;animation:slideIn var(--t-enter) linear var(--t-overlap) both}
+.slide.leaving{z-index:1;will-change:transform,opacity,filter;pointer-events:none;animation:slideOut var(--t-exit) linear both}
+@keyframes nudge{0%{transform:none;animation-timing-function:cubic-bezier(.2,.9,.3,1)}30%{transform:translateX(calc(var(--tdir)*-2.4vw)) rotateY(calc(var(--tdir)*3deg));animation-timing-function:ease-in-out}62%{transform:translateX(calc(var(--tdir)*.8vw));animation-timing-function:ease-in-out}100%{transform:none}}
+.slide.nudge{animation:nudge .6s linear both}
+
+/* éléments : tout arrive en rebond */
+@keyframes stampIn{0%{opacity:0;transform:scale(1.7) rotate(calc(var(--dir)*-6deg));filter:blur(3px);animation-timing-function:cubic-bezier(.2,.9,.3,1)}45%{opacity:1;transform:scale(.9) rotate(calc(var(--dir)*1.5deg));filter:blur(0);animation-timing-function:ease-in-out}70%{transform:scale(1.06) rotate(calc(var(--dir)*-.5deg));animation-timing-function:ease-in-out}100%{opacity:1;transform:none;filter:blur(0)}}
+@keyframes smashDown{0%{opacity:0;transform:translateY(calc(var(--dir)*-70px)) scale(1.06);animation-timing-function:cubic-bezier(.5,0,.9,.6)}50%{opacity:1;transform:translateY(calc(var(--dir)*12px)) scale(.985);animation-timing-function:ease-out}72%{transform:translateY(calc(var(--dir)*-5px)) scale(1.004);animation-timing-function:ease-in-out}100%{opacity:1;transform:none}}
+@keyframes slideInLeft{0%{opacity:0;transform:translateX(calc(var(--dir)*-70px)) skewX(calc(var(--dir)*6deg));animation-timing-function:cubic-bezier(.2,.8,.3,1)}55%{opacity:1;transform:translateX(calc(var(--dir)*10px)) skewX(calc(var(--dir)*-2deg));animation-timing-function:ease-in-out}80%{transform:translateX(calc(var(--dir)*-3px)) skewX(0);animation-timing-function:ease-in-out}100%{opacity:1;transform:none}}
+@keyframes smashUp{0%{opacity:0;transform:translateY(calc(var(--dir)*70px)) scale(.94);animation-timing-function:cubic-bezier(.2,.9,.3,1)}55%{opacity:1;transform:translateY(calc(var(--dir)*-10px)) scale(1.02);animation-timing-function:ease-in-out}78%{transform:translateY(calc(var(--dir)*3px)) scale(.998);animation-timing-function:ease-in-out}100%{opacity:1;transform:none}}
+@keyframes rulerGrow{0%{opacity:.6;transform:scaleX(0);animation-timing-function:cubic-bezier(.2,.9,.3,1)}60%{opacity:1;transform:scaleX(1.18);animation-timing-function:ease-in-out}80%{transform:scaleX(.96);animation-timing-function:ease-in-out}100%{opacity:1;transform:scaleX(1)}}
+@keyframes glitchIn{0%{opacity:0;transform:translateX(-8px);filter:saturate(3) blur(2px)}20%{opacity:1;transform:translateX(5px);filter:saturate(0) blur(0)}40%{transform:translateX(-3px);filter:saturate(2)}60%{transform:translateX(1.5px);filter:saturate(1)}80%{transform:translateX(-.5px)}100%{opacity:1;transform:none;filter:saturate(1) blur(0)}}
+@keyframes popBounce{0%{opacity:0;transform:scale(.4) rotate(calc(var(--dir)*-8deg));animation-timing-function:cubic-bezier(.2,.9,.3,1)}45%{opacity:1;transform:scale(1.2) rotate(calc(var(--dir)*2deg));animation-timing-function:ease-in-out}65%{transform:scale(.92) rotate(calc(var(--dir)*-1deg));animation-timing-function:ease-in-out}82%{transform:scale(1.05) rotate(0);animation-timing-function:ease-in-out}100%{opacity:1;transform:none}}
+@keyframes pulseGlow{0%,100%{text-shadow:0 0 20px rgba(255,179,71,.3)}50%{text-shadow:0 0 50px rgba(255,179,71,.7),0 0 80px rgba(255,179,71,.3)}}
+.anim-1{--d:0s}.anim-2{--d:.10s}.anim-3{--d:.22s}.anim-4{--d:.34s}.anim-5{--d:.48s}.anim-6{--d:.62s}
+.slide.anim [class*="anim-"],.slide.anim .stagger>*,.slide.anim .split-words{--delay:calc(var(--lead) + var(--d,0s)*var(--speed))}
+.slide.anim .anim-1{animation:stampIn .75s linear var(--delay) both}
+.slide.anim .anim-2{animation:smashDown .85s linear var(--delay) both}
+.slide.anim .divider.anim-3{animation:rulerGrow .7s linear var(--delay) both}
+.slide.anim .anim-3:not(.divider){animation:slideInLeft .8s linear var(--delay) both}
+.slide.anim .anim-4{animation:smashUp .85s linear var(--delay) both}
+.slide.anim .anim-5{animation:glitchIn .6s linear var(--delay) both}
+.slide.anim .anim-6{animation:popBounce .85s linear var(--delay) both}
+.stagger>*{--d:calc(var(--s0,.34s) + var(--i,0)*.11s)}
+.slide.anim .stagger>*{animation:smashUp .85s linear var(--delay) both}
+.slide.anim .stagger.left>*{animation:slideInLeft .8s linear var(--delay) both}
+.split-words{--d:.10s}.split-words .w,.split-words .w>span{display:inline-block}
+.slide.anim .split-words .w>span{animation:smashDown .85s linear calc(var(--delay) + var(--i)*.07s) both}
+.glow{animation:pulseGlow 4s ease-in-out infinite}
+
+@keyframes softIn{from{opacity:0}to{opacity:1}}
+@keyframes softOut{from{opacity:1}to{opacity:0}}
+@media (prefers-reduced-motion:reduce){
+ .slide.entering{animation:softIn .4s ease var(--t-overlap) both}
+ .slide.leaving{animation:softOut .3s ease both}
+ .slide.nudge{animation:none}
+ .slide.anim [class*="anim-"],.slide.anim .stagger>*,.slide.anim .split-words .w>span{animation:softIn .4s ease var(--delay,0s) both!important}
+ #bg-canvas{display:none}}
+</style>
+</head>
+<body>
+<canvas id="bg-canvas"></canvas>
+<div id="deck">
+
+<!-- 1 TITLE -->
+<div class="slide" id="s1">
+  <div class="badge anim-1">English · Oral presentation</div>
+  <div class="display split-words glow">My Ideal School</div>
+  <div class="divider anim-3"></div>
+  <p class="lead anim-3">A school where students feel good, so they learn well.</p>
+  <div class="chips stagger" style="--s0:.5s"><span class="tag">📍 Place</span><span class="tag s">⏰ Time</span><span class="tag">🎮 Teaching</span><span class="tag s">💶 Money</span><span class="tag c">❤️ Feelings</span></div>
+</div>
+
+<!-- 2 PLAN -->
+<div class="slide" id="s2">
+  <div class="badge anim-1">Our plan</div>
+  <h2 class="h anim-2">Four parts, one school</h2>
+  <ul class="plan stagger left" style="--s0:.3s">
+    <li><b>I</b><div><em>The place</em><span>Location · building · facilities</span></div></li>
+    <li><b>II</b><div><em>The time</em><span>Timetable · sport · homework</span></div></li>
+    <li><b>III</b><div><em>The teaching</em><span>Fun · AI · subjects &amp; electives</span></div></li>
+    <li><b>IV</b><div><em>Money &amp; feelings</em><span>Fees · scholarships · how we feel</span></div></li>
+  </ul>
+</div>
+
+<!-- 3 LOCATION -->
+<div class="slide" id="s3">
+  <div class="badge anim-1">I · The place</div>
+  <h2 class="h anim-2">Best of both worlds</h2>
+  <div class="row wide" style="align-items:center">
+    <div class="stagger left" style="display:flex;flex-direction:column;gap:1.6vh;text-align:left;flex:1;--s0:.3s">
+      <div class="card m"><h3>🏘️ Medium-sized town</h3><p>Not a huge city, not the middle of nowhere</p></div>
+      <div class="card s"><h3>🚆 Train &amp; bus stop</h3><p>Students arrive easily, without depending on parents</p></div>
+      <div class="card m"><h3>🌳 Surrounded by nature</h3><p>Trees, small lake, open fields = less stress</p></div>
+    </div>
+    <div class="anim-4" style="flex:1.1">
+      <svg class="scene" viewBox="0 0 600 400" role="img" aria-label="School between nature and a train station">
+        <rect width="600" height="400" rx="26" fill="#15383f"/>
+        <circle cx="500" cy="80" r="42" fill="#ffb347"/>
+        <path d="M0 300 Q120 190 250 280 T600 250 V400 H0Z" fill="#5fe3b5" opacity=".35"/>
+        <path d="M0 330 Q160 260 330 320 T600 300 V400 H0Z" fill="#5fe3b5" opacity=".55"/>
+        <ellipse cx="110" cy="350" rx="95" ry="22" fill="#f7f3e8" opacity=".35"/>
+        <g fill="#5fe3b5"><circle cx="40" cy="285" r="26"/><circle cx="85" cy="270" r="30"/><circle cx="530" cy="270" r="28"/><circle cx="565" cy="290" r="22"/></g>
+        <g fill="#f7f3e8" opacity=".6"><rect x="37" y="300" width="6" height="30"/><rect x="82" y="290" width="6" height="40"/><rect x="527" y="290" width="6" height="40"/></g>
+        <rect x="200" y="215" width="200" height="105" rx="8" fill="#f7f3e8"/>
+        <polygon points="190,215 300,160 410,215" fill="#ff7a68"/>
+        <g fill="#ffb347"><rect x="220" y="238" width="30" height="34" rx="4"/><rect x="285" y="238" width="30" height="34" rx="4"/><rect x="350" y="238" width="30" height="34" rx="4"/></g>
+        <rect x="285" y="285" width="30" height="35" rx="4" fill="#0e2a2f"/>
+        <rect x="262" y="185" width="76" height="20" rx="3" fill="#0e2a2f" opacity=".6"/>
+        <rect x="0" y="352" width="600" height="10" fill="#f7f3e8" opacity=".5"/>
+        <g><rect x="350" y="326" width="180" height="26" rx="8" fill="#ffb347"/><rect x="362" y="332" width="22" height="12" fill="#0e2a2f"/><rect x="396" y="332" width="22" height="12" fill="#0e2a2f"/><rect x="430" y="332" width="22" height="12" fill="#0e2a2f"/></g>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- 4 BUILDING -->
+<div class="slide" id="s4">
+  <div class="badge anim-1">I · The building</div>
+  <h2 class="h anim-2">Bright, modern, eco-friendly</h2>
+  <div class="g2 wide stagger" style="--s0:.3s">
+    <div class="card m"><span class="ico">📚</span><h3>Learning zone</h3><p>Flexible classrooms: alone or in groups</p></div>
+    <div class="card s"><span class="ico">🏊</span><h3>Sports zone</h3><p>Gym · swimming pool · climbing wall</p></div>
+    <div class="card c"><span class="ico">🎨</span><h3>Creative zone</h3><p>Music studio · art workshop · game lab</p></div>
+    <div class="card m"><span class="ico">🛋️</span><h3>Chill zone</h3><p>Library with sofas · healthy restaurant &amp; school garden</p></div>
+  </div>
+  <div class="rule anim-5">Solar panels &nbsp;·&nbsp; Natural light &nbsp;·&nbsp; A tablet &amp; a locker for everyone</div>
+</div>
+
+<!-- 5 START LATER -->
+<div class="slide" id="s5">
+  <div class="badge anim-1">II · The time</div>
+  <h2 class="h anim-2">Start later, learn better</h2>
+  <div class="row wide" style="align-items:center;gap:3vw">
+    <div class="anim-4" style="flex:1;text-align:center">
+      <div class="big sun glow">9:00</div>
+      <div class="label">instead of &nbsp;<s>8:00</s></div>
+    </div>
+    <div class="stagger left" style="flex:1.4;display:flex;flex-direction:column;gap:1.6vh;--s0:.4s">
+      <div class="card s"><h3>🧬 Teen biological clock</h3><p>Teenagers fall asleep later, naturally</p></div>
+      <div class="card m"><h3>😴 8–10 hours of sleep</h3><p>A rested brain learns better</p></div>
+      <div class="card c"><h3>🩺 Experts say…</h3><p>Not before 8:30 · Seattle: ~30 min more sleep, better results</p></div>
+    </div>
+  </div>
+  <div class="rule anim-5">🕘 Our day: 9:00 → 16:00 · 3 lessons · long lunch · 1 h of sport</div>
+</div>
+
+<!-- 7 SPORT -->
+<div class="slide" id="s7">
+  <div class="badge anim-1">II · Sport</div>
+  <h2 class="h anim-2">Sport, every single day</h2>
+  <div class="row wide" style="align-items:center;gap:3vw">
+    <div class="anim-4" style="flex:1;text-align:center"><div class="big mint" data-count="1" data-suffix=" h">1 h</div><div class="label">of sport a day <br>(today: ~2 h a week)</div></div>
+    <div style="flex:1.5;display:flex;flex-direction:column;gap:2.4vh;align-items:center">
+      <div class="chips stagger" style="--s0:.4s"><span>⚽</span><span>🏀</span><span>🧗</span><span>🏊</span><span>💃</span><span>🧘</span><span>🎮</span></div>
+      <div class="row stagger" style="--s0:.9s"><div class="card s"><h3>💪 Health</h3></div><div class="card m"><h3>🎯 Focus</h3></div><div class="card c"><h3>🤝 Teamwork</h3></div></div>
+      <p class="txt anim-5 muted" style="color:var(--muted)">Choose your activity each term. Nobody is forced to run!</p>
+    </div>
+  </div>
+</div>
+
+<!-- 8 HOMEWORK -->
+<div class="slide" id="s8">
+  <div class="badge anim-1">II · Homework</div>
+  <h2 class="h anim-2">Learning happens <span class="sun">at school</span></h2>
+  <div class="row wide" style="align-items:center;gap:2vw">
+    <div class="card c anim-4"><h3>😵 Today</h3><p>7 h at school<br>+ ~3 h of homework<br><b class="coral">= exhausted</b></p></div>
+    <div class="big sun anim-6" style="flex:.8;text-align:center">0<div class="label">homework</div></div>
+    <div class="card m anim-4"><h3>😊 Our school</h3><p>Study sessions with teachers<br>Evenings: friends, hobbies, sleep<br><b class="mint">= fairer for all</b></p></div>
+  </div>
+</div>
+
+<!-- 9 FUN -->
+<div class="slide" id="s9">
+  <div class="badge anim-1">III · The teaching</div>
+  <div class="quote anim-2">We remember what we enjoy.</div>
+  <div class="row wide stagger" style="--s0:.35s">
+    <div class="card s"><span class="ico">🎵</span><h3>Song lyrics</h3><p>Remembered after a few listens</p></div>
+    <div class="card m"><span class="ico">🎮</span><h3>Video games</h3><p>Complex rules learned without noticing</p></div>
+    <div class="card c"><span class="ico">🔐</span><h3>Escape-room class</h3><p>Solve 18th-century clues to get out!</p></div>
+  </div>
+  <div class="chips anim-5"><span class="tag s">Gamification</span><span class="tag">points</span><span class="tag">levels</span><span class="tag">quizzes</span><span class="tag">team challenges</span></div>
+</div>
+
+<!-- 10 AI -->
+<div class="slide" id="s10">
+  <div class="badge anim-1">III · Artificial intelligence</div>
+  <h2 class="h anim-2">AI: a partner, not a ban</h2>
+  <div class="row wide" style="align-items:center;gap:1.4vw">
+    <div class="card s anim-4"><h3>👩‍🏫 For teachers</h3><ul><li>• Prepare fun lessons &amp; games</li><li>• Correct simple tests</li><li>• <b class="sun">More time to motivate</b></li></ul></div>
+    <div class="arrow anim-5">⇄</div>
+    <div class="node anim-6">AI<small>personal tutor</small></div>
+    <div class="arrow anim-5">⇄</div>
+    <div class="card m anim-4"><h3>🧑‍🎓 For students</h3><ul><li>• Private tutor, all day</li><li>• Own speed &amp; interests</li><li>• <b class="mint">Football maths!</b></li></ul></div>
+  </div>
+  <div class="rule anim-5">AI helps you learn — it doesn’t do the work for you. The teacher stays the captain.</div>
+</div>
+
+<!-- 11 SUBJECTS + ELECTIVES -->
+<div class="slide" id="s11">
+  <div class="badge anim-1">III · Subjects &amp; electives</div>
+  <h2 class="h anim-2">Keep the essentials, <span class="sun">add</span> real life</h2>
+  <div class="row wide" style="align-items:center;gap:1.4vw">
+    <div class="card anim-4" style="flex:.8"><h3>Keep — through projects</h3><ul><li>• Languages</li><li>• Maths &amp; sciences</li><li>• History &amp; geography</li></ul></div>
+    <div class="arrow anim-5">＋</div>
+    <div class="g2 stagger" style="flex:2;--s0:.4s">
+      <div class="card s"><h3>🎮 Game Design</h3><p>&amp; Storytelling</p></div>
+      <div class="card m"><h3>💶 Money &amp; Life</h3><p>Taxes, budget, renting a flat</p></div>
+      <div class="card c"><h3>🤖 AI &amp; Digital</h3><p>Privacy, fake news, coding</p></div>
+      <div class="card m"><h3>🧠 Mind &amp; Wellbeing</h3><p>Stress, sleep, communication</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- 11 MONEY -->
+<div class="slide" id="s12">
+  <div class="badge anim-1">IV · Money</div>
+  <h2 class="h anim-2">Education: a right, not a luxury</h2>
+  <div class="row wide" style="align-items:center;gap:2vw">
+    <div class="anim-6" style="flex:.8;text-align:center"><div class="big sun">€0</div><div class="label">tuition fees</div></div>
+    <div class="stagger left" style="flex:1.7;display:flex;flex-direction:column;gap:1.4vh;--s0:.4s">
+      <div class="card s"><h3>🏛️ Who pays?</h3><p>Government + local companies = an investment</p></div>
+      <div class="card m"><h3>👨‍👩‍👧 Families</h3><p>Only extras (trips): the less you earn, the less you pay</p></div>
+    </div>
+  </div>
+  <div class="row wide stagger" style="--s0:.8s">
+    <div class="card c"><h3>🤲 Needs-based</h3><p>Trips &amp; transport</p></div>
+    <div class="card s"><h3>🏅 Talent</h3><p>Sport, music, art, science</p></div>
+    <div class="card m"><h3>💛 Community</h3><p>Volunteer → university money</p></div>
+  </div>
+  <p class="lead anim-5 sun" style="font-weight:800">3 scholarships · Do good, get support.</p>
+</div>
+
+<!-- 14 FEELINGS -->
+<div class="slide" id="s14">
+  <div class="badge anim-1">Personal feelings</div>
+  <h2 class="h anim-2">How do we feel about it?</h2>
+  <div class="row wide stagger" style="--s0:.3s">
+    <div class="card s"><span class="ico">🏠</span><h3>Welcome</h3><p>Not a number: at home, every morning</p></div>
+    <div class="card m"><span class="ico">⚡</span><h3>Energy</h3><p>Rested, active, in a better mood</p></div>
+    <div class="card c"><span class="ico">🔍</span><h3>Curious</h3><p>Lessons that feel like games</p></div>
+    <div class="card s"><span class="ico">💪</span><h3>Confident</h3><p>Dare to make mistakes: that’s how we learn</p></div>
+  </div>
+  <p class="lead anim-5">“If I had studied here, I would have been happier.”</p>
+</div>
+
+<!-- 15 SUMMARY -->
+<div class="slide" id="s15">
+  <div class="badge anim-1">To sum up</div>
+  <h2 class="h anim-2">Our ideal school in 6 ideas</h2>
+  <div class="g2 wide stagger" style="grid-template-columns:repeat(3,1fr);--s0:.3s">
+    <div class="card m"><span class="ico">🌳</span><h3>Green &amp; modern</h3><p>Town, nature, 4 zones</p></div>
+    <div class="card s"><span class="ico">⏰</span><h3>Start at 9:00</h3><p>1 h of sport a day</p></div>
+    <div class="card c"><span class="ico">🏠</span><h3>No homework</h3><p>Study at school</p></div>
+    <div class="card m"><span class="ico">🎮</span><h3>Learning is fun</h3><p>Games &amp; projects</p></div>
+    <div class="card s"><span class="ico">🤖</span><h3>AI + electives</h3><p>Tutor &amp; life skills</p></div>
+    <div class="card c"><span class="ico">💶</span><h3>Free for all</h3><p>+ 3 scholarships</p></div>
+  </div>
+</div>
+
+<!-- 16 FINAL -->
+<div class="slide" id="s16">
+  <div class="badge anim-1">Final question</div>
+  <div class="quote anim-2">If you could change <span class="sun">one thing</span> in your school… what would it be?</div>
+  <div class="divider anim-3"></div>
+  <div class="display sun anim-6 glow" style="font-size:clamp(3.5rem,7vw,9rem)">Thank you!</div>
+  <p class="lead anim-5">Any questions?</p>
+</div>
+
+</div>
+<div id="progress"><span id="cur">1</span> / <span id="tot">14</span></div>
+<div id="progbar"></div>
+
+<script>
+(function(){var c=document.getElementById('bg-canvas'),g=c.getContext('2d'),W,H,P=[],cols=['#ffb347','#5fe3b5','#f7f3e8'];
+function size(){W=c.width=innerWidth;H=c.height=innerHeight}size();addEventListener('resize',size);
+function spawn(p,any){p.x=Math.random()*W;p.y=any?Math.random()*H:-20;p.r=Math.random()*5+3;p.vx=(Math.random()-.5)*.3;p.vy=Math.random()*.4+.12;p.a=Math.random()*.6+.3;p.c=cols[Math.floor(Math.random()*3)];p.k=Math.floor(Math.random()*3);p.rot=Math.random()*6;return p}
+for(var i=0;i<46;i++)P.push(spawn({},true));
+(function frame(){g.clearRect(0,0,W,H);P.forEach(function(p){p.x+=p.vx;p.y+=p.vy;p.rot+=.004;if(p.y>H+20||p.x<-20||p.x>W+20)spawn(p,false);
+g.globalAlpha=p.a;g.strokeStyle=p.c;g.lineWidth=1.6;g.beginPath();var r=p.r*2;
+if(p.k===0){g.arc(p.x,p.y,r,0,6.3)}else if(p.k===1){g.moveTo(p.x-r,p.y);g.lineTo(p.x+r,p.y);g.moveTo(p.x,p.y-r);g.lineTo(p.x,p.y+r)}else{for(var j=0;j<3;j++){var a=p.rot+j*2.094;j?g.lineTo(p.x+r*Math.cos(a),p.y+r*Math.sin(a)):g.moveTo(p.x+r*Math.cos(a),p.y+r*Math.sin(a))}g.closePath()}
+g.stroke()});g.globalAlpha=1;requestAnimationFrame(frame)})()})();
+</script>
+<script>
+(function () {
+  'use strict';
+  var root = document.documentElement;
+  function ms(v) { return parseFloat(getComputedStyle(root).getPropertyValue(v)) * 1000; }
+  var T_ENTER = ms('--t-enter'), T_EXIT = ms('--t-exit'), T_OVERLAP = ms('--t-overlap');
+  var slides = [].slice.call(document.querySelectorAll('.slide'));
+  var total = slides.length, current = 0, locked = false, pending = null, started = false;
+  var curEl = document.getElementById('cur'), totEl = document.getElementById('tot');
+  var progBar = document.getElementById('progbar'), progress = document.getElementById('progress');
+  totEl.textContent = total;
+  [].forEach.call(document.querySelectorAll('.stagger'), function (g) {
+    [].forEach.call(g.children, function (c, i) { c.style.setProperty('--i', i); });
+  });
+  [].forEach.call(document.querySelectorAll('.split-words'), function (el) {
+    el.innerHTML = el.textContent.trim().split(/\s+/).map(function (w, i) {
+      return '<span class="w" style="--i:' + i + '"><span>' + w + '</span></span>';
+    }).join(' ');
+  });
+  function runCounters(slide) {
+    [].forEach.call(slide.querySelectorAll('[data-count]'), function (el) {
+      if (el._orig === undefined) el._orig = el.textContent;
+      var to = parseFloat(el.getAttribute('data-count')), dec = +(el.getAttribute('data-dec') || 0);
+      var pre = el.getAttribute('data-prefix') || '', suf = el.getAttribute('data-suffix') || '';
+      var wait = (parseFloat(el.getAttribute('data-delay')) || .55) * 1000, dur = 1200;
+      var token = (el._tk = (el._tk || 0) + 1);
+      function fmt(v) { return pre + v.toLocaleString('en-GB', { minimumFractionDigits: dec, maximumFractionDigits: dec }) + suf; }
+      el.textContent = fmt(0);
+      setTimeout(function () {
+        var t0 = null;
+        (function step(ts) {
+          if (el._tk !== token) return;
+          if (t0 === null) t0 = ts;
+          var p = Math.min((ts - t0) / dur, 1), e = 1 - Math.pow(1 - p, 4);
+          el.textContent = fmt(to * e);
+          if (p < 1) requestAnimationFrame(step);
+        })(performance.now());
+      }, wait);
+    });
+  }
+  function cancelCounters(slide) {
+    [].forEach.call(slide.querySelectorAll('[data-count]'), function (el) {
+      el._tk = (el._tk || 0) + 1;
+      if (el._orig !== undefined) el.textContent = el._orig;
+    });
+  }
+  function showProgress() {
+    curEl.textContent = current + 1;
+    progBar.style.width = ((current + 1) / total * 100) + '%';
+    progress.classList.remove('bump'); void progress.offsetWidth; progress.classList.add('bump');
+  }
+  function enter(next, dir) {
+    next.style.setProperty('--tdir', dir);
+    next.classList.toggle('back', dir < 0);
+    next.classList.add('active', 'entering');
+    void next.offsetWidth;
+    next.classList.add('anim');
+    runCounters(next);
+    setTimeout(function () { next.classList.remove('entering'); }, T_OVERLAP + T_ENTER + 30);
+  }
+  function leave(s) {
+    s.classList.remove('active', 'leaving', 'anim', 'back');
+    cancelCounters(s);
+  }
+  function goTo(idx) {
+    if (idx < 0 || idx >= total) { nudge(idx < 0 ? -1 : 1); return; }
+    if (idx === current) return;
+    if (locked) { pending = idx; return; }
+    locked = true;
+    var prev = slides[current], next = slides[idx], dir = idx > current ? 1 : -1;
+    prev.style.setProperty('--tdir', dir);
+    prev.classList.add('leaving');
+    current = idx;
+    enter(next, dir);
+    showProgress();
+    setTimeout(function () { leave(prev); }, T_EXIT + 40);
+    setTimeout(function () {
+      locked = false;
+      if (pending !== null) { var p = pending; pending = null; goTo(p); }
+    }, T_OVERLAP + T_ENTER + 40);
+  }
+  function nudge(dir) {
+    var s = slides[current];
+    if (locked || s.classList.contains('nudge')) return;
+    s.style.setProperty('--tdir', dir);
+    s.classList.add('nudge');
+    setTimeout(function () { s.classList.remove('nudge'); }, 640);
+  }
+  function start() {
+    if (started) return; started = true;
+    locked = true;
+    enter(slides[0], 1);
+    progBar.style.width = (1 / total * 100) + '%';
+    setTimeout(function () { locked = false; }, T_OVERLAP + T_ENTER + 40);
+  }
+  var fontsReady = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
+  fontsReady.then(function () { requestAnimationFrame(start); });
+  setTimeout(start, 1500);
+  function toggleFS() {
+    if (!document.fullscreenElement) { if (root.requestFullscreen) root.requestFullscreen(); }
+    else { document.exitFullscreen(); }
+  }
+  document.addEventListener('keydown', function (e) {
+    var k = e.key;
+    if (k === 'ArrowRight' || k === 'ArrowDown' || k === ' ' || k === 'PageDown') { e.preventDefault(); goTo(current + 1); }
+    else if (k === 'ArrowLeft' || k === 'ArrowUp' || k === 'PageUp') { e.preventDefault(); goTo(current - 1); }
+    else if (k === 'Home') { goTo(0); }
+    else if (k === 'End') { goTo(total - 1); }
+    else if (k === 'f' || k === 'F') { toggleFS(); }
+  });
+  document.addEventListener('click', function (e) {
+    if (e.target.closest && e.target.closest('a, button, input, video, .no-nav')) return;
+    goTo(e.clientX > window.innerWidth / 2 ? current + 1 : current - 1);
+  });
+  var touchX = null;
+  document.addEventListener('touchstart', function (e) { touchX = e.touches[0].clientX; }, { passive: true });
+  document.addEventListener('touchend', function (e) {
+    if (touchX === null) return;
+    var dx = e.changedTouches[0].clientX - touchX;
+    if (Math.abs(dx) > 40) goTo(dx < 0 ? current + 1 : current - 1);
+    touchX = null;
+  });
+})();
+</script>
+</body>
+</html>
