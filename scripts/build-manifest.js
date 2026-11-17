@@ -2,7 +2,7 @@
 // Lancé par Netlify à chaque déploiement (voir netlify.toml). Ne fait jamais échouer le déploiement.
 const fs = require('fs'), path = require('path');
 const root = path.join(__dirname, '..', 'syntheses', 'content');
-const ok = /\.(pdf|png|jpe?g|webp|mp4|txt)$/i;
+const ok = /\.(pdf|png|jpe?g|webp|mp4|txt|html)$/i;
 try {
   fs.mkdirSync(root, { recursive: true });
   const m = {};

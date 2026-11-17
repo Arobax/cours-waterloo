@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Synthèse UAA9 – Alcènes et polymères</title>
+<style>
+:root{--bg:#fafaf7;--fg:#1d2330;--mut:#5b6475;--card:#fff;--bd:#d9dce3;--ac:#1f6feb;--a3:#c62828;--a2:#e08a00;--a1:#6b7280;--ok:#1b7f3b;--ko:#c62828;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14171f;--fg:#e8eaf0;--mut:#9aa3b5;--card:#1c202b;--bd:#343a4a;--ac:#6ea8ff;--a3:#ff7b72;--a2:#f0b04a;--a1:#9aa3b5;--ok:#56d364;--ko:#ff7b72}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.55 system-ui,-apple-system,Segoe UI,sans-serif}
+main{max-width:860px;margin:auto;padding:16px}
+h1{font-size:1.6rem;margin:.2em 0}h2{font-size:1.25rem;margin:1.6em 0 .4em;border-bottom:2px solid var(--ac);padding-bottom:4px}h3{font-size:1.05rem;margin:1em 0 .3em}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:12px 14px;margin:10px 0}
+.s3,.s2,.s1{display:inline-block;font-size:.75rem;font-weight:700;border-radius:99px;padding:1px 9px;color:#fff;vertical-align:middle}
+.s3{background:var(--a3)}.s2{background:var(--a2)}.s1{background:var(--a1)}
+.rule{border-left:4px solid var(--ac);padding:2px 10px;margin:8px 0;background:color-mix(in srgb,var(--ac) 8%,transparent)}
+.warn{border-left:4px solid var(--a2);padding:2px 10px;margin:8px 0;background:color-mix(in srgb,var(--a2) 10%,transparent)}
+details{margin:6px 0}summary{cursor:pointer;font-weight:600}details>div,details>ul{margin-left:6px}
+code,.f{font-family:ui-monospace,Consolas,monospace;background:color-mix(in srgb,var(--mut) 15%,transparent);padding:0 4px;border-radius:4px}
+table{border-collapse:collapse;width:100%}th,td{border:1px solid var(--bd);padding:5px 8px;text-align:left;vertical-align:top}th{background:color-mix(in srgb,var(--ac) 10%,transparent)}
+.sc{overflow-x:auto}svg{max-width:100%;height:auto}svg text{fill:var(--fg);font:13px system-ui}svg .l{stroke:var(--fg);stroke-width:2;fill:none}
+button{font:inherit;border:1px solid var(--bd);background:var(--card);color:var(--fg);border-radius:8px;padding:6px 12px;margin:3px 4px 3px 0;cursor:pointer}
+button.ok{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 18%,transparent)}button.ko{border-color:var(--ko);background:color-mix(in srgb,var(--ko) 18%,transparent)}
+nav a{margin-right:10px;color:var(--ac)}
+</style></head><body><main>
+<h1>La macromolécule en chimie organique</h1>
+<p><b>Synthèse pour l’examen préparatoire (UAA9)</b> — alcènes → polymères → recyclage.</p>
+<p>Priorité : <span class="s3">★★★ à maîtriser</span> <span class="s2">★★ important</span> <span class="s1">★ culture / contexte</span>. Pourquoi ces niveaux : un point est ★★★ s’il est en <b>rouge dans tes notes</b>, s’il est un <b>exercice</b> du cours (nomenclature, dimères MolView, travail de synthèse) ou s’il revient dans le <b>questionnaire de 37 questions</b>.</p>
+<nav><a href="#a">1 Alcènes</a><a href="#b">2 cis-trans</a><a href="#c">3 Addition</a><a href="#d">4 Condensation</a><a href="#e">5 Catégories</a><a href="#f">6 Recyclage</a><a href="#g">7 S’entraîner</a></nav>
+
+<div class="card"><b>Carte du cours (l’arbre)</b>
+<ul>
+<li><b>Alcènes</b> (C=C) → nommer / dessiner → <b>isomérie cis-trans</b> → santé (acides gras)</li>
+<li><b>Polymères</b> = monomère × n
+ <ul><li><b>Addition</b> : on ouvre C=C, aucun atome perdu → PE, PP, PVC, PS, PTFE</li>
+ <li><b>Condensation</b> : on perd H₂O → amide (protéines, nylon, Kevlar), ester (PET)</li></ul></li>
+<li><b>Catégories</b> (chauffage) : thermoplastiques / thermodurcissables (dont élastomères)</li>
+<li><b>Fin de vie</b> : matière → chimique → énergétique → biodégradation</li></ul></div>
+
+<h2 id="a">1. Les alcènes <span class="s3">★★★</span></h2>
+<details open><summary>1.1 Définitions et formule</summary><div>
+<ul><li><b>Alcane</b> : que des liaisons simples C–C, <span class="f">CₙH₂ₙ₊₂</span>.</li>
+<li><b>Alcène</b> : ≥ 1 double liaison C=C. Avec une seule C=C : <span class="f">CₙH₂ₙ</span> (la C=C « retire » 2 H), chaîne linéaire <u>ou</u> ramifiée.</li>
+<li><b>Alcyne</b> : triple liaison (tendue, donc libère de l’énergie) <span class="s1">★</span>.</li></ul></div></details>
+<details open><summary>1.2 Nommer un alcène : la méthode en 5 étapes</summary><div>
+<ol><li><b>Chaîne principale</b> = la plus longue <u>qui contient C=C</u> (même s’il existe une chaîne plus longue sans C=C).</li>
+<li><b>Racine</b> selon le nombre de C : 1 méth, 2 éth, 3 prop, 4 but, 5 pent, 6 hex, 7 hept… ; suffixe <b>-ène</b>.</li>
+<li><b>Numéroter</b> pour que C=C ait l’indice <b>le plus petit</b> (priorité sur les ramifications).</li>
+<li><b>Ramifications</b> : indice-nom devant la chaîne. Différentes → ordre alphabétique ; identiques → di, tri, tétra (ignorés pour l’ordre alphabétique).</li>
+<li><b>Ponctuation</b> : virgule entre deux chiffres, tiret entre chiffre et lettre. L’indice de C=C s’écrit juste avant « -ène » : <code>pent-2-ène</code>.</li></ol>
+<div class="rule">Ex. <code>CH₃–C(CH₃)=C(CH₃)–CH₃</code> → but-2-ène (4 C, C=C en 2) + 2 méthyles en 2 et 3 → <b>2,3-diméthylbut-2-ène</b>.</div></div></details>
+<details><summary>1.3 Du nom à la formule (exercice 3-méthylpent-2-ène)</summary><div>
+<ol><li>Racine pent = 5 C : C–C–C–C–C</li><li>C=C en 2 : C₁–C₂=C₃–C₄–C₅</li><li>Méthyle sur C₃</li><li>Compléter avec H pour que chaque C ait 4 liaisons</li></ol>
+<p>Résultat : <code>CH₃–CH=C(CH₃)–CH₂–CH₃</code> (formule brute C₆H₁₂ = CₙH₂ₙ ✓ : vérifie toujours ainsi).</p>
+<div class="sc"><svg viewBox="0 0 300 165" width="300" role="img" aria-label="Squelette du 3-méthylpent-2-ène"><path class="l" d="M30 100 L75 75 L120 100 L165 75 L210 100 M75 81 L120 106 M120 100 L120 140"/><text x="24" y="120">1</text><text x="70" y="66">2</text><text x="128" y="96">3</text><text x="160" y="66">4</text><text x="206" y="120">5</text><text x="104" y="158">CH₃</text></svg></div><p><i>Squelette : chaque sommet = un C ; C=C entre C₂ et C₃ ; méthyle sur C₃.</i></p></div></details>
+<details><summary>1.4 De la formule au nom (exemple du cours)</summary><div>
+<p><code>CH₂=C(CH₃)–CH₃</code> : chaîne principale 3 C (contient C=C), suffixe -ène en 1, méthyle en 2 → <b>2-méthylpropène</b>. Piège : ne pas « oublier » un C de la ramification.</p>
+<p>Tableau de référence à connaître : éthène C₂H₄ · propène C₃H₆ · but-1-ène et but-2-ène C₄H₈ (isomères de position) · 2-méthylbut-2-ène C₅H₁₀.</p></div></details>
+
+<h2 id="b">2. Isomérie cis-trans <span class="s3">★★★</span></h2>
+<div class="card">
+<div class="rule"><b>Pourquoi ?</b> La double liaison est rigide : pas de libre rotation → deux arrangements spatiaux possibles = <b>isomérie géométrique</b>.</div>
+<div class="rule"><b>Condition</b> : chaque C de la C=C porte un <b>H</b> et un <b>substituant ≠ H</b> (R₁HC=CHR₂). Test express : un C=CH₂ (deux H) → pas de cis-trans. Donc <b>but-1-ène : non</b> ; but-2-ène, pent-2-ène, hex-3-ène : oui.</div>
+<ul><li><b>cis</b> : substituants du <b>même côté</b> (mnémo : cis = <i>bol</i>, forme en U).</li><li><b>trans</b> : de <b>part et d’autre</b> (trans = <i>transat</i>, forme en Z).</li></ul>
+<div class="sc"><svg viewBox="0 0 520 150" width="520" role="img" aria-label="cis et trans-but-2-ène">
+<text x="60" y="16">cis-but-2-ène (CH₃ du même côté)</text>
+<path class="l" d="M60 110 L100 80 L150 80 L190 110 M60 110 L60 110"/><path class="l" d="M100 84 L150 84"/><text x="40" y="128">CH₃</text><text x="175" y="128">CH₃</text><text x="105" y="70">H</text><text x="135" y="70">H</text>
+<text x="310" y="16">trans-but-2-ène (CH₃ opposés)</text>
+<path class="l" d="M300 110 L340 80 L390 80 L430 50"/><path class="l" d="M340 84 L390 84"/><text x="280" y="128">CH₃</text><text x="425" y="46">CH₃</text><text x="345" y="70">H</text><text x="372" y="104">H</text></svg></div>
+<h3>Lien santé : la chaîne de raisonnement (questionnaire + notes rouges)</h3>
+<div class="rule"><b>Idée unique :</b> le nombre et le type (cis/trans) des C=C décident de la <b>forme de la chaîne</b> (coudée ou droite), qui décide de l’<b>empilement</b>, donc de l’<b>état physique</b> et de l’effet sur la santé.</div>
+<div class="sc"><table><tr><th>Acide gras</th><th>Chaîne</th><th>Empilement → état</th><th>Origine</th><th>Santé</th></tr>
+<tr><td>Saturé (que des C–C)</td><td>droite</td><td>bien emboîtée, forces de Van der Waals fortes → <b>solide</b></td><td>beurre, graisse de bœuf</td><td>non traité dans le cours</td></tr>
+<tr><td><b>cis</b> insaturé</td><td>coudée</td><td>mal empilée, forces faibles, fusion basse → <b>liquide</b></td><td>huiles végétales (naturel)</td><td>oméga-3/6 bénéfiques</td></tr>
+<tr><td><b>trans</b></td><td>droite</td><td>empilement compact → <b>solide</b></td><td>hydrogénation partielle industrielle</td><td>↑ LDL (mauvais), ↓ HDL (bon)</td></tr></table></div>
+<h3>A. Déjouer l’étiquette (notes rouges)</h3>
+<ol><li><b>Signal d’alerte</b> : « huiles végétales partiellement hydrogénées ». La mention « acides gras trans » est rare en Europe (limite légale : 2 g/100 g de graisses).</li>
+<li><b>Hydrogénation</b> = on ajoute H₂ sur une C=C : C=C + H₂ → C–C (une double liaison devient simple, +2 H). La chaîne se « remplit » : l’huile liquide (cis) devient une graisse solide. Comme elle est <u>partielle</u>, des C=C restent et certaines passent de cis à <b>trans</b> (chaîne droite). Réaction inverse, la déshydrogénation : une C=C se forme, chaîne coudée.</li>
+<li><b>Pourquoi l’industrie le fait</b> : conservation plus longue, texture croustillante ou onctueuse, coût réduit. On en trouve dans fritures de fast-food, viennoiseries industrielles, plats préparés, biscuits, margarines bas de gamme.</li></ol>
+<h3>B. Oméga-3 et oméga-6</h3>
+<p>On compte depuis le <b>CH₃ terminal</b> (extrémité ω), à l’inverse de la chimie (qui part du COOH). <b>ω-3</b> : 1<sup>re</sup> C=C au 3<sup>e</sup> C (poissons gras, lin, noix, colza). <b>ω-6</b> : 1<sup>re</sup> C=C au 6<sup>e</sup> C (tournesol, maïs, soja). Ratio idéal OMS ω-6/ω-3 : <b>4/1</b> ; alimentation moderne : ≈ 20/1 → excès d’ω-6 = inflammation.</p>
+<div class="sc"><table><tr><th>Huile</th><th>ω-6</th><th>ω-3</th><th>Rapport</th><th>Verdict</th></tr><tr><td>Tournesol</td><td>60 %</td><td>0 %</td><td>énorme</td><td>favorise l’inflammation</td></tr><tr><td>Olive</td><td>10 %</td><td>0,6 %</td><td>16/1</td><td>neutre (riche en ω-9)</td></tr><tr><td>Colza</td><td>20 %</td><td>9 %</td><td>2/1</td><td>excellent équilibre</td></tr><tr><td>Noix</td><td>54 %</td><td>12 %</td><td>4,5/1</td><td>très bon</td></tr></table></div>
+<h3>C. Cuisson</h3>
+<p>Les C=C sont des points fragiles : à forte chaleur elles réagissent avec O₂ (oxydation) → composés toxiques, radicaux libres, acroléine, parfois graisses trans. Plus il y a de C=C, plus le point de fumée est bas : <b>ne pas chauffer lin, noix, colza</b>.</p></div>
+
+<h2 id="c">3. Polymères d’addition <span class="s3">★★★</span></h2>
+<div class="card"><p><b>Polymère</b> = macromolécule faite de la répétition d’un motif ; les unités de départ sont les <b>monomères</b>. <b>Polymérisation d’addition</b> : la C=C s’ouvre, les monomères s’enchaînent, <b>aucun atome n’est perdu</b>.</p>
+<div class="rule"><code>n CH₂=CH₂ → –[CH₂–CH₂]ₙ–</code> (« on ne perd pas ses 2 oreilles » : les 2 H restent). Générique : n A → –[A]ₙ–</div>
+<table><tr><th>Monomère</th><th>Polymère</th><th>Motif</th><th>Usage</th></tr>
+<tr><td>Éthène CH₂=CH₂</td><td>PE</td><td>–[CH₂–CH₂]–</td><td>sacs, flacons</td></tr>
+<tr><td>Propène CH₂=CH(CH₃)</td><td>PP</td><td>–[CH₂–CH(CH₃)]–</td><td>yaourt, pare-chocs</td></tr>
+<tr><td>Chloroéthène CH₂=CHCl</td><td>PVC</td><td>–[CH₂–CHCl]–</td><td>tuyaux, fenêtres</td></tr>
+<tr><td>Styrène CH₂=CH(C₆H₅)</td><td>PS</td><td>–[CH₂–CH(C₆H₅)]–</td><td>barquettes, isolation</td></tr>
+<tr><td>Tétrafluoroéthène CF₂=CF₂</td><td>PTFE</td><td>–[CF₂–CF₂]–</td><td>Téflon</td></tr></table>
+<h3>Codes de recyclage (à reconnaître) <span class="s2">★★</span></h3>
+<p>1 PET (bouteilles) · 2 PE-HD (lessive, lait) · 3 PVC · 4 PE-LD (sacs, films) · 5 PP (yaourt, bouchons) · 6 PS · 7 Autres (PC, ABS, nylon). Seuls <b>1, 2, 5</b> sont bien recyclés ; PVC = chlore (toxicité), PS = coût.</p></div>
+
+<h2 id="d">4. Polymères de condensation <span class="s3">★★★</span></h2>
+<div class="card"><div class="rule"><b>Condensation</b> = on assemble des molécules à fonctions réactives <b>en éliminant une petite molécule (H₂O)</b>. Différence clé avec l’addition.</div>
+<h3>4.1 Acide aminé et liaison peptidique</h3>
+<ul><li><b>Acide aminé</b> : une fonction <b>acide carboxylique –COOH</b> + une <b>amine –NH₂</b> sur le même carbone (H₂N–CH(R)–COOH). Exercice : <i>entourer les 2 fonctions</i> sur Lys, Arg, Cys, Gly, Trp, Asp. Piège : repérer l’amine <u>à côté</u> du COOH ; ne pas compter un C en trop ; Lys/Arg ont un 2<sup>e</sup> azote dans R, mais l’amine de l’acide aminé est celle voisine du COOH.</li>
+<li><b>Amide</b> : groupement –CO–NH–. Entre deux acides aminés : <b>liaison peptidique</b>.</li></ul>
+<div class="rule"><code>R–<b style="color:#2e9e4f">CO</b><b style="color:#1f8fff">OH</b> + R’–<b style="color:#2e9e4f">N</b><b style="color:#1f8fff">H</b><b style="color:#2e9e4f">H</b> → R–<b style="color:#2e9e4f">CO–NH</b>–R’ + <b style="color:#1f8fff">H₂O</b></code><br>Le COOH perd son <b>–OH entier</b> (pas seulement H⁺), l’amine perd un H : ils font H₂O. Le C du COOH se lie à N.</div>
+<p><b>Acide vs électrophile</b> : ici –COOH ne donne pas H⁺ ; son C (pauvre en électrons) = <b>électrophile</b>, attaqué par le doublet de N (<b>nucléophile</b>). « Attaque » est une convention de dessin des flèches.</p>
+<div class="sc"><svg viewBox="0 0 600 238" width="600" role="img" aria-label="Formation de la liaison amide : avant et après">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" style="fill:var(--ac)"/></marker></defs>
+<text x="10" y="16" style="font-weight:700">AVANT</text><text x="340" y="16" style="font-weight:700">APRÈS</text>
+<text x="12" y="150">R</text><path class="l" d="M28 142 L62 118"/>
+<path d="M58 118 L58 80 M66 118 L66 80" style="stroke:#2e9e4f;stroke-width:2;fill:none"/><text x="55" y="70" style="fill:#2e9e4f;font-weight:700">O</text>
+<path d="M62 118 L96 142" style="stroke:#1f8fff;stroke-width:2;fill:none"/><text x="98" y="158" style="fill:#1f8fff;font-weight:700">OH</text>
+<ellipse cx="78" cy="112" rx="62" ry="66" style="stroke:#c62828;stroke-dasharray:5 4;fill:none;stroke-width:2"/>
+<text x="140" y="124">+</text>
+<text x="158" y="124" style="fill:#1f8fff;font-weight:700">H</text><path d="M171 118 L186 118" style="stroke:#1f8fff;stroke-width:2;fill:none"/><text x="188" y="124" style="fill:#2e9e4f;font-weight:700">N</text>
+<path d="M196 106 L196 92" style="stroke:#2e9e4f;stroke-width:2;fill:none"/><text x="191" y="86" style="fill:#2e9e4f;font-weight:700">H</text><path class="l" d="M204 118 L236 140"/><text x="238" y="154">R’</text><ellipse cx="181" cy="106" rx="34" ry="36" style="stroke:#2447b8;stroke-dasharray:5 4;fill:none;stroke-width:2"/>
+<path d="M186 106 C160 50 100 55 72 106" style="stroke:var(--ac);stroke-width:2;fill:none" marker-end="url(#ar)"/><text x="60" y="38" style="fill:var(--ac);font-size:11px">doublet de N attaque le C (électrophile)</text>
+<path class="l" d="M275 120 L320 120"/><text x="268" y="108">condensation</text>
+<text x="352" y="150">R</text><path class="l" d="M368 142 L402 118"/>
+<path d="M398 118 L398 80 M406 118 L406 80 M402 118 L436 142 M436 162 L436 176" style="stroke:#2e9e4f;stroke-width:2;fill:none"/><text x="395" y="70" style="fill:#2e9e4f;font-weight:700">O</text><text x="432" y="158" style="fill:#2e9e4f;font-weight:700">N</text><text x="432" y="190" style="fill:#2e9e4f;font-weight:700">H</text>
+<path class="l" d="M446 142 L488 120"/><text x="490" y="124">R’</text>
+
+<text x="525" y="150">+ <tspan fill="#1f8fff" font-weight="700">H₂O</tspan></text>
+<text x="5" y="212" style="font-size:12px"><tspan fill="#2e9e4f" font-weight="700">vert</tspan> : sert à la liaison peptidique · <tspan fill="#1f8fff" font-weight="700">bleu</tspan> : part en H₂O</text><text x="5" y="230" style="font-size:12px"><tspan fill="#c62828" font-weight="700">pointillés rouges</tspan> : fonction acide carboxylique · <tspan fill="#2447b8" font-weight="700">pointillés bleu foncé</tspan> : fonction amine NH₂</text></svg></div>
+<p><i>Lecture :</i> en bleu, le –OH du COOH et un H de l’amine : ils partent ensemble en H₂O. En vert, ce qui sert à la liaison peptidique : C=O du COOH et N–H de l’amine, qui forment l’amide. Cercle rouge = fonction acide carboxylique ; cercle bleu foncé = fonction amine NH₂. Entre deux acides aminés, R et R’ sont chacun le reste d’un acide aminé : le dimère garde un COOH libre d’un côté et un NH₂ libre de l’autre, donc la chaîne peut continuer → protéine. Pour un dimère X–Y : le COOH de X réagit avec le NH₂ de Y. Chez l’humain, les ribosomes forcent cette réaction (elle demande de l’énergie).</p>
+<p><b>Protéines</b> = biopolymères d’acides aminés (20 naturels) reliés par des liaisons peptidiques.</p>
+<h3>4.2 Polymères de synthèse</h3>
+<div class="rule"><b>Objectif de cette partie :</b> <u>comprendre une seule méthode</u>, puis <u>mémoriser quelques correspondances</u>. Il ne s’agit pas d’apprendre trois réactions différentes. (À confirmer avec ton cours : les formules développées du nylon et du Kevlar y servent d’illustration, on te demande surtout de reconnaître la famille et les monomères.)</div>
+<ol><li><b>La méthode unique</b> : une molécule avec <b>deux</b> fonctions identiques (une à chaque bout) + une autre molécule avec <b>deux</b> fonctions complémentaires. Chaque jonction fait une liaison et libère H₂O. Comme les bouts restent réactifs, ça se répète : polymère.</li>
+<li><b>À mémoriser</b> :
+<div class="sc"><table><tr><th>Famille</th><th>Monomères</th><th>Liaison répétée</th><th>Exemples à citer</th></tr>
+<tr><td>Polyamide</td><td>diacide + <b>diamine</b></td><td>amide –CO–NH–</td><td>Nylon 6-6 (textile, cordes), Kevlar (gilets pare-balles), protéines</td></tr>
+<tr><td>Polyester</td><td>diacide + <b>diol</b></td><td>ester –COO–</td><td>PET (bouteilles, polaire, Tergal)</td></tr></table></div></li>
+<li><b>Astuce de tri</b> : amine (N) → amide ; alcool (OH) → ester. Le diacide est commun aux deux.</li></ol>
+<div class="sc"><svg viewBox="0 0 600 80" width="600" role="img" aria-label="Polyamide : diacide + diamine"><rect x="5" y="8" width="135" height="30" rx="6" class="l"/><text x="14" y="28">HOOC–R–COOH</text><text x="148" y="28">+</text><rect x="162" y="8" width="135" height="30" rx="6" class="l"/><text x="171" y="28">H₂N–R’–NH₂</text><text x="308" y="28">→ …CO–R–CO–NH–R’–NH–… + H₂O</text><text x="5" y="68">Polyester : diacide + diol → …CO–R–COO–R’–O–… (ester au lieu d’amide)</text></svg></div>
+<p>Bilan d’eau : n + n monomères → (2n–1) H₂O. Estérification : R–COOH + R’–OH → R–COO–R’ + H₂O.</p>
+<p><span class="s1">★</span> Ultra fast fashion : le polyester (PET) fait &gt; 50 % des fibres, peu cher et rapide, imite soie/cuir ; vêtements portés 7–10 fois mais liaisons C–C/ester stables pendant des siècles ; microplastiques à chaque lavage ; fin de vie incinérée (CO₂ fossile). Idée à retenir : <b>stabilité chimique excessive par rapport à une fonction éphémère</b>.</p></div>
+
+<h2 id="e">5. Catégories de polymères <span class="s3">★★★</span></h2>
+<div class="card"><p>Classement « technologique » (réaction à la chaleur), donc qui ne dit rien des liaisons <u>entre atomes</u> mais entre <u>chaînes</u>.</p>
+<table><tr><th>Catégorie</th><th>Structure</th><th>Chaleur</th><th>Exemples</th></tr>
+<tr><td>Thermoplastique</td><td>chaînes longues enchevêtrées, non liées</td><td>ramollit/fond, <b>réversible</b> → refonte facile</td><td>PE, PP, PVC, PET, PS, nylon</td></tr>
+<tr><td>Thermodurcissable</td><td>chaînes reliées par ponts covalents (réticulation)</td><td>durcit, <b>irréversible</b> ; brûle sans fondre</td><td>Bakélite, époxy, mélamine, mousse PU</td></tr>
+<tr><td>Élastomère</td><td>réseau thermodurcissable à <b>très peu de ponts</b> (vulcanisation)</td><td>très grande déformation, retour à la forme</td><td>caoutchouc, pneu, joints</td></tr></table>
+<p>Selon la <b>forme</b> : <b>mousse</b> = gaz dans une matrice (PU thermodurcissable ou PS expansé thermoplastique) ; <b>fibre</b> = mise en forme par extrusion, chaînes alignées (nylon, Kevlar, mais aussi cellulose du coton).</p></div>
+
+<h2 id="f">6. Recyclage et fin de vie <span class="s3">★★★</span></h2>
+<div class="card"><table><tr><th>Voie</th><th>Principe</th><th>Limite</th></tr>
+<tr><td><b>Matière</b> (mécanique) : « on garde la chaîne »</td><td>trier, laver, broyer, fondre (comme des briques LEGO qu’on réassemble : on démonte le château pour faire un bateau, mêmes briques = mêmes chaînes, autre objet ; la comparaison porte sur le réassemblage, pas sur le plastique des LEGO). Ex. bouteille PET → polaire</td><td>chaînes raccourcissent à chaque fusion ; qualité en baisse</td></tr>
+<tr><td><b>Chimique</b> : « on démonte la chaîne »</td><td>dépolymérisation → monomère (PS → styrène) ; pyrolyse (sans O₂, mélange d’hydrocarbures) ; gazéification (syngas CO + H₂)</td><td>coût, énergie</td></tr>
+<tr><td><b>Énergétique</b> : « on brûle »</td><td>incinération, chaleur/électricité ; pouvoir calorifique proche charbon/fioul</td><td>CO₂ fossile ; PVC → chlore</td></tr>
+<tr><td><b>Biodégradabilité</b> : « la nature coupe »</td><td>microbes + enzymes, hydrolyse de liaisons <b>fragiles ester/amide</b> (PLA)</td><td>PE, PP : liaisons C–C trop stables → non</td></tr></table>
+<h3>Synthèse : quel recyclage pour quel objet ?</h3>
+<div class="sc"><table><tr><th>Objet</th><th>Retenu</th><th>Écarté</th></tr>
+<tr><td>Bouteille PET</td><td>Matière (thermoplastique, code 1, filière rodée)</td><td>Chimique (plus cher que la refonte) · Énergétique (gâchis) · Biodégradabilité (polymère très stable)</td></tr>
+<tr><td>Pot de yaourt PS</td><td>Chimique (dépolymérisation → styrène) · Énergétique (calorifique)</td><td>Matière (léger, souillé, collecte coûteuse) · Biodégradabilité (liaisons C–C)</td></tr>
+<tr><td>Tuyau PVC</td><td>Matière (gisement groupé, tri possible)</td><td>Énergétique et chimique (chlore → HCl toxique) · Biodégradabilité (C–C)</td></tr>
+<tr><td>Gobelet PLA</td><td>Biodégradabilité (liaisons ester hydrolysables)</td><td>Matière (pollue la filière PET) · Chimique (peu rentable)</td></tr>
+<tr><td>Paquet de chips PP + Al</td><td>Énergétique (PP calorifique)</td><td>Matière et chimique (multicouche inséparable, coût) · Biodégradabilité (C–C)</td></tr>
+<tr><td>Pneu</td><td>Chimique (pyrolyse) · Énergétique (calorifique)</td><td>Matière (réseau réticulé : ne fond pas) · Biodégradabilité (C–C)</td></tr></table></div></div>
+
+<h2 id="g">7. S’entraîner</h2>
+<div class="card"><div id="q"></div><p id="sc"></p>
+<details><summary>Savoir-faire à pratiquer sur papier</summary><div><ul><li>Dessiner <i>trans-3,4-diméthylhex-3-ène</i> (Q7 sans correction : C=C en 3, un CH₃ sur chaque C de la C=C, chaîne éthyle de part et d’autre ; les deux groupes éthyle sont de côtés opposés).</li><li>Nommer 4-éthyl-2,3-diméthylhex-2-ène (Q6) et le redessiner.</li><li>Écrire la polymérisation de chaque monomère du tableau 3.</li><li>Entourer –COOH et –NH₂ sur 6 acides aminés ; (Lys, Arg, Cys, Gly, Trp, Asp).</li></ul></div></details></div>
+
+</main>
+<script>
+const Q=[
+["Formule générale d’un alcène à une seule C=C ?",["CₙH₂ₙ₊₂","CₙH₂ₙ","CₙH₂ₙ₋₂"],1,"La C=C retire 2 H par rapport à l’alcane."],
+["Nom de CH₃–CH=C(CH₃)–CH₂–CH₃ ?",["3-méthylpent-2-ène","3-méthylpent-3-ène","2-éthylbut-2-ène"],0,"Chaîne de 5 C contenant C=C, C=C en 2 (indice le plus petit), méthyle en 3."],
+["Nom de CH₃–C(CH₃)=C(CH₃)–CH₃ ?",["2,3-diméthylbut-2-ène","3-méthylbut-1-ène","tétraméthyléthène"],0,"Chaîne but-2-ène, deux méthyles en 2 et 3."],
+["Chaîne principale d’un alcène ?",["la plus longue de la molécule","la plus longue contenant C=C","la plus ramifiée"],1,"Elle doit contenir la C=C."],
+["Quelle molécule n’a PAS d’isomérie cis-trans ?",["but-2-ène","but-1-ène","hex-3-ène"],1,"CH₂= porte deux H identiques."],
+["Pourquoi une huile (acides gras cis) est-elle liquide ?",["Les coudes empêchent un empilement compact : forces de Van der Waals plus faibles","Chaînes droites bien empilées","Elle ne contient aucune C=C"],0,"Coude cis → mauvais empilement → point de fusion bas."],
+["La polymérisation du propène donne…",["PVC","PP","PS"],1,"Propène (3 C) → polypropylène."],
+["Une polycondensation se reconnaît à…",["l’ouverture de C=C sans perte d’atome","la libération d’une petite molécule (H₂O)","l’absence de réaction"],1,"Addition = aucun atome perdu ; condensation = perte de H₂O."],
+["R–COOH + R’–NH₂ donne…",["un sel","R–CO–NH–R’ + H₂O","R–COO–R’ + H₂O"],1,"Amide = liaison peptidique entre acides aminés."],
+["La Bakélite est…",["thermoplastique","thermodurcissable","un élastomère"],1,"Réseau réticulé : brûle au lieu de fondre."],
+["Pourquoi PE et PP ne sont-ils pas biodégradables ?",["Liaisons C–C trop stables","Ils contiennent des esters","Ils fondent trop bas"],0,"Seules des liaisons fragiles (ester, amide) sont hydrolysables."],
+["Quelle formule correspond au pent-2-ène ?",["CH₃–CH=CH–CH₂–CH₃","CH₂=CH–CH₂–CH₂–CH₃","CH₃–CH₂–CH₂–CH₂–CH₃"],0,"5 C, C=C entre C2 et C3. Le 2e est le pent-1-ène, le 3e un alcane."],
+["Formule du 2-méthylbut-2-ène ?",["CH₃–C(CH₃)=CH–CH₃","CH₂=C(CH₃)–CH₂–CH₃","CH₃–CH(CH₃)–CH=CH₂"],0,"But = 4 C, C=C en 2, méthyle en 2. Les autres : 2-méthylbut-1-ène et 3-méthylbut-1-ène."],
+["Nom de CH₃–CH(CH₃)–CH=CH₂ ?",["3-méthylbut-1-ène","2-méthylbut-3-ène","isopentane"],0,"On numérote côté C=C : C=C en 1, méthyle en 3."],
+["Combien d’atomes d’H dans le hex-2-ène ?",["12","14","10"],0,"CₙH₂ₙ avec n = 6."],
+["Effet des acides gras trans industriels ?",["↑ LDL et ↓ HDL","↓ LDL et ↑ HDL","aucun effet"],0,"Néfastes pour le système cardiovasculaire."],
+["Les oméga-n se comptent depuis…",["le CH₃ terminal (ω)","la fonction acide","le milieu de la chaîne"],0,"Oméga-3 : 1re C=C au 3e C depuis le bout."],
+["Excès d’oméga-6 par rapport aux oméga-3 ?",["favorise l’inflammation","protège le cœur","sans effet"],0,"Ratio idéal ≈ 4/1."],
+["Une huile « partiellement hydrogénée » contient…",["des graisses trans possibles","uniquement des cis","des alcynes"],0,"L’hydrogénation partielle fait passer certains cis en trans."],
+["Monomère du PVC ?",["chloroéthène","styrène","tétrafluoroéthène"],0,"CH₂=CHCl."],
+["Nylon 6-6 : monomères ?",["diacide + diamine","diacide + diol","deux alcènes"],0,"Amides répétés + eau."],
+["PET : famille ?",["polyester (diacide + diol)","polyamide","polyalcène"],0,"Liaison ester."],
+["Kevlar : propriété phare ?",["résistance à la traction et au feu, léger","élasticité","biodégradable"],0,"Gilets pare-balles, casques."],
+["Pourquoi un thermodurcissable ne fond-il pas ?",["réseau réticulé par liaisons covalentes : il brûle","chaînes trop courtes","il est biodégradable"],0,"Les ponts empêchent les chaînes de glisser."],
+["Recyclage chimique du PS ?",["dépolymérisation vers le styrène","fusion et moulage","incinération"],0,"On casse la chaîne pour retrouver le monomère."],
+["Biodégradation du PLA : par…",["des micro-organismes (hydrolyse des esters)","la lumière seule","le gel"],0,"Liaisons ester fragiles."]
+];
+let n=0,s=0,box=document.getElementById('q');
+function show(){if(n>=Q.length){box.innerHTML='';document.getElementById('sc').textContent='Score : '+s+' / '+Q.length+(s==Q.length?' — parfait !':' — relis les points manqués.');return}
+const [t,o,c,e]=Q[n];box.innerHTML='<b>Q'+(n+1)+'/'+Q.length+'.</b> '+t+'<br>';
+const ord=[...o.keys()].sort(()=>Math.random()-.5);ord.forEach(i=>{const x=o[i];const b=document.createElement('button');b.dataset.i=i;b.textContent=x;b.onclick=()=>{[...box.querySelectorAll('button')].forEach((k,j)=>{k.disabled=true;if(k.dataset.i==c)k.className='ok'});if(i!=c)b.className='ko';else s++;
+const p=document.createElement('p');p.textContent=e;const nx=document.createElement('button');nx.textContent='Suivante';nx.onclick=()=>{n++;show()};box.append(p,nx)};box.append(b)})}
+show();
+</script></body></html>

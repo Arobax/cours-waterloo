@@ -56,6 +56,7 @@ h1,h2,h3{font-family:'Playfair Display',serif;margin:0;line-height:1.2}
 .vw img{max-width:100%;max-height:100%;margin:auto;object-fit:contain}
 .ar{position:absolute;top:50%;transform:translateY(-50%);z-index:2;width:56px;height:56px;border-radius:50%;border:1px solid var(--b);background:rgba(255,250,244,.92);color:var(--e);font-size:2rem;line-height:1;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.2)}
 .ar.l{left:20px}.ar.r{right:20px}.ar:not(:disabled):hover{background:#fff}.ar:disabled{opacity:.3;cursor:default}
+.hx .ar{width:40px;height:40px;font-size:1.5rem;opacity:.55}.hx .ar.l{left:6px}.hx .ar.r{right:6px}.hx .ar:hover{opacity:1}.hx .ar:disabled{opacity:.2}
 .promo{display:flex;align-items:center;justify-content:center;gap:10px;padding:6px 14px calc(6px + env(safe-area-inset-bottom));background:var(--e);font-size:.82rem;text-align:center}
 .promo[hidden]{display:none}.promo a{color:var(--c);text-decoration:none}
 .promo button{all:unset;cursor:pointer;color:var(--b);padding:2px 8px;font-size:1.2rem}
@@ -140,7 +141,9 @@ async function show(i){
   history.replaceState(0,'',`/syntheses/?u=${encodeURIComponent(X.id)}&f=${i}`);
   zmin=e==='pdf'?.2:1;ctl();v.innerHTML='';v.scrollTo(0,0);
   if(e==='pdf')return pdf(src,v,t);
+  $('.stage').classList.toggle('hx',e==='html');
   if(e==='mp4')v.innerHTML=`<video src="${src}" controls playsinline></video>`;
+  else if(e==='html')v.innerHTML=`<iframe src="${src}" title="${esc(ttl(f))}" sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox" allow="fullscreen" loading="eager"></iframe>`;
   else if(e==='txt'){
     try{
       const x=(await(await fetch(src)).text()).match(/(?:v=|youtu\.be\/|embed\/|shorts\/)([\w-]{11})/);
