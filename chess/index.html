@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Échecs</title>
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>♟️</text></svg>">
+</head>
+<body data-turn="w" data-mode="classic" data-layout="horizontal">
+<div id="sprite"></div>
+<div class="bg-layer" id="bgLayer"></div>
+<header class="appbar">
+  <div class="brand"><svg class="pc w" viewBox="0 0 100 100" width="30" height="30"><use href="#pc-n"/></svg><span>Échecs</span></div>
+  <div class="segmented" id="modeSwitch" role="group" aria-label="Mode de jeu">
+    <button data-mode="classic">Classique</button><button data-mode="creative">Créatif</button>
+  </div>
+  <button class="btn soft" id="btnNew">Nouvelle partie</button>
+</header>
+<main class="app">
+  <section class="stage" id="stage">
+    <div class="player" data-color="w" id="panelW"></div>
+    <div class="board-zone" id="boardZone">
+      <div class="evalbar" id="evalBar" hidden><div class="fill"></div></div>
+      <div class="board-wrap" id="boardWrap">
+        <div class="board" id="board" role="grid" aria-label="Plateau d'échecs"></div>
+        <div class="banner" id="banner" hidden></div>
+      </div>
+    </div>
+    <div class="player" data-color="b" id="panelB"></div>
+  </section>
+
+  <aside class="side">
+    <section class="card" id="cardActions">
+      <h2>Partie</h2>
+      <div class="statusline" id="statusLine" aria-live="polite"></div>
+      <div class="row">
+        <button class="btn pink creative-only" id="btnCommit">Valider le coup</button>
+        <button class="btn tonal creative-only" id="btnDiscard">Réinitialiser le tour</button>
+      </div>
+      <div class="row">
+        <button class="btn tonal" id="btnBest">Meilleur coup</button>
+        <button class="btn tonal creative-only" id="btnUndo">↶ Annuler</button>
+        <button class="btn tonal creative-only" id="btnRedo">↷ Refaire</button>
+      </div>
+      <div class="row">
+        <button class="btn outline" id="btnResign">Abandon</button>
+        <button class="btn outline" id="btnDraw">Nulle (accord)</button>
+      </div>
+    </section>
+
+    <section class="card creative-only" id="cardPalette">
+      <h2>Atelier créatif</h2>
+      <div class="palette" id="palette"></div>
+      <p class="hint">Glissez une pièce sur le plateau, ou cliquez-en une puis cliquez les cases (échap pour arrêter). Déplacez librement les pièces, glissez-en une hors du plateau pour la retirer. Le coup n'est compté que lorsque vous validez.</p>
+    </section>
+
+    <section class="card">
+      <h2>Affichage</h2>
+      <div class="chips" id="layoutChips">
+        <button data-layout="horizontal">Horizontal</button>
+        <button data-layout="vrotate">Vertical tournant</button>
+        <button data-layout="vwhite">Vertical · Blancs en bas</button>
+        <button data-layout="vblack">Vertical · Noirs en bas</button>
+      </div>
+      <label class="sw"><input type="checkbox" id="swSwap"><span></span>Inverser gauche/droite (horizontal)</label>
+    </section>
+
+    <section class="card">
+      <h2>Stockfish <small class="soon" id="sfStatus">inactif</small></h2>
+      <label class="sw"><input type="checkbox" id="swEval"><span></span>Barre d'évaluation <b id="evalLabel"></b></label>
+      <label class="sw"><input type="checkbox" id="swAutoW"><span></span>Stockfish joue les Blancs</label>
+      <label class="sw"><input type="checkbox" id="swAutoB"><span></span>Stockfish joue les Noirs</label>
+      <p class="hint">Le jeu automatique ne s'applique qu'en mode classique. « Meilleur coup » fonctionne dans les deux modes (en créatif, il joue sur le plateau tel qu'il est, modifications comprises).</p>
+    </section>
+
+    <section class="card">
+      <h2>Historique <small id="notationBadge"></small></h2>
+      <ol class="hist" id="hist"></ol>
+    </section>
+
+    <section class="card">
+      <h2>Texte de la partie</h2>
+      <textarea id="txt" spellcheck="false" rows="8" aria-label="État de la partie au format texte"></textarea>
+      <div class="statusline err" id="txtErr" aria-live="polite"></div>
+      <div class="row">
+        <button class="btn" id="btnLoad">Charger</button>
+        <button class="btn tonal" id="btnCopy">Copier</button>
+        <button class="btn tonal" id="btnExport">Exporter .txt</button>
+        <button class="btn tonal" id="btnImport">Importer .txt</button>
+        <input type="file" id="fileIn" accept=".txt,.pgn,text/plain" hidden>
+      </div>
+      <details class="syntax"><summary>Syntaxe du texte</summary>
+        <div>
+<p>Le texte ressemble à un PGN : des en-têtes <code>[Clé "valeur"]</code>, une ligne vide, puis les coups. Tant qu'aucun coup illégal n'a été joué, c'est un <b>PGN standard</b> (notation SAN : <code>e4</code>, <code>Nf3</code>, <code>exd5</code>, <code>O-O</code>, <code>e8=Q+</code>…). Dès qu'un coup n'est pas un coup légal, <b>toute la partie</b> passe en <b>notation étendue</b>.</p>
+<h4>Notation étendue</h4>
+<p>Un coup est une liste d'opérations séparées par des virgules, <i>sans espace</i>. Les pièces sont les lettres FEN : <code>K Q R B N P</code> pour les blancs, <code>k q r b n p</code> pour les noirs.</p>
+<ul>
+<li><code>Pe2-e4</code> : déplace le pion blanc de e2 vers e4. <code>x</code> remplace <code>-</code> quand la case d'arrivée est occupée (<code>Qd1xd8</code>) ; c'est purement indicatif.</li>
+<li><code>Pe7-e8=Q</code> : déplacement avec transformation de la pièce.</li>
+<li><code>+Nc5</code> : une pièce apparaît en c5 (elle remplace ce qui s'y trouve).</li>
+<li><code>-d7</code> : la pièce en d7 disparaît.</li>
+<li><code>O-O</code>, <code>O-O-O</code> : roques légaux.</li>
+<li><code>--</code> : coup vide (aucun changement ; le trait passe quand même).</li>
+</ul>
+<p>Exemple : <code>qd8-d3,+Nc5,-a2</code>. Toutes les opérations d'un coup sont lues sur le plateau <i>au début</i> du coup (un échange de deux pièces s'écrit donc <code>Ra1-b1,nb1-a1</code>), et une même case ne peut figurer qu'une fois comme départ ou retrait.</p>
+<h4>Déroulement</h4>
+<p>Chaque coup validé donne le trait à l'autre camp, légal ou non. Numérotation : <code>12.</code> avant un coup blanc ; <code>12...</code> seulement si la liste commence par un coup noir. Commentaires <code>{…}</code>, <code>;…</code>, variantes <code>(…)</code> et <code>$n</code> sont ignorés à l'import.</p>
+<h4>En-têtes</h4>
+<ul>
+<li><code>Mode</code> : <code>classique</code> ou <code>creatif</code> (mode actif à l'import).</li>
+<li><code>Notation</code> : <code>standard</code> ou <code>etendue</code> (informatif).</li>
+<li><code>Result</code> : <code>1-0</code>, <code>0-1</code>, <code>1/2-1/2</code> ou <code>*</code>.</li>
+<li><code>Termination</code> : <code>abandon</code> ou <code>nulle par accord</code> sont restaurés à l'import ; les autres valeurs sont informatives.</li>
+<li><code>SetUp</code> + <code>FEN</code> : position de départ si ce n'est pas la position standard.</li>
+<li><code>Pending</code> : plateau en cours de modification, non encore validé (placement FEN), pour reprendre une partie créative en cours.</li>
+</ul>
+        </div>
+      </details>
+    </section>
+  </aside>
+</main>
+<div class="toast" id="toast" role="status"></div>
+<dialog id="dlg"><form method="dialog"><h3 id="dlgTitle"></h3><p id="dlgText"></p><div class="row" id="dlgBtns"></div></form></dialog>
+<script type="module" src="src/ui.js"></script>
+</body>
+</html>
